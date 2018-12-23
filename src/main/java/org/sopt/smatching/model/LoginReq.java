@@ -1,15 +1,14 @@
 package org.sopt.smatching.model;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class SignUpReq {
+public class LoginReq {
 
-    private String nickname;
     private String email;
     private String password;
 }

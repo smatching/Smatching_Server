@@ -1,4 +1,4 @@
-package org.sopt.smatching.service;
+package org.sopt.smatching.test;
 
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.model.DefaultRes;
