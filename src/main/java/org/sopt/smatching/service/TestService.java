@@ -10,7 +10,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestService {
 
-    public DefaultRes test() {
-        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USER, "Great!! Please tell Kitae if you see this message :D");
+    public DefaultRes getTest() {
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USER, "GET 메소드 테스트 성공!! 서버 개발자에게 말해주세요");
+    }
+
+    public DefaultRes postTest() {
+        return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_USER, "POST 메소드 테스트 성공!! 서버 개발자에게 말해주세요");
+    }
+
+    public DefaultRes putTest() {
+        return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.UPDATE_USER, "PUT 메소드 테스트 성공!! 서버 개발자에게 말해주세요");
+    }
+
+    public DefaultRes deleteTest() {
+        return DefaultRes.res(StatusCode.FORBIDDEN, ResponseMessage.DELETE_USER, "DELETE 메소드 테스트 성공!! 서버 개발자에게 말해주세요");
     }
 }
