@@ -26,7 +26,7 @@ public class UserController {
 
 
     // 회원 가입
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity signUp(@RequestBody SignUpReq signUpReq) {
         return new ResponseEntity<>(userService.signUp(signUpReq), HttpStatus.OK);
     }
