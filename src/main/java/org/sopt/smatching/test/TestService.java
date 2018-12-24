@@ -10,6 +10,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestService {
 
+    public DefaultRes getTestMain() {
+        return DefaultRes.res(StatusCode.SERVICE_UNAVAILABLE, ResponseMessage.ALREADY_EXIST_EMAIL, "GET 메소드 메인임!!!!!");
+    }
+
+    public DefaultRes postTestMain() {
+        return DefaultRes.res(StatusCode.SERVICE_UNAVAILABLE, ResponseMessage.ALREADY_EXIST_EMAIL, "POST 메소드 메인임!!!!");
+    }
+
     public DefaultRes getTest() {
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USER, "GET 메소드 테스트 성공!! 서버 개발자에게 말해주세요");
     }
