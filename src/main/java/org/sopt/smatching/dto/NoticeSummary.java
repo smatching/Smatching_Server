@@ -4,14 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
 @Getter
 @Setter
 @NoArgsConstructor
 public class NoticeSummary {
 
+    private int noticeIdx;
     private String title;
     private String institution;
-    private Date end_date;
+    private int dday;
 }

@@ -10,12 +10,18 @@ import java.util.List;
 @Mapper
 public interface NoticeMapper {
 
-    // 공고 목록 전체조회
-    @Select("SELECT title, institution, end_date " +
+    // 전체공고 목록 조회
+    @Select("SELECT noticeIdx, title, institution, end_date-current_date as dday " +
             "FROM notice " +
-            "ORDER BY timestamp DESC " +
+            "WHERE valid = 1 " +
+            "ORDER BY timestamp DESC, noticeIdx DESC " +
             "LIMIT #{existNum}, #{reqNum}")
     List<NoticeSummary> findAllNoticeSummary(@Param("reqNum") final int reqNum,
                                              @Param("existNum") final int existNum);
 
+
+    // 맞춤공고 목록 조회 <- notice 테이블과 cond 테이블 조인 필요... 이 mapper에 구현하는거 맞나??
+
+
+    // 공고 상세보기 <- notice 테이블과 notice_detail 테이블 조인 필요...
 }
