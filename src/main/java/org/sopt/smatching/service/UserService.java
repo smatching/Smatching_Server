@@ -55,7 +55,7 @@ public class UserService {
 
         } catch (DuplicateKeyException e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            if(e.getMessage().contains("for key 'email_UNIQUE'") == true) {
+            if(e.getMessage().contains("for key 'UC_email'") == true) {
                 log.error(e.getMessage());
                 return DefaultRes.res(StatusCode.ALREADY_EXSIST_EMAIL, ResponseMessage.ALREADY_EXIST_EMAIL);
             }

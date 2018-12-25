@@ -19,7 +19,7 @@ public class TestService {
     }
 
     public DefaultRes getTest() {
-        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USER, "GET 메소드 테스트 성공!! 서버 개발자에게 말해주세요");
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, "GET 메소드 테스트 성공!! 서버 개발자에게 말해주세요");
     }
 
     public DefaultRes postTest() {
