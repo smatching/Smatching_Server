@@ -21,9 +21,9 @@ public class NoticeService {
 
         final List<NoticeSummary> noticeSummaryList = noticeMapper.findAllNoticeSummary(reqNum, existNum);
 
-        // 한개도 검색되지 않았으면 404
+        // 한개도 검색되지 않았으면 204
         if (noticeSummaryList.isEmpty())
-            return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_NOTICE);
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_FOUND_NOTICE);
 
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTICE_SUMMARY, noticeSummaryList);
     }

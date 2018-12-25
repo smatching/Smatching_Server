@@ -24,18 +24,23 @@ public class MainService {
 
         MainTabInfo mainTabInfo = new MainTabInfo();
 
-        // 전체 공고 정보 4개 획득
+        // 전체공고 목록 최대 4개 획득 - 없으면 빈 리스트( [] )가 나감
         mainTabInfo.setAllNoticeSummary(noticeMapper.findAllNoticeSummary(4,0));
 
-        // 토큰값 있으면 해독해서 이름, 맞춤지원 공고 개수, 맞춤지원 공고 목록 3개 리턴
+
+        // 토큰값 있으면 개인화정보도 채움
         if(jwt != null) {
-            final JwtService.Token token = jwtService.decode(jwt); //토큰 해독
+            //토큰 해독
+            final JwtService.Token token = jwtService.decode(jwt);
 
-            System.out.println("userIdx is : " + token.getUser_idx());
+            // 닉네임 획득
+            mainTabInfo.setNickname(userMapper.findNicknameByUserIdx(token.getUser_idx()));
 
-            mainTabInfo.setNickname("테스트");
-            mainTabInfo.setFitNoticeCnt(123);
-            mainTabInfo.setFitNoticeSummary(noticeMapper.findAllNoticeSummary(3,0));
+            // 맞춤공고 전체개수만 획득
+            mainTabInfo.setFitNoticeCnt(1234);
+
+            // 맞춤공고 목록 최대 3개 획득 - 없으면 빈 리스트( [] )가 나감?!
+            mainTabInfo.setFitNoticeSummary(null);
         }
 
         return DefaultRes.res(StatusCode.OK, ResponseMessage.MAIN_INFO_SUCCESS, mainTabInfo);
