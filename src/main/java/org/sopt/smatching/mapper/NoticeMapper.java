@@ -14,7 +14,7 @@ public interface NoticeMapper {
     @Select("SELECT noticeIdx, title, institution, end_date-current_date as dday " +
             "FROM notice " +
             "WHERE valid = 1 " +
-            "ORDER BY timestamp DESC, noticeIdx DESC " +
+            "ORDER BY noticeIdx DESC " +
             "LIMIT #{existNum}, #{reqNum}")
     List<NoticeSummary> findAllNoticeSummary(@Param("reqNum") final int reqNum,
                                              @Param("existNum") final int existNum);
