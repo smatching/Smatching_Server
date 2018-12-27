@@ -19,9 +19,36 @@ public interface NoticeMapper {
     List<NoticeSummary> findAllNoticeSummary(@Param("reqNum") final int reqNum,
                                              @Param("existNum") final int existNum);
 
+    // 전체공고 목록 조회 (스크랩 여부까지)
+    @Select("SELECT notice.noticeIdx, notice.title, notice.institution, notice.end_date-current_date as dday, scrap_notice.scrap " +
+            "FROM notice " +
+            "LEFT OUTER JOIN scrap_notice " +
+            "ON notice.noticeIdx = scrap_notice.noticeIdx AND scrap_notice.useridx = #{userIdx} " +
+            "WHERE notice.valid = 1 " +
+            "ORDER BY notice.noticeIdx DESC " +
+            "LIMIT #{existNum}, #{reqNum}")
+    List<NoticeSummary> findAllNoticeSummaryWithScrap(@Param("reqNum") final int reqNum,
+                                                      @Param("existNum") final int existNum,
+                                                      @Param("userIdx") final int userIdx);
 
-    // 맞춤공고 목록 조회 <- notice 테이블과 cond 테이블 조인 필요... 이 mapper에 구현하는거 맞나??
+
+    // 맞춤공고 목록 조회
+    @Select("")
+    List<NoticeSummary> findFitNoticeSummary(@Param("reqNum") final int reqNum,
+                                             @Param("existNum") final int existNum,
+                                             @Param("condIdx") final int condIdx);
 
 
-    // 공고 상세보기 <- notice 테이블과 notice_detail 테이블 조인 필요...
+    // 맞춤공고 목록 조회 (스크랩 여부까지)
+    @Select("")
+    List<NoticeSummary> findFitNoticeSummaryWithScrap(@Param("reqNum") final int reqNum,
+                                                      @Param("existNum") final int existNum,
+                                                      @Param("condIdx") final int condIdx,
+                                                      @Param("userIdx") final int userIdx);
+
+
+    // 공고 상세보기
+    @Select("")
+    NoticeSummary findNoticeDetailWithNoticeIdx(@Param("noticeIdx") final int noticeIdx);
+
 }
