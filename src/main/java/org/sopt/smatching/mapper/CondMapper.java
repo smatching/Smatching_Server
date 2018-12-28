@@ -2,17 +2,30 @@ package org.sopt.smatching.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.sopt.smatching.dto.Cond;
+import org.sopt.smatching.dto.UserCond;
 
 import java.util.List;
 
 @Mapper
 public interface CondMapper {
 
-    // userIdx로 맞춤조건 조회 - 0개 or 1개 or 2개가 채워진 리스트 반환
-    @Select("SELECT condidx, condname, location, age, period, category_exc, field_inc, advantage " +
+    // userIdx로 이름 + 설정해놓은 Cond의 인덱스와 이름 - 0개~2개가 담긴 리스트가 조회됨
+    @Select("SELECT user.nickname AS nickName, cond.condidx AS condIdx, cond.condname AS condName " +
             "FROM cond " +
-            "WHERE useridx = #{userIdx}")
-    List<Cond> findByUserIdx(@Param("userIdx") final int userIdx);
+            "INNER JOIN user " +
+            "ON cond.userIdx = user.userIdx " +
+            "WHERE cond.userIdx = #{userIdx} ")
+    List<UserCond> findInfoByUserIdx(@Param("userIdx") final int userIdx);
+
+
+
+    // condIdx로 맞춤조건 조회
+    @Select("SELECT * " +
+            "FROM cond " +
+            "WHERE condidx = #{condIdx}")
+    Cond findByCondIdx(@Param("condIdx") final int condIdx);
+
+
 
 
     // 맞춤조건 추가
