@@ -14,4 +14,5 @@ public class NoticeSummary {
     private String institution;
     private int dday;
     private int scrap;
+    private int readCnt;
 }
