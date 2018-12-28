@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +22,11 @@ public class CondController {
     @Autowired
     private HttpServletRequest httpServletRequest;
 
-    // 토큰을 받아서 해당 유저가 설정한 맞춤조건 정보들을 리턴
+    // condIdx로 맞춤조건 조회
     @GetMapping("")
-    public ResponseEntity getMainTabInfo() {
-        return new ResponseEntity<>(condService.getCondList(httpServletRequest.getHeader("Authorization")), HttpStatus.OK);
+    public ResponseEntity getCondInfoByCondIdx(@RequestParam(value = "cond_idx") int condIdx) {
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
+
+
 }

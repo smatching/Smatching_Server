@@ -1,6 +1,7 @@
 package org.sopt.smatching.test;
 
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.smatching.utils.enums.Age;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,10 @@ public class TestController {
     }
 
     @GetMapping("")
-    public ResponseEntity testMainGet() { return new ResponseEntity<>(testService.getTestMain(), HttpStatus.OK); }
+    public ResponseEntity testMainGet() {
+        Age age = Age.ALL;
+        System.out.println(age);
+        return new ResponseEntity<>(testService.getTestMain(), HttpStatus.OK); }
 
     @PostMapping("")
     public ResponseEntity testMainPost() {
