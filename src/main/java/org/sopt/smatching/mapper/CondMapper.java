@@ -15,7 +15,8 @@ public interface CondMapper {
             "FROM cond " +
             "INNER JOIN user " +
             "ON cond.userIdx = user.userIdx " +
-            "WHERE cond.userIdx = #{userIdx} ")
+            "WHERE cond.userIdx = #{userIdx} " +
+            "ORDER BY cond.condidx ASC")
     List<UserCond> findInfoByUserIdx(@Param("userIdx") final int userIdx);
 
 
