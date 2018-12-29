@@ -56,7 +56,6 @@ public class CondDetail {
         }
         return map;
     }
-
     public static HashMap<String, Boolean> bitToMap(int binary, String[] arr) {
         return bitToMap((long)binary, arr);
     }

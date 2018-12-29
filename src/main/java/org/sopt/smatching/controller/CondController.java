@@ -1,14 +1,12 @@
 package org.sopt.smatching.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.smatching.dto.CondDetail;
 import org.sopt.smatching.service.CondService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,5 +26,16 @@ public class CondController {
         return new ResponseEntity<>(condService.getCondInfoByCondIdx(condIdx), HttpStatus.OK);
     }
 
+    // 맞춤조건에 맞는 지원사업 개수 조회
+    @PutMapping("/count")
+    public ResponseEntity getNoticeCountByCondDetail(@RequestBody final CondDetail condDetail) {
+        return new ResponseEntity<>(condService.getNoticeCountByCondDetail(condDetail), HttpStatus.OK);
+    }
+
+    // 맞춤조건 추가
+    @PostMapping("")
+    public ResponseEntity createCond(@RequestBody final CondDetail condDetail) {
+        return new ResponseEntity<>(condService.createCond(condDetail), HttpStatus.OK);
+    }
 
 }

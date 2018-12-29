@@ -65,7 +65,7 @@ public class NoticeService {
     // 맞춤조건에 매칭되는 지원사업 개수 조회
     public DefaultRes getNoticeCnt(int condIdx) {
 
-        // 맞춤조건 정보 획득
+        // condIdx로 맞춤조건 정보 획득
         final Cond cond = condMapper.findCondByCondIdx(condIdx);
         if(cond == null)
             return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_EXIST_COND);
