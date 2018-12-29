@@ -1,5 +1,7 @@
 package org.sopt.smatching.service;
 
+import org.sopt.smatching.dto.Cond;
+import org.sopt.smatching.dto.CondDetail;
 import org.sopt.smatching.dto.CondSummary;
 import org.sopt.smatching.dto.UserCond;
 import org.sopt.smatching.model.CondRes;
@@ -26,8 +28,14 @@ public class CondService {
     @Autowired
     private JwtService jwtService;
 
+    public DefaultRes getCondInfoByCondIdx(final int condIdx) {
+        final Cond cond = condMapper.findCondByCondIdx(condIdx);
 
-    // 토큰에서 userIdx를 추출해서 맞춤조건 조회
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_COND_SUCCESS);//condDetail);
+    }
+
+
+    // 토큰에서 userIdx를 추출해서 맞춤조건 조회 - UserController 에서 사용
     public DefaultRes getCondInfoByToken(final String jwt) {
 
         // 토큰이 없으면 403 리턴
@@ -55,11 +63,11 @@ public class CondService {
         for(int i=0; i<userCondList.size(); i++) {
             int condIdx = userCondList.get(i).getCondIdx();
             String condName = userCondList.get(i).getCondName();
-            int noticeCnt = noticeMapper.countFitNotice(condMapper.findByCondIdx(userCondList.get(i).getCondIdx()));
+            int noticeCnt = noticeMapper.countFitNotice(condMapper.findCondByCondIdx(userCondList.get(i).getCondIdx()));
             condRes.getCondSummaryList().add(new CondSummary(condIdx, condName, noticeCnt));
         }
 
-        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_COND_SUCCESS, condRes);
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USERCOND_SUCCESS, condRes);
     }
 
 }
