@@ -26,12 +26,16 @@ public class CondController {
         return new ResponseEntity<>(condService.getCondInfoByCondIdx(condIdx), HttpStatus.OK);
     }
 
-
     // 맞춤조건에 맞는 지원사업 개수 조회
     @PutMapping("/count")
     public ResponseEntity getNoticeCountByCondDetail(@RequestBody final CondDetail condDetail) {
         return new ResponseEntity<>(condService.getNoticeCountByCondDetail(condDetail), HttpStatus.OK);
     }
 
+    // 맞춤조건 추가
+    @PostMapping("")
+    public ResponseEntity createCond(@RequestBody final CondDetail condDetail) {
+        return new ResponseEntity<>(condService.createCond(condDetail), HttpStatus.OK);
+    }
 
 }

@@ -1,5 +1,6 @@
 package org.sopt.smatching.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.dto.Cond;
 import org.sopt.smatching.dto.CondDetail;
 import org.sopt.smatching.dto.CondSummary;
@@ -13,9 +14,12 @@ import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class CondService {
 
@@ -37,10 +41,29 @@ public class CondService {
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_COND_SUCCESS, new CondDetail(cond));
     }
 
+
     // 맞춤조건에 맞는 지원사업 개수 조회
     public DefaultRes getNoticeCountByCondDetail(CondDetail condDetail) {
         final int noticeCnt = noticeMapper.countFitNotice(new Cond(condDetail));
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_FIT_NOTICE_CNT_SUCCESS, noticeCnt);
+    }
+
+
+    // 맞춤조건 추가
+    @Transactional
+    public DefaultRes createCond(CondDetail condDetail) {
+        Cond cond = new Cond(condDetail);
+        try {
+//             ### 쿼리문 수정 및 auto increment 값 받아오도록 수정필요
+//            final int condIdx = condMapper.save(cond);
+            int condIdx = -1; // ### 이 라인은 삭제
+            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_COND, condIdx);
+        } catch(Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
+
     }
 
 
