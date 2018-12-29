@@ -62,11 +62,11 @@ public class NoticeService {
 
 
     /////// 위의 2개 메소드 Overload ////////
-    // 맞춤조건에 매칭되는 지원사업 개수 조회 - Mappper만 수정하면됨
+    // 맞춤조건에 매칭되는 지원사업 개수 조회
     public DefaultRes getNoticeCnt(int condIdx) {
 
         // 맞춤조건 정보 획득
-        final Cond cond = condMapper.findByCondIdx(condIdx);
+        final Cond cond = condMapper.findCondByCondIdx(condIdx);
         if(cond == null)
             return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_EXIST_COND);
 
@@ -75,7 +75,7 @@ public class NoticeService {
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_FIT_NOTICE_CNT_SUCCESS, noticeCnt);
     }
 
-    // 맞춤 지원사업 목록 조회- 최신등록순으로 요청된 갯수만큼 리턴 - Mappper만 수정하면됨
+    // 맞춤 지원사업 목록 조회- 최신등록순으로 요청된 갯수만큼 리턴
     public DefaultRes getNoticeSummaryList(String jwt, int reqNum, int existNum, int condIdx) {
 
         // 토큰이 없으면 403 리턴
@@ -92,7 +92,7 @@ public class NoticeService {
         }
 
         // scrap과 조인하는 쿼리문 사용
-        final Cond cond = condMapper.findByCondIdx(condIdx);
+        final Cond cond = condMapper.findCondByCondIdx(condIdx);
         List<NoticeSummary> noticeSummaryList = noticeMapper.findFitNoticeSummaryWithScrap(reqNum, existNum, userIdx, cond);
 
         // 한개도 검색되지 않았으면 204

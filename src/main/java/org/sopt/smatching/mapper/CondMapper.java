@@ -2,6 +2,7 @@ package org.sopt.smatching.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.sopt.smatching.dto.Cond;
+import org.sopt.smatching.dto.CondDetail;
 import org.sopt.smatching.dto.UserCond;
 
 import java.util.List;
@@ -23,8 +24,7 @@ public interface CondMapper {
     @Select("SELECT * " +
             "FROM cond " +
             "WHERE condidx = #{condIdx}")
-    Cond findByCondIdx(@Param("condIdx") final int condIdx);
-
+    Cond findCondByCondIdx(@Param("condIdx") final int condIdx);
 
 
 
