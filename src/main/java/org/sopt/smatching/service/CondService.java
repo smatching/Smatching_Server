@@ -37,6 +37,12 @@ public class CondService {
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_COND_SUCCESS, new CondDetail(cond));
     }
 
+    // 맞춤조건에 맞는 지원사업 개수 조회
+    public DefaultRes getNoticeCountByCondDetail(CondDetail condDetail) {
+        final int noticeCnt = noticeMapper.countFitNotice(new Cond(condDetail));
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_FIT_NOTICE_CNT_SUCCESS, noticeCnt);
+    }
+
 
     // 토큰에서 userIdx를 추출해서 맞춤조건 조회 - UserController 에서 사용
     public DefaultRes getCondInfoByToken(final String jwt) {
