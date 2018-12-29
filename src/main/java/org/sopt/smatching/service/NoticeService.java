@@ -93,6 +93,8 @@ public class NoticeService {
 
         // scrap과 조인하는 쿼리문 사용
         final Cond cond = condMapper.findCondByCondIdx(condIdx);
+        if(cond == null)
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_EXIST_COND);
         List<NoticeSummary> noticeSummaryList = noticeMapper.findFitNoticeSummaryWithScrap(reqNum, existNum, userIdx, cond);
 
         // 한개도 검색되지 않았으면 204
