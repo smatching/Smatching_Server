@@ -14,7 +14,7 @@ public class MultipleOption {
                                                "kyunggi",  "kyungnam", "kyungbuk", "jeonnam", "jeonbuk",
                                                "chungnam", "chungbuk", "jeju",     "aborad" };
 
-    public static final String[] AGES = { "TWENTY_LESS", "TWENTY_FOURTY", "FORTY_MORE" };
+    public static final String[] AGES = { "twenty_less", "twenty_forty", "forty_more" };
 
     public static final String[] PERIODS = { "zero_one", "one_two",   "two_three",  "three_four", "four_five",
                                              "five_six", "six_seven", "seven_more", "yet" };
