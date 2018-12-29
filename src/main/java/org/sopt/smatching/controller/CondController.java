@@ -25,7 +25,7 @@ public class CondController {
     // condIdx로 맞춤조건 조회
     @GetMapping("")
     public ResponseEntity getCondInfoByCondIdx(@RequestParam(value = "cond_idx") int condIdx) {
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(condService.getCondInfoByCondIdx(condIdx), HttpStatus.OK);
     }
 
 

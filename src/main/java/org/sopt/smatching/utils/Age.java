@@ -1,8 +1,8 @@
-package org.sopt.smatching.utils.enums;
+package org.sopt.smatching.utils;
 
 // ENUM('ALL', 'TWENTY_LESS', 'TWENTY_FORTY', 'FORTY_MORE')
 
-public enum Age {
+public enum Age { // 나이
     ALL(1), // 무관
     TWENTY_LESS(2), // 만 20세 미만
     TWENTY_FOURTY(3), // 만 20세 이상 ~ 만 40세 미만

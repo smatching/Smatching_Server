@@ -42,24 +42,35 @@ public interface NoticeMapper {
     @Select("SELECT COUNT(notice.noticeidx) " +
             "FROM notice " +
             "WHERE notice.valid = 1 " +
-
             "AND notice.location & #{cond.location} > 0 " +
             "AND notice.category & #{cond.category} > 0 " +
-            //"AND notice.age = #{cond.age} " + // 무관 빠지면 변경필요
-            //"AND notice.min_month < " +
-            //"AND notice.max_month > " +
+            "AND notice.age = #{cond.age} " +
+            "AND notice.period & #{cond.period} > 0 " +
             "AND notice.field & #{cond.field} > 0 " +
             "AND notice.advantage & #{cond.advantage} > 0 " +
-            "AND notice.busitype & #{cond.busiType} > 0 ")
+            "AND notice.busitype & #{cond.busiType} > 0")
     int countFitNotice(@Param("cond") final Cond cond);
 
 
     // 맞춤공고 목록 조회
-    @Select("")
+    @Select("SELECT notice.noticeIdx, notice.title, notice.institution, notice.end_date-current_date as dday, scrap_notice.scrap, notice.readcnt " +
+            "FROM notice " +
+            "LEFT OUTER JOIN scrap_notice " +
+            "ON notice.noticeIdx = scrap_notice.noticeIdx AND scrap_notice.useridx = #{userIdx} " +
+            "WHERE notice.valid = 1 " +
+            "AND notice.location & #{cond.location} > 0 " +
+            "AND notice.category & #{cond.category} > 0 " +
+            "AND notice.age = #{cond.age} " +
+            "AND notice.period & #{cond.period} > 0 " +
+            "AND notice.field & #{cond.field} > 0 " +
+            "AND notice.advantage & #{cond.advantage} > 0 " +
+            "AND notice.busitype & #{cond.busiType} > 0 " +
+            "ORDER BY notice.noticeIdx DESC " +
+            "LIMIT #{existNum}, #{reqNum}")
     List<NoticeSummary> findFitNoticeSummaryWithScrap(@Param("reqNum") final int reqNum,
                                                       @Param("existNum") final int existNum,
                                                       @Param("userIdx") final int userIdx,
-                                                      @Param("condIdx") final int condIdx);
+                                                      @Param("cond") final Cond cond);
 
 
 }
