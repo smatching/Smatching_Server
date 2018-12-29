@@ -28,10 +28,13 @@ public class CondService {
     @Autowired
     private JwtService jwtService;
 
+    // 맞춤조건 조회
     public DefaultRes getCondInfoByCondIdx(final int condIdx) {
         final Cond cond = condMapper.findCondByCondIdx(condIdx);
+        if(cond == null)
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_EXIST_COND);
 
-        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_COND_SUCCESS);//condDetail);
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_COND_SUCCESS, new CondDetail(cond));
     }
 
 

@@ -16,7 +16,7 @@ public class Cond {
     private int userIdx;
     private String condName;
     private long location;
-    private Age age;
+    private int age;
     private int period;
     private int category;
     private long field;

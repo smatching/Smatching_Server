@@ -44,7 +44,7 @@ public interface NoticeMapper {
             "WHERE notice.valid = 1 " +
             "AND notice.location & #{cond.location} > 0 " +
             "AND notice.category & #{cond.category} > 0 " +
-            "AND notice.age = #{cond.age} " +
+            "AND notice.age & #{cond.age} > 0 " +
             "AND notice.period & #{cond.period} > 0 " +
             "AND notice.field & #{cond.field} > 0 " +
             "AND notice.advantage & #{cond.advantage} > 0 " +
@@ -60,7 +60,7 @@ public interface NoticeMapper {
             "WHERE notice.valid = 1 " +
             "AND notice.location & #{cond.location} > 0 " +
             "AND notice.category & #{cond.category} > 0 " +
-            "AND notice.age = #{cond.age} " +
+            "AND notice.age & #{cond.age} > 0 " +
             "AND notice.period & #{cond.period} > 0 " +
             "AND notice.field & #{cond.field} > 0 " +
             "AND notice.advantage & #{cond.advantage} > 0 " +
