@@ -42,7 +42,7 @@ public class CondDetail {
 
         // 사용자 입장 에선 Exclude Category(필요없는 지원분야)이므로 비트플립 해서 넘김
         int invalidBitCnt = 32 - MultipleOption.CATEGORYS.length;
-        int flipped_category = ((~(cond.getCategory()) << invalidBitCnt) >> invalidBitCnt);
+        int flipped_category = ((~(cond.getCategory()) << invalidBitCnt) >>> invalidBitCnt);
         this.excCategory = bitToMap(flipped_category, MultipleOption.CATEGORYS);
     }
 
