@@ -51,12 +51,28 @@ public class CondService {
 
     // 맞춤조건 추가
     @Transactional
-    public DefaultRes createCond(CondDetail condDetail) {
+    public DefaultRes createCond(String jwt, CondDetail condDetail) {
+
+        // 토큰이 없으면 403 리턴
+        if(jwt == null)
+            return new DefaultRes(StatusCode.FORBIDDEN, ResponseMessage.NOT_EXIST_TOKEN);
+
+        // 토큰 해독
+        final JwtService.Token token = jwtService.decode(jwt);
+        int userIdx = token.getUser_idx();
+
+        // 비정상 토큰인 경우 에러 출력
+        if (userIdx == -1) {
+            return DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INVALID_TOKEN);
+        }
+
+        // 클라가 보내준 CondDetail -> DB에 저장할 Cond 변환
         Cond cond = new Cond(condDetail);
+        cond.setUserIdx(userIdx);
+
+        // Cond DB에 Insert
         try {
-//             ### 쿼리문 수정 및 auto increment 값 받아오도록 수정필요
-//            final int condIdx = condMapper.save(cond);
-            int condIdx = -1; // ### 이 라인은 삭제
+            final int condIdx = condMapper.save(cond);
             return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_COND, condIdx);
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback

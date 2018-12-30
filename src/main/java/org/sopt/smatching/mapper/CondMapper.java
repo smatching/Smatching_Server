@@ -30,13 +30,13 @@ public interface CondMapper {
 
 
     // 맞춤조건 추가
-    @Insert("INSERT INTO cond(useridx, condname, location, age, period, category_exc, field_inc, advantage) " +
-            "VALUES(#{cond.useridx}, #{cond.condname}, #{cond.location}, #{cond.age}, #{cond.period}, #{cond.category_exc}, #{cond.field_inc}, #{cond.advantage})")
+    @Insert("INSERT INTO cond(useridx, condname, location, age, period, category, field, advantage, busitype, alert) " +
+            "VALUES(#{cond.userIdx}, #{cond.condName}, #{cond.location}, #{cond.age}, #{cond.period}, #{cond.category}, #{cond.field}, #{cond.advantage}, #{cond.busiType}, #{cond.alert})")
     @Options(useGeneratedKeys = true, keyColumn = "condIdx")
-    void save(@Param("cond") final Cond cond);
+    int save(@Param("cond") final Cond cond);
 
 
-    // 맞춤조건 수정
+    // 맞춤조건 수정 - alert 는 제외
     @Update("UPDATE cond " +
             "SET condname = #{cond.condname}, location = #{cond.location}, age = #{cond.age}, period = #{cond.period}, category_exc = #{cond.category_exc}, field_inc = #{cond.field_inc}, advantage = #{cond.advantage} " +
             "WHERE condidx = #{cond.condidx}")

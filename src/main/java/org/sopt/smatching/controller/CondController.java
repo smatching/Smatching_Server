@@ -35,7 +35,7 @@ public class CondController {
     // 맞춤조건 추가
     @PostMapping("")
     public ResponseEntity createCond(@RequestBody final CondDetail condDetail) {
-        return new ResponseEntity<>(condService.createCond(condDetail), HttpStatus.OK);
+        return new ResponseEntity<>(condService.createCond(httpServletRequest.getHeader("Authorization"), condDetail), HttpStatus.OK);
     }
 
 }
