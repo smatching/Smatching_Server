@@ -30,10 +30,10 @@ public class Cond {
     public Cond(CondDetail condDetail) {
 
         // 안 쓸 변수들 각 type default 값들로 초기화
-        this.condIdx = 0;
-        this.userIdx = 0;
-        this.condName = null;
-        this.alert = false;
+        this.condIdx = condDetail.getCondIdx();
+        this.userIdx = -1;
+        this.condName = condDetail.getCondName();
+        this.alert = condDetail.isAlert();
 
         this.location = mapToLong(condDetail.getLocation(), MultipleOption.LOCATIONS);
         this.age = mapToInt(condDetail.getAge(), MultipleOption.AGES);
@@ -44,7 +44,7 @@ public class Cond {
 
         // DB 저장된 정보는 Include Category(필요한 지원분야)이므로 비트플립 해서 넘김
         int invalidBitCnt = 32 - MultipleOption.CATEGORYS.length;
-        int flipped_category = ((~(mapToInt(condDetail.getExcCategory(), MultipleOption.CATEGORYS)) << invalidBitCnt) >> invalidBitCnt);
+        int flipped_category = ((~(mapToInt(condDetail.getExcCategory(), MultipleOption.CATEGORYS)) << invalidBitCnt) >>> invalidBitCnt);
         this.category = flipped_category;
     }
 
