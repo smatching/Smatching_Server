@@ -49,11 +49,11 @@ public class UserService {
 
     @Transactional
     public DefaultRes signUp(SignUpReq signUpReq) {
-        try {
+        try { // 정상 추가
             userMapper.save(signUpReq);
             return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_USER, signUpReq.getNickname());
 
-        } catch (DuplicateKeyException e) {
+        } catch (DuplicateKeyException e) { // 이메일 중복
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
             if(e.getMessage().contains("for key 'UC_email'") == true) {
                 log.error(e.getMessage());
@@ -61,7 +61,7 @@ public class UserService {
             }
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
 
-        } catch (Exception e) {
+        } catch (Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
             log.error(e.getMessage());
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);

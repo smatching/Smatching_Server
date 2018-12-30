@@ -24,8 +24,6 @@ import java.util.List;
 public class CondService {
 
     @Autowired
-    private UserMapper userMapper;
-    @Autowired
     private CondMapper condMapper;
     @Autowired
     private NoticeMapper noticeMapper;
@@ -70,11 +68,11 @@ public class CondService {
         Cond cond = new Cond(condDetail);
         cond.setUserIdx(userIdx);
 
-        // Cond DB에 Insert
-        try {
+        try { // 정상 추가
             condMapper.save(cond);
             return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_COND, cond.getCondIdx());
-        } catch(Exception e) {
+
+        } catch(Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
             log.error(e.getMessage());
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
@@ -85,7 +83,7 @@ public class CondService {
 
     // 맞춤조건 변경
     @Transactional
-    public DefaultRes updateCond(String jwt, int condIdx, CondDetail condDetail) {
+    public DefaultRes updateCond(final String jwt, final int condIdx, final CondDetail condDetail) {
 
         // 토큰이 없으면 403 리턴
         if(jwt == null)
@@ -103,11 +101,11 @@ public class CondService {
         // 클라가 보내준 CondDetail -> DB에 저장할 Cond 변환
         Cond cond = new Cond(condDetail);
 
-        // Cond DB에 update
-        try {
+        try { // 정상 변경
             condMapper.updateByCondIdx(userIdx, condIdx, cond);
-            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.UPDATED_COND, cond.getCondIdx());
-        } catch(Exception e) {
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.UPDATED_COND, condIdx);
+
+        } catch(Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
             log.error(e.getMessage());
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
@@ -117,7 +115,7 @@ public class CondService {
 
     // 맞춤조건 삭제
     @Transactional
-    public DefaultRes deleteCond(String jwt, int condIdx) {
+    public DefaultRes deleteCond(final String jwt, final int condIdx) {
 
         // 토큰이 없으면 403 리턴
         if(jwt == null)
@@ -132,16 +130,19 @@ public class CondService {
             return DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INVALID_TOKEN);
         }
 
-        // DB에서 DELETE 실행
-        try {
+        try { // 정상 삭제
             condMapper.deleteByCondIdx(userIdx, condIdx);
             return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.DELETED_COND);
-        } catch(Exception e) {
+
+        } catch(Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
             log.error(e.getMessage());
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
+
+
+
 
     // 토큰에서 userIdx를 추출해서 맞춤조건 조회 - UserController 에서 사용
     public DefaultRes getCondInfoByToken(final String jwt) {

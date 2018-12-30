@@ -3,7 +3,6 @@ package org.sopt.smatching.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.sopt.smatching.utils.Age;
 import org.sopt.smatching.utils.MultipleOption;
 
 import java.util.HashMap;
