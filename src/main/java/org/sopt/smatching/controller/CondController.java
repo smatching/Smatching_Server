@@ -38,4 +38,16 @@ public class CondController {
         return new ResponseEntity<>(condService.createCond(httpServletRequest.getHeader("Authorization"), condDetail), HttpStatus.OK);
     }
 
+    // 맞춤조건 변경
+    @PutMapping("/{condIdx}")
+    public ResponseEntity updateCond(@PathVariable(value = "condIdx") final int condIdx,
+                                     @RequestBody final CondDetail condDetail) {
+        return new ResponseEntity<>(condService.updateCond(httpServletRequest.getHeader("Authorization"), condIdx, condDetail), HttpStatus.OK);
+    }
+
+    // 맞춤조건 삭제
+    @DeleteMapping("/{condIdx}")
+    public ResponseEntity deleteCond(@PathVariable(value = "condIdx") final int condIdx) {
+        return new ResponseEntity<>(condService.deleteCond(httpServletRequest.getHeader("Authorization"), condIdx), HttpStatus.OK);
+    }
 }

@@ -2,7 +2,6 @@ package org.sopt.smatching.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.sopt.smatching.dto.Cond;
-import org.sopt.smatching.dto.CondDetail;
 import org.sopt.smatching.dto.UserCond;
 
 import java.util.List;
@@ -33,20 +32,20 @@ public interface CondMapper {
     @Insert("INSERT INTO cond(useridx, condname, location, age, period, category, field, advantage, busitype, alert) " +
             "VALUES(#{cond.userIdx}, #{cond.condName}, #{cond.location}, #{cond.age}, #{cond.period}, #{cond.category}, #{cond.field}, #{cond.advantage}, #{cond.busiType}, #{cond.alert})")
     @Options(useGeneratedKeys = true, keyProperty = "cond.condIdx")
-    // AI값 받기 방법 : 리턴타입 void 로 바꾸고 keyColumn 대신 keyProperty 설정. 인자로 넘겨준 cond 변수에 final 키워드 삭제에. 그러면 알아서 condIdx 채워짐 (세미나 코드는 안먹음)
+    // AI값 받기 방법 : 리턴타입 void 로 바꾸고 keyColumn 대신 keyProperty 설정 + 인자로 넘겨준 cond 변수에 final 키워드 삭제. 그러면 알아서 condIdx 채워짐 (세미나 코드는 안먹음)
     void save(@Param("cond") Cond cond);
 
 
-    
-    // 맞춤조건 수정 - alert 는 제외
+
+    // 맞춤조건 수정 - INSERT에서 condIdx, userIdx, alert 값은 제외
     @Update("UPDATE cond " +
-            "SET condname = #{cond.condname}, location = #{cond.location}, age = #{cond.age}, period = #{cond.period}, category_exc = #{cond.category_exc}, field_inc = #{cond.field_inc}, advantage = #{cond.advantage} " +
-            "WHERE condidx = #{cond.condidx}")
-    void updateByCondIdx(@Param("cond") final Cond cond);
+            "SET condname = #{cond.condName}, location = #{cond.location}, age = #{cond.age}, period = #{cond.period}, category = #{cond.category}, field = #{cond.field}, advantage = #{cond.advantage}, busitype = #{cond.busiType} " +
+            "WHERE condidx = #{condIdx} AND useridx = #{userIdx}")
+    void updateByCondIdx(@Param("userIdx") final int userIdx, @Param("condIdx") final int condIdx, @Param("cond") final Cond cond);
 
 
     // 맞춤조건 삭제
     @Delete("DELETE FROM cond " +
-            "where condidx = #{condidx}")
-    void deleteByCondIdx(@Param("condidx") final int condidx);
+            "WHERE condidx = #{condIdx} AND useridx = #{userIdx}")
+    void deleteByCondIdx(@Param("userIdx") final int userIdx, @Param("condIdx") final int condIdx);
 }
