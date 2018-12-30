@@ -72,8 +72,8 @@ public class CondService {
 
         // Cond DB에 Insert
         try {
-            final int condIdx = condMapper.save(cond);
-            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_COND, condIdx);
+            condMapper.save(cond);
+            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_COND, cond.getCondIdx());
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
             log.error(e.getMessage());
