@@ -5,12 +5,14 @@ import org.sopt.smatching.model.LoginReq;
 import org.sopt.smatching.model.SignUpReq;
 import org.sopt.smatching.service.CondService;
 import org.sopt.smatching.service.UserService;
+import org.sopt.smatching.utils.auth.Auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -21,8 +23,6 @@ public class UserController {
     private UserService userService;
     @Autowired
     private CondService condService;
-    @Autowired
-    private HttpServletRequest httpServletRequest;
 
     // 회원 가입
     @PostMapping("")
@@ -39,8 +39,9 @@ public class UserController {
 
 
     // 유저의 맞춤조건 현황 조회
+    @Auth
     @GetMapping("/cond")
-    public ResponseEntity getCondInfoByToken() {
-        return new ResponseEntity<>(condService.getCondInfoByToken(httpServletRequest.getHeader("Authorization")), HttpStatus.OK);
+    public ResponseEntity getCondInfoByToken(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
+        return new ResponseEntity<>(condService.getCondInfoByToken(idx_variable), HttpStatus.OK);
     }
 }
