@@ -48,7 +48,15 @@ public class NoticeController {
     }
 
 
-    // 지원사업 스크랩
+    // 지원사업 스크랩 조회
+    @Auth
+    @GetMapping("/scrap")
+    public ResponseEntity getScrap(@RequestHeader(required = false, defaultValue = "0") int idx_variable,
+                                   @RequestParam(value = "notice_idx") final int noticeIdx) {
+        return new ResponseEntity<>(noticeService.getScrap(idx_variable, noticeIdx), HttpStatus.OK);
+    }
+
+    // 지원사업 스크랩 설정 or 해제
     @Auth
     @PutMapping("/scrap/{noticeIdx}")
     public ResponseEntity changeScrap(@RequestHeader(required = false, defaultValue = "0") int idx_variable,

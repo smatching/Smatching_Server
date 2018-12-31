@@ -32,6 +32,7 @@ public class ResponseMessage {
     public static final String UPDATED_COND = "맞춤조건 변경 성공";
     public static final String DELETED_COND = "맞춤조건 삭제 성공";
 
-    public static final String CREATED_SCRAP = "스크랩 추가 성공";
-    public static final String DELETED_SCRAP = "스크랩 삭제 성공";
+    public static final String READ_SCRAP = "스크랩 여부 조회 성공";
+    public static final String CREATED_SCRAP = "스크랩 설정 성공";
+    public static final String DELETED_SCRAP = "스크랩 해제 성공";
 }

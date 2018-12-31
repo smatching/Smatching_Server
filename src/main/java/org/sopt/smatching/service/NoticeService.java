@@ -117,11 +117,19 @@ public class NoticeService {
 
     ///////////////////////////////////////////////////////////////////////
 
+    // 스크랩 여부 조회
+    public DefaultRes getScrap(int userIdx, int noticeIdx) {
+        // 현재 상태 count로 체크 (1 or 0)
+        int scraped = scrapMapper.isScraped(userIdx, noticeIdx);
+
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_SCRAP, scraped);
+    }
+
     // 스크랩 여부 바꾸기
     @Transactional
     public DefaultRes changeScrap(int userIdx, int noticeIdx) {
 
-        // 현재 상태 count로 체크 (0 or 1)
+        // 현재 상태 count로 체크 (1 or 0)
         int scraped = scrapMapper.isScraped(userIdx, noticeIdx);
 
         try {
