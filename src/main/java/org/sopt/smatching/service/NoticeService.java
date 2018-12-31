@@ -8,6 +8,7 @@ import org.sopt.smatching.mapper.UserMapper;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
+import org.sopt.smatching.utils.auth.AuthAspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,7 @@ public class NoticeService {
     private NoticeMapper noticeMapper;
     @Autowired
     private CondMapper condMapper;
-    @Autowired
-    private UserMapper userMapper;
+
 
     // 전체 지원사업 개수 조회
     public DefaultRes getNoticeCnt() {
@@ -41,14 +41,15 @@ public class NoticeService {
 
         // 토큰값 있으면 스크랩 여부를 위해 조인 필요
         else {
+
             // 토큰 해독
             final JwtService.Token token = jwtService.decode(jwt);
             int userIdx = token.getUser_idx();
 
-            // 비정상 토큰인 경우 에러 출력
-            if (userIdx == -1) {
-                return DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INVALID_TOKEN);
-            }
+            // 비정상 토큰인 경우 403 리턴
+            if(userIdx < 1)
+                return AuthAspect.DEFAULT_RES_403;
+
             // scrap과 조인하는 쿼리문 사용
             noticeSummaryList = noticeMapper.findAllNoticeSummaryWithScrap(reqNum, existNum, userIdx);
         }
@@ -78,24 +79,26 @@ public class NoticeService {
     // 맞춤 지원사업 목록 조회- 최신등록순으로 요청된 갯수만큼 리턴
     public DefaultRes getNoticeSummaryList(String jwt, int reqNum, int existNum, int condIdx) {
 
-        // 토큰이 없으면 403 리턴
+        // 토큰 없으면 401 리턴
         if(jwt == null)
-            return new DefaultRes(StatusCode.FORBIDDEN, ResponseMessage.NOT_EXIST_TOKEN);
+            return AuthAspect.DEFAULT_RES_401;
 
         // 토큰 해독
         final JwtService.Token token = jwtService.decode(jwt);
         int userIdx = token.getUser_idx();
 
-        // 비정상 토큰인 경우 에러 출력
-        if (userIdx == -1) {
-            return DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INVALID_TOKEN);
-        }
+        // 비정상 토큰인 경우 403 리턴
+        if(userIdx < 1)
+            return AuthAspect.DEFAULT_RES_403;
 
-        // scrap과 조인하는 쿼리문 사용
+        // cond 테이블에서 맞춤조건 정보 획득
         final Cond cond = condMapper.findCondByCondIdx(condIdx);
         if(cond == null)
             return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_EXIST_COND);
+
+        // notice 테이블과 scrap과 조인하는 쿼리문 사용
         List<NoticeSummary> noticeSummaryList = noticeMapper.findFitNoticeSummaryWithScrap(reqNum, existNum, userIdx, cond);
+
 
         // 한개도 검색되지 않았으면 204
         if (noticeSummaryList.isEmpty())
@@ -108,6 +111,12 @@ public class NoticeService {
 
     ///////////////////////////////////////////////////////////////////////
 
+    // 스크랩 여부 바꾸기
+    public DefaultRes changeScrap(int userIdx, int noticeIdx) {
+
+
+        return null;
+    }
 
 
     // 공고 상세 조회 - 새로 작성해야함

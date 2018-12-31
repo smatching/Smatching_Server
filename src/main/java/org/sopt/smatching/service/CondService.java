@@ -8,7 +8,6 @@ import org.sopt.smatching.dto.UserCond;
 import org.sopt.smatching.model.CondRes;
 import org.sopt.smatching.mapper.CondMapper;
 import org.sopt.smatching.mapper.NoticeMapper;
-import org.sopt.smatching.mapper.UserMapper;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
@@ -27,8 +26,6 @@ public class CondService {
     private CondMapper condMapper;
     @Autowired
     private NoticeMapper noticeMapper;
-    @Autowired
-    private JwtService jwtService;
 
     // 맞춤조건 조회
     public DefaultRes getCondInfoByCondIdx(final int condIdx) {
@@ -49,27 +46,18 @@ public class CondService {
 
     // 맞춤조건 추가
     @Transactional
-    public DefaultRes createCond(String jwt, CondDetail condDetail) {
-
-        // 토큰이 없으면 403 리턴
-        if(jwt == null)
-            return new DefaultRes(StatusCode.FORBIDDEN, ResponseMessage.NOT_EXIST_TOKEN);
-
-        // 토큰 해독
-        final JwtService.Token token = jwtService.decode(jwt);
-        int userIdx = token.getUser_idx();
-
-        // 비정상 토큰인 경우 에러 출력
-        if (userIdx == -1) {
-            return DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INVALID_TOKEN);
-        }
+    public DefaultRes createCond(final int userIdx, final CondDetail condDetail) {
 
         // 클라가 보내준 CondDetail -> DB에 저장할 Cond 변환
         Cond cond = new Cond(condDetail);
         cond.setUserIdx(userIdx);
 
         try { // 정상 추가
-            condMapper.save(cond);
+            int rowCnt = condMapper.save(cond);
+
+            if(rowCnt != 1)
+                throw new Exception("rowCnt is NOT 1");
+
             return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_COND, cond.getCondIdx());
 
         } catch(Exception e) { // DB 에러
@@ -83,26 +71,17 @@ public class CondService {
 
     // 맞춤조건 변경
     @Transactional
-    public DefaultRes updateCond(final String jwt, final int condIdx, final CondDetail condDetail) {
-
-        // 토큰이 없으면 403 리턴
-        if(jwt == null)
-            return new DefaultRes(StatusCode.FORBIDDEN, ResponseMessage.NOT_EXIST_TOKEN);
-
-        // 토큰 해독
-        final JwtService.Token token = jwtService.decode(jwt);
-        int userIdx = token.getUser_idx();
-
-        // 비정상 토큰인 경우 에러 출력
-        if (userIdx == -1) {
-            return DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INVALID_TOKEN);
-        }
+    public DefaultRes updateCond(final int userIdx, final int condIdx, final CondDetail condDetail) {
 
         // 클라가 보내준 CondDetail -> DB에 저장할 Cond 변환
         Cond cond = new Cond(condDetail);
 
         try { // 정상 변경
-            condMapper.updateByCondIdx(userIdx, condIdx, cond);
+            final int rowCnt = condMapper.updateByCondIdx(userIdx, condIdx, cond);
+
+            if(rowCnt != 1)
+                throw new Exception("rowCnt is NOT 1");
+
             return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.UPDATED_COND, condIdx);
 
         } catch(Exception e) { // DB 에러
@@ -110,28 +89,19 @@ public class CondService {
             log.error(e.getMessage());
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
-
     }
+
 
     // 맞춤조건 삭제
     @Transactional
-    public DefaultRes deleteCond(final String jwt, final int condIdx) {
-
-        // 토큰이 없으면 403 리턴
-        if(jwt == null)
-            return new DefaultRes(StatusCode.FORBIDDEN, ResponseMessage.NOT_EXIST_TOKEN);
-
-        // 토큰 해독
-        final JwtService.Token token = jwtService.decode(jwt);
-        int userIdx = token.getUser_idx();
-
-        // 비정상 토큰인 경우 에러 출력
-        if (userIdx == -1) {
-            return DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INVALID_TOKEN);
-        }
+    public DefaultRes deleteCond(final int userIdx, final int condIdx) {
 
         try { // 정상 삭제
-            condMapper.deleteByCondIdx(userIdx, condIdx);
+            final int rowCnt = condMapper.deleteByCondIdx(userIdx, condIdx);
+
+            if(rowCnt != 1)
+                throw new Exception("rowCnt is NOT 1");
+
             return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.DELETED_COND);
 
         } catch(Exception e) { // DB 에러
@@ -143,22 +113,8 @@ public class CondService {
 
 
 
-
-    // 토큰에서 userIdx를 추출해서 맞춤조건 조회 - UserController 에서 사용
-    public DefaultRes getCondInfoByToken(final String jwt) {
-
-        // 토큰이 없으면 403 리턴
-        if(jwt == null)
-            return new DefaultRes(StatusCode.FORBIDDEN, ResponseMessage.NOT_EXIST_TOKEN);
-
-        // 토큰 해독
-        final JwtService.Token token = jwtService.decode(jwt);
-        int userIdx = token.getUser_idx();
-
-        // 비정상 토큰인 경우 500 리턴
-        if(userIdx == -1)
-            return new DefaultRes(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INVALID_TOKEN);
-
+    // 유저의 맞춤조건 현황 조회 - UserController 에서 사용
+    public DefaultRes getCondInfoByToken(final int userIdx) {
 
         // 유저의 닉네임과 설정해놓은 맞춤조건 인덱스와 이름까지만 가져옴
         List<UserCond> userCondList =  condMapper.findInfoByUserIdx(userIdx);
