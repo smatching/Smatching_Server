@@ -1,19 +1,23 @@
 package org.sopt.smatching.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.dto.Cond;
 import org.sopt.smatching.dto.NoticeSummary;
 import org.sopt.smatching.mapper.CondMapper;
 import org.sopt.smatching.mapper.NoticeMapper;
-import org.sopt.smatching.mapper.UserMapper;
+import org.sopt.smatching.mapper.ScrapMapper;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
 import org.sopt.smatching.utils.auth.AuthAspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class NoticeService {
 
@@ -23,6 +27,8 @@ public class NoticeService {
     private NoticeMapper noticeMapper;
     @Autowired
     private CondMapper condMapper;
+    @Autowired
+    private ScrapMapper scrapMapper;
 
 
     // 전체 지원사업 개수 조회
@@ -112,10 +118,36 @@ public class NoticeService {
     ///////////////////////////////////////////////////////////////////////
 
     // 스크랩 여부 바꾸기
+    @Transactional
     public DefaultRes changeScrap(int userIdx, int noticeIdx) {
 
+        // 현재 상태 count로 체크 (0 or 1)
+        int scraped = scrapMapper.isScraped(userIdx, noticeIdx);
 
-        return null;
+        try {
+            if (scraped == 0) { // 스크랩 안돼있으면 row 추가
+                int rowCnt = scrapMapper.insertScrap(userIdx, noticeIdx);
+                if(rowCnt != 1)
+                    throw new Exception("rowCnt is NOT 1");
+
+                return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_SCRAP, 1);
+            }
+            else if (scraped == 1) { // 스크랩 돼있으면 row 삭제
+                int rowCnt = scrapMapper.deleteScrap(userIdx, noticeIdx);
+                if(rowCnt != 1)
+                    throw new Exception("rowCnt is NOT 1");
+
+                return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.DELETED_SCRAP, 0);
+            }
+            else { // 0 이나 1이 아니면 이상한거임
+                throw new Exception("scraped is not 0 or 1");
+            }
+
+        } catch(Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
     }
 
 
