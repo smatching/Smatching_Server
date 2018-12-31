@@ -42,7 +42,7 @@ public class NoticeService {
         List<NoticeSummary> noticeSummaryList;
 
         // 토큰값 없으면 조인 없는 쿼리문 사용, scrap은 모두 int 기본값인 0으로 설정됨
-        if(jwt == null)
+        if(jwt == null  || jwt == "")
             noticeSummaryList = noticeMapper.findAllNoticeSummary(reqNum, existNum);
 
         // 토큰값 있으면 스크랩 여부를 위해 조인 필요
@@ -86,7 +86,7 @@ public class NoticeService {
     public DefaultRes getNoticeSummaryList(String jwt, int reqNum, int existNum, int condIdx) {
 
         // 토큰 없으면 401 리턴
-        if(jwt == null)
+        if(jwt == null || jwt == "")
             return AuthAspect.DEFAULT_RES_401;
 
         // 토큰 해독
