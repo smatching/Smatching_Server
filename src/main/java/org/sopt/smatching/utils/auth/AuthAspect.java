@@ -32,7 +32,7 @@ public class AuthAspect {
     public final static DefaultRes DEFAULT_RES_401 = DefaultRes.builder().status(401).message("인증 실패: 토큰 없음").build();
     private final static ResponseEntity<DefaultRes> RES_RESPONSE_ENTITY_401 = new ResponseEntity<>(DEFAULT_RES_401, HttpStatus.UNAUTHORIZED);
 
-    public final static DefaultRes DEFAULT_RES_403 = DefaultRes.builder().status(403).message("인가 실패 : 유효하지 않은 토큰").build();
+    public final static DefaultRes DEFAULT_RES_403 = DefaultRes.builder().status(403).message("인가 실패: 유효하지 않은 토큰").build();
     private final static ResponseEntity<DefaultRes> RES_RESPONSE_ENTITY_403 = new ResponseEntity<>(DEFAULT_RES_403, HttpStatus.FORBIDDEN);
 
 
