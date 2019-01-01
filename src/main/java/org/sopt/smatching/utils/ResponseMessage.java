@@ -36,4 +36,5 @@ public class ResponseMessage {
     public static final String DELETED_SCRAP = "스크랩 해제 성공";
 
     public static final String READ_USER_INFO = "마이페이지 메인 정보 조회 성공";
+    public static final String READ_USER_ALERT = "유저의 알람설정 여부 조회 성공";
 }

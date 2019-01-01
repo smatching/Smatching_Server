@@ -3,9 +3,11 @@ package org.sopt.smatching.service;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.dto.Cond;
 import org.sopt.smatching.dto.NoticeSummary;
+import org.sopt.smatching.dto.UserAlert;
 import org.sopt.smatching.mapper.CondMapper;
 import org.sopt.smatching.mapper.NoticeMapper;
 import org.sopt.smatching.mapper.ScrapMapper;
+import org.sopt.smatching.mapper.UserMapper;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -29,6 +32,9 @@ public class NoticeService {
     private CondMapper condMapper;
     @Autowired
     private ScrapMapper scrapMapper;
+    @Autowired
+    private UserMapper userMapper;
+
 
 
     // 전체 지원사업 개수 조회
@@ -159,6 +165,7 @@ public class NoticeService {
     }
 
 
+    // 유저가 스크랩한 지원사업 목록 조회
     public DefaultRes getScrapedNoticeList(int userIdx, int reqNum, int existNum) {
         List<NoticeSummary> noticeSummaryList = noticeMapper.findScrapedNoticeSummary(userIdx, reqNum, existNum);
 
@@ -170,7 +177,16 @@ public class NoticeService {
     }
 
 
+    // 유저의 알람설정 여부 조회 (마이페이지 탭)
+    public DefaultRes getAlert(int userIdx) {
+        UserAlert userAlert = userMapper.findUserAlertByUserIdx(userIdx);
 
+        HashMap<String, Boolean> map = new HashMap();
+        map.put("talkAlert", userAlert.getTalkAlert() > 0);
+        map.put("condAlert", userAlert.getCondAlert() > 0);
+
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USER_ALERT, map);
+    }
 
 
     // 공고 상세 조회 - 새로 작성해야함

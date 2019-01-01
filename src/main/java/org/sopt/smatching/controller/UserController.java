@@ -49,7 +49,7 @@ public class UserController {
 
     // 마이페이지 메인 정보 조회
     @Auth
-    @GetMapping("/info")
+    @GetMapping("/myinfo")
     public ResponseEntity getMyPageMainInfo(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
         return new ResponseEntity<>(userService.getMyPageMainInfo(idx_variable), HttpStatus.OK);
     }
@@ -61,6 +61,13 @@ public class UserController {
                                                @RequestParam(value = "request_num") final int reqNum,
                                                @RequestParam(value = "exist_num") final int existNum) {
         return new ResponseEntity<>(noticeService.getScrapedNoticeList(idx_variable, reqNum, existNum), HttpStatus.OK);
+    }
+
+    // 유저의 알람설정 여부 조회 (마이페이지 탭)
+    @Auth
+    @GetMapping("/alert")
+    public ResponseEntity getAlert(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
+        return new ResponseEntity<>(noticeService.getAlert(idx_variable), HttpStatus.OK);
     }
 
 }

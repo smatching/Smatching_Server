@@ -2,6 +2,7 @@ package org.sopt.smatching.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.sopt.smatching.dto.User;
+import org.sopt.smatching.dto.UserAlert;
 import org.sopt.smatching.dto.UserInfo;
 import org.sopt.smatching.model.SignUpReq;
 
@@ -25,4 +26,14 @@ public interface UserMapper {
             "WHERE user.useridx = #{userIdx} " +
             "GROUP BY user.useridx")
     UserInfo findUserInfoByUserIdx(@Param("userIdx") final int userIdx);
+
+
+    // 유저의 알람설정 여부 조회 (마이페이지 설정 탭에서 사용)
+    @Select("SELECT user.talkalert AS talkAlert, SUM(cond.alert) AS condAlert " +
+            "FROM user " +
+            "LEFT OUTER JOIN cond " +
+            "ON user.useridx = cond.useridx " +
+            "WHERE user.useridx = #{userIdx} " +
+            "GROUP BY user.useridx")
+    UserAlert findUserAlertByUserIdx(@Param("userIdx") final int userIdx);
 }
