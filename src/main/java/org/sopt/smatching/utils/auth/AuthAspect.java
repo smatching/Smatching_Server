@@ -60,7 +60,7 @@ public class AuthAspect {
         final String jwt = httpServletRequest.getHeader(AUTHORIZATION);
 
         // 토큰 없으면 401 리턴
-        if(jwt == null)
+        if(jwt == null  || jwt == "")
             return RES_RESPONSE_ENTITY_401;
 
         // 토큰 해독

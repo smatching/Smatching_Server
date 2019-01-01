@@ -3,9 +3,11 @@ package org.sopt.smatching.service;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.dto.Cond;
 import org.sopt.smatching.dto.NoticeSummary;
+import org.sopt.smatching.dto.UserAlert;
 import org.sopt.smatching.mapper.CondMapper;
 import org.sopt.smatching.mapper.NoticeMapper;
 import org.sopt.smatching.mapper.ScrapMapper;
+import org.sopt.smatching.mapper.UserMapper;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -29,6 +32,9 @@ public class NoticeService {
     private CondMapper condMapper;
     @Autowired
     private ScrapMapper scrapMapper;
+    @Autowired
+    private UserMapper userMapper;
+
 
 
     // 전체 지원사업 개수 조회
@@ -42,7 +48,7 @@ public class NoticeService {
         List<NoticeSummary> noticeSummaryList;
 
         // 토큰값 없으면 조인 없는 쿼리문 사용, scrap은 모두 int 기본값인 0으로 설정됨
-        if(jwt == null)
+        if(jwt == null  || jwt == "")
             noticeSummaryList = noticeMapper.findAllNoticeSummary(reqNum, existNum);
 
         // 토큰값 있으면 스크랩 여부를 위해 조인 필요
@@ -86,7 +92,7 @@ public class NoticeService {
     public DefaultRes getNoticeSummaryList(String jwt, int reqNum, int existNum, int condIdx) {
 
         // 토큰 없으면 401 리턴
-        if(jwt == null)
+        if(jwt == null || jwt == "")
             return AuthAspect.DEFAULT_RES_401;
 
         // 토큰 해독
@@ -159,9 +165,33 @@ public class NoticeService {
     }
 
 
+    // 유저가 스크랩한 지원사업 목록 조회
+    public DefaultRes getScrapedNoticeList(int userIdx, int reqNum, int existNum) {
+        List<NoticeSummary> noticeSummaryList = noticeMapper.findScrapedNoticeSummary(userIdx, reqNum, existNum);
+
+        // 한개도 검색되지 않았으면 204
+        if (noticeSummaryList.isEmpty())
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_FOUND_NOTICE);
+
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTICE_SUMMARY, noticeSummaryList);
+    }
+
+
+    // 유저의 알람설정 여부 조회 (마이페이지 탭)
+    public DefaultRes getAlert(int userIdx) {
+        UserAlert userAlert = userMapper.findUserAlertByUserIdx(userIdx);
+
+        HashMap<String, Boolean> map = new HashMap();
+        map.put("talkAlert", userAlert.getTalkAlert() > 0);
+        map.put("condAlert", userAlert.getCondAlert() > 0);
+
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USER_ALERT, map);
+    }
+
+
     // 공고 상세 조회 - 새로 작성해야함
     public DefaultRes getNotice(int noticeIdx) {
-
+        // 조회수 ++
         return null;
     }
 

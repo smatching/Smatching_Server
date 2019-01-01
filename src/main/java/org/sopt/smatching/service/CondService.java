@@ -33,7 +33,7 @@ public class CondService {
         if(cond == null)
             return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_EXIST_COND);
 
-        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_COND_SUCCESS, new CondDetail(cond));
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_COND, new CondDetail(cond));
     }
 
 
