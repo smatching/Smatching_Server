@@ -159,9 +159,23 @@ public class NoticeService {
     }
 
 
+    public DefaultRes getScrapedNoticeList(int userIdx, int reqNum, int existNum) {
+        List<NoticeSummary> noticeSummaryList = noticeMapper.findScrapedNoticeSummary(userIdx, reqNum, existNum);
+
+        // 한개도 검색되지 않았으면 204
+        if (noticeSummaryList.isEmpty())
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_FOUND_NOTICE);
+
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTICE_SUMMARY, noticeSummaryList);
+    }
+
+
+
+
+
     // 공고 상세 조회 - 새로 작성해야함
     public DefaultRes getNotice(int noticeIdx) {
-
+        // 조회수 ++
         return null;
     }
 

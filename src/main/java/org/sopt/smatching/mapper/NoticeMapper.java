@@ -38,7 +38,7 @@ public interface NoticeMapper {
                                                       @Param("existNum") final int existNum,
                                                       @Param("userIdx") final int userIdx);
 
-    // 맞춤공고 개수 조회
+    // 맞춤공고 개수 조회 - ### 동적 쿼리로 바꿔야함!!
     @Select("SELECT COUNT(notice.noticeidx) " +
             "FROM notice " +
             "WHERE notice.valid = 1 " +
@@ -52,7 +52,7 @@ public interface NoticeMapper {
     int countFitNotice(@Param("cond") final Cond cond);
 
 
-    // 맞춤공고 목록 조회
+    // 맞춤공고 목록 조회 - ### 동적 쿼리로 바꿔야함!!
     @Select("SELECT notice.noticeIdx, notice.title, notice.institution, notice.end_date-current_date as dday, scrap_notice.scrap, notice.readcnt " +
             "FROM notice " +
             "LEFT OUTER JOIN scrap_notice " +
@@ -72,5 +72,17 @@ public interface NoticeMapper {
                                                       @Param("userIdx") final int userIdx,
                                                       @Param("cond") final Cond cond);
 
+
+    // 유저가 스크랩 해놓은 공고 목록 조회
+    @Select("SELECT notice.noticeIdx, notice.title, notice.institution, notice.end_date-current_date as dday, scrap_notice.scrap, notice.readcnt " +
+            "FROM scrap_notice " +
+            "INNER JOIN notice " +
+            "ON notice.noticeIdx = scrap_notice.noticeIdx AND notice.valid = 1 " +
+            "WHERE scrap_notice.useridx = #{userIdx} " +
+            "ORDER BY scrap_notice.timestamp DESC " +
+            "LIMIT #{existNum}, #{reqNum}")
+    List<NoticeSummary> findScrapedNoticeSummary(@Param("userIdx") final int userIdx,
+                                                 @Param("reqNum") final int reqNum,
+                                                 @Param("existNum") final int existNum);
 
 }

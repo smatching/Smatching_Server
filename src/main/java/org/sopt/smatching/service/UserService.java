@@ -3,6 +3,8 @@ package org.sopt.smatching.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.dto.User;
+import org.sopt.smatching.dto.UserCond;
+import org.sopt.smatching.dto.UserInfo;
 import org.sopt.smatching.mapper.UserMapper;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.model.LoginReq;
@@ -25,11 +27,7 @@ public class UserService {
     @Autowired
     private JwtService jwtService;
 
-    /**
-     * 로그인 서비스
-     * @param loginReq 객체
-     * @return DefaultRes (로그인 성공시 토큰값 / 실패시 null)
-     */
+    // 로그인 기능
     public DefaultRes<JwtService.TokenRes> login(final LoginReq loginReq) {
         final User user = userMapper.findByEmailAndPassword(loginReq.getEmail(), loginReq.getPassword());
         if (user != null) {
@@ -41,14 +39,9 @@ public class UserService {
     }
 
 
-    /**
-     * 회원가입 서비스
-     * @param signUpReq 객체
-     * @return DefaultRes (
-     */
-
+    // 회원가입 기능
     @Transactional
-    public DefaultRes signUp(SignUpReq signUpReq) {
+    public DefaultRes signUp(final SignUpReq signUpReq) {
         try { // 정상 추가
             userMapper.save(signUpReq);
             return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_USER, signUpReq.getNickname());
@@ -66,5 +59,12 @@ public class UserService {
             log.error(e.getMessage());
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
+    }
+
+
+    // 마이페이지 메인에 필요한 정보 조회 기능
+    public DefaultRes getMyPageMainInfo(final int userIdx) {
+        UserInfo userInfo = userMapper.findUserInfoByUserIdx(userIdx);
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USER_INFO, userInfo);
     }
 }
