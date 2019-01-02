@@ -1,8 +1,11 @@
 package org.sopt.smatching.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.smatching.dto.UserAlert;
+import org.sopt.smatching.dto.UserInfo;
 import org.sopt.smatching.model.LoginReq;
 import org.sopt.smatching.model.SignUpReq;
+import org.sopt.smatching.model.UserModifyReq;
 import org.sopt.smatching.service.CondService;
 import org.sopt.smatching.service.NoticeService;
 import org.sopt.smatching.service.UserService;
@@ -63,11 +66,40 @@ public class UserController {
         return new ResponseEntity<>(noticeService.getScrapedNoticeList(idx_variable, reqNum, existNum), HttpStatus.OK);
     }
 
-    // 유저의 알람설정 여부 조회 (마이페이지 탭)
+    // 유저의 알람설정 여부 조회 (마이페이지 탭의 설정화면)
     @Auth
     @GetMapping("/alert")
     public ResponseEntity getAlert(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
         return new ResponseEntity<>(noticeService.getAlert(idx_variable), HttpStatus.OK);
     }
 
+    // 유저의 맞춤조건 알람설정 ON/OFF 토글 (마이페이지 탭의 설정화면)
+    @Auth
+    @PutMapping("/alert/cond")
+    public ResponseEntity toggleCondAlert(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
+        return new ResponseEntity<>(noticeService.toggleCondAlert(idx_variable), HttpStatus.OK);
+    }
+
+    // 유저의 창업토크 알람설정 ON/OFF 토글 (마이페이지 탭의 설정화면)
+    @Auth
+    @PutMapping("/alert/talk")
+    public ResponseEntity toggleTalkAlert(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
+        return new ResponseEntity<>(noticeService.toggleTalkAlert(idx_variable), HttpStatus.OK);
+    }
+
+
+    // 회원정보 조회 기능 - 회원정보변경 창 띄울때
+    @Auth
+    @GetMapping("/edit")
+    public ResponseEntity getUserInfo(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
+        return new ResponseEntity<>(userService.getUserInfo(idx_variable), HttpStatus.OK);
+    }
+
+    // 회원정보변경
+    @Auth
+    @PutMapping("/edit")
+    public ResponseEntity modifyUserInfo(@RequestHeader(required = false, defaultValue = "0") int idx_variable,
+                                         @RequestBody UserModifyReq userModifyReq) {
+        return new ResponseEntity<>(userService.modifyUserInfo(idx_variable, userModifyReq), HttpStatus.OK);
+    }
 }

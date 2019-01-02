@@ -1,4 +1,4 @@
-package org.sopt.smatching.dto;
+package org.sopt.smatching.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,10 +7,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserInfo {
+public class UserModifyReq {
 
     private String nickname;
+    private String email;
+    private String password;
     private String profileUrl;
-    private int noticeScrapCnt;
-    private int talkScrapCnt;
+
+    private String newPassword;
 }
