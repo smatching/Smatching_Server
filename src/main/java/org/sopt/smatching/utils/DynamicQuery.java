@@ -55,8 +55,8 @@ public class DynamicQuery {
                 WHERE("notice.location & #{cond.location} > 0");
             if(cond.getAge() > 0)
                 WHERE("notice.age & #{cond.age} > 0");
-            if(cond.getAdvantage() > 0)
-                WHERE("notice.advantage & #{cond.advantage} > 0");
+//            if(cond.getAdvantage() > 0)
+//                WHERE("notice.advantage & #{cond.advantage} > 0");
 
         }}.toString();
     }
