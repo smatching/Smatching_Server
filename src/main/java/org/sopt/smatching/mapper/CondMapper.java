@@ -62,4 +62,17 @@ public interface CondMapper {
     @Delete("DELETE FROM cond " +
             "WHERE condidx = #{condIdx} AND useridx = #{userIdx}")
     int deleteByCondIdx(@Param("userIdx") final int userIdx, @Param("condIdx") final int condIdx);
+
+
+    // condIdx로 맞춤조건의 알람여부 조회
+    @Select("SELECT alert " +
+            "FROM cond " +
+            "WHERE condidx = #{condIdx} AND useridx = #{userIdx}")
+    Integer findAlert(@Param("userIdx") final int userIdx, @Param("condIdx") final int condIdx);
+
+    // condIdx와 userIdx로 맞춤조건의 알람여부 변경
+    @Update("UPDATE cond " +
+            "SET alert = #{value} " +
+            "WHERE condidx = #{condIdx} AND useridx = #{userIdx}")
+    int updateAlert(@Param("userIdx") final int userIdx, @Param("condIdx") final int condIdx, @Param("value") final int value);
 }

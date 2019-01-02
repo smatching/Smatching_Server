@@ -53,4 +53,12 @@ public class CondController {
                                      @PathVariable(value = "condIdx") final int condIdx) {
         return new ResponseEntity<>(condService.deleteCond(idx_variable, condIdx), HttpStatus.OK);
     }
+
+    // 맞춤조건 알람 ON / OFF
+    @Auth
+    @PutMapping("/alert/{condIdx}")
+    public ResponseEntity toggleAlert(@RequestHeader(required = false, defaultValue = "0") int idx_variable,
+                                      @PathVariable(value = "condIdx") final int condIdx) {
+        return new ResponseEntity<>(condService.toggleAlert(idx_variable, condIdx), HttpStatus.OK);
+    }
 }
