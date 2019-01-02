@@ -149,14 +149,14 @@ public class NoticeService {
                 if(rowCnt != 1)
                     throw new Exception("rowCnt is NOT 1");
 
-                return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_SCRAP, 1);
+                return DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_SCRAP, 1);
             }
             else if (scraped == 1) { // 스크랩 돼있으면 row 삭제
                 int rowCnt = scrapMapper.deleteScrap(userIdx, noticeIdx);
                 if(rowCnt != 1)
                     throw new Exception("rowCnt is NOT 1");
 
-                return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.DELETED_SCRAP, 0);
+                return DefaultRes.res(StatusCode.OK, ResponseMessage.DELETED_SCRAP, 0);
             }
             else { // 0 이나 1이 아니면 이상한거임
                 throw new Exception("scraped is not 0 or 1");

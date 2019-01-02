@@ -31,7 +31,7 @@ public class CondService {
     public DefaultRes getCondInfoByCondIdx(final int condIdx) {
         final Cond cond = condMapper.findCondByCondIdx(condIdx);
         if(cond == null)
-            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_EXIST_COND);
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_EXIST_COND);
 
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_COND, new CondDetail(cond));
     }
