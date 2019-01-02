@@ -40,7 +40,7 @@ public class NoticeService {
     // 전체 지원사업 개수 조회
     public DefaultRes getNoticeCnt() {
         final int noticeCnt = noticeMapper.countAllNotice();
-        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_FIT_NOTICE_CNT_SUCCESS, noticeCnt);
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_ALL_NOTICE_CNT_SUCCESS, noticeCnt);
     }
 
     // 전체 지원사업 목록 조회 - 최신등록순으로 요청된 갯수만큼 리턴

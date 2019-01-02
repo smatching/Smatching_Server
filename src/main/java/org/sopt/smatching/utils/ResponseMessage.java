@@ -26,6 +26,7 @@ public class ResponseMessage {
     public static final String NOT_EXIST_COND = "존재하지 않는 맞춤조건 인덱스 입니다.";
 
     public static final String READ_FIT_NOTICE_CNT_SUCCESS = "맞춤 지원공고 개수 조회 성공";
+    public static final String READ_ALL_NOTICE_CNT_SUCCESS = "전체 지원공고 개수 조회 성공";
 
 
     public static final String READ_COND = "맞춤조건 조회 성공";
