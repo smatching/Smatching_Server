@@ -9,10 +9,10 @@ public class MultipleOption {
      *
      **/
 
-    public static final String[] LOCATIONS = { "domesticAll", "seoul",    "busan",    "daegu",   "incheon",
-                                               "gwangju",     "daejeon",  "ulsan",    "sejong",  "gangwon",
-                                               "kyunggi",     "kyungnam", "kyungbuk", "jeonnam", "jeonbuk",
-                                               "chungnam",    "chungbuk", "jeju",     "aborad" };
+    public static final String[] LOCATIONS = { "seoul",    "busan",    "daegu",   "incheon", "gwangju",
+                                               "daejeon",  "ulsan",    "sejong",  "gangwon", "kyunggi",
+                                               "kyungnam", "kyungbuk", "jeonnam", "jeonbuk", "chungnam",
+                                               "chungbuk", "jeju",     "aborad" };
 
     public static final String[] AGES = { "twenty_less", "twenty_forty", "forty_more" };
 
