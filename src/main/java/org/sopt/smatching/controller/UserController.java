@@ -1,8 +1,6 @@
 package org.sopt.smatching.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.smatching.dto.UserAlert;
-import org.sopt.smatching.dto.UserInfo;
 import org.sopt.smatching.model.LoginReq;
 import org.sopt.smatching.model.SignUpReq;
 import org.sopt.smatching.model.UserModifyReq;
@@ -14,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -101,5 +96,12 @@ public class UserController {
     public ResponseEntity modifyUserInfo(@RequestHeader(required = false, defaultValue = "0") int idx_variable,
                                          @RequestBody UserModifyReq userModifyReq) {
         return new ResponseEntity<>(userService.modifyUserInfo(idx_variable, userModifyReq), HttpStatus.OK);
+    }
+
+    // 회원탈퇴
+    @Auth
+    @DeleteMapping("")
+    public ResponseEntity modifyUserInfo(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
+        return new ResponseEntity<>(userService.deleteUser(idx_variable), HttpStatus.OK);
     }
 }

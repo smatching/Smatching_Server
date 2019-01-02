@@ -32,6 +32,13 @@ public interface UserMapper {
     int checkPassword(@Param("userIdx") final int userIdx, @Param("inputPassword") final String inputPassword);
 
 
+    // 회원탈퇴 - 이메일 앞에 타임스탬프를 붙여서 탈퇴한 회원으로 처리
+    @Update("UPDATE user " +
+            "SET email = CONCAT(#{timestamp}, email) " +
+            "WHERE useridx = #{userIdx}")
+    int discardByUserIdx(@Param("userIdx") final int userIdx, @Param("timestamp") final String timestamp);
+
+
     // 회원 추가
     @Insert("INSERT INTO user(nickname, email, password) VALUES(#{signUpReq.nickname}, #{signUpReq.email}, #{signUpReq.password})")
     @Options(useGeneratedKeys = true, keyColumn = "userIdx")

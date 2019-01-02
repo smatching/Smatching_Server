@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.Date;
+
 @Slf4j
 @Service
 public class UserService {
@@ -101,4 +103,20 @@ public class UserService {
         }
     }
 
+    // 회원탈퇴 기능
+    @Transactional
+    public DefaultRes deleteUser(final int userIdx) {
+        try {
+            final int updatedCnt = userMapper.discardByUserIdx(userIdx, new Date().toString()); // 실제 삭제는 하지 않고 이메일 앞에 타임스탬프를 붙임
+            if(updatedCnt != 1)
+                return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_NOT_ONE);
+
+            return DefaultRes.res(StatusCode.OK, ResponseMessage.DELETED_USER, true);
+
+        } catch (Exception e) { // DB 에러
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
+    }
 }
