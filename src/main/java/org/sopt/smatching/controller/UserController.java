@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -97,6 +98,23 @@ public class UserController {
                                          @RequestBody UserModifyReq userModifyReq) {
         return new ResponseEntity<>(userService.modifyUserInfo(idx_variable, userModifyReq), HttpStatus.OK);
     }
+
+
+    // 프로필사진 변경
+    @Auth
+    @PutMapping("/picture")
+    public ResponseEntity modifyProfilePicture(@RequestHeader(required = false, defaultValue = "0") int idx_variable,
+                                               @RequestPart(value="picture") final MultipartFile picture) {
+        return new ResponseEntity<>(userService.modifyProfilePicture(idx_variable, picture), HttpStatus.OK);
+    }
+
+    // 프로필사진 삭제
+    @Auth
+    @DeleteMapping("/picture")
+    public ResponseEntity modifyProfilePicture(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
+        return new ResponseEntity<>(userService.deleteProfilePicture(idx_variable), HttpStatus.OK);
+    }
+
 
     // 회원탈퇴
     @Auth

@@ -44,4 +44,8 @@ public class ResponseMessage {
     public static final String READ_USER_ALERT = "유저의 알람설정 여부 조회 성공";
     public static final String UPDATED_USER_COND_ALERT = "유저의 맞춤공고 알람설정 변경 성공";
     public static final String UPDATED_USER_TALK_ALERT = "유저의 창업토크 알람설정 변경 성공";
+
+
+    public static final String UPDATED_USER_PIC = "프로필 사진 변경 성공";
+    public static final String DELETED_USER_PIC = "프로필 사진 삭제 성공";
 }

@@ -32,6 +32,20 @@ public interface UserMapper {
     int checkPassword(@Param("userIdx") final int userIdx, @Param("inputPassword") final String inputPassword);
 
 
+    // 프로필 사진 변경
+    @Update("UPDATE user " +
+            "SET profileurl = #{profileUrl} " +
+            "WHERE useridx = #{userIdx}")
+    void updateProfileUrlByUserIdx(@Param("userIdx") final int userIdx, @Param("profileUrl") final String profileUrl);
+
+
+    // 프로필 사진 삭제
+    @Update("UPDATE user " +
+            "SET profileurl = NULL " +
+            "WHERE useridx = #{userIdx}")
+    void deleteProfileUrlByUserIdx(@Param("userIdx") final int userIdx);
+
+
     // 회원탈퇴 - 이메일 앞에 타임스탬프를 붙여서 탈퇴한 회원으로 처리
     @Update("UPDATE user " +
             "SET email = CONCAT(#{timestamp}, email) " +
