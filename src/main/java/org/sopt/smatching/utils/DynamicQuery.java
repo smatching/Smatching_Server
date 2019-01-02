@@ -17,21 +17,19 @@ public class DynamicQuery {
             WHERE("notice.notfit = 0");
             ORDER_BY("notice.noticeIdx DESC");
 
-            // 주어진 보기들 중 1개라도 선택한 경우에만 해당 조건에 대한 필터링 적용
+            // 필수옵션들
+            WHERE("notice.period & #{cond.period} > 0"); // 설립 경과 년수
+            WHERE("notice.busitype & #{cond.busiType} > 0"); // 기업형태
+            WHERE("notice.field & #{cond.field} > 0"); // 업종
+            WHERE("notice.category & #{cond.category} > 0"); // 필요없는 지원사업분야
+
+            // 선택옵션들 - 주어진 보기들 중 1개라도 선택한 경우에만 해당 조건에 대한 필터링 적용
             if(cond.getLocation() > 0)
                 WHERE("notice.location & #{cond.location} > 0");
-            if(cond.getCategory() > 0)
-                WHERE("notice.category & #{cond.category} > 0");
             if(cond.getAge() > 0)
                 WHERE("notice.age & #{cond.age} > 0");
-            if(cond.getPeriod() > 0)
-                WHERE("notice.period & #{cond.period} > 0");
-            if(cond.getField() > 0)
-                WHERE("notice.field & #{cond.field} > 0");
             if(cond.getAdvantage() > 0)
                 WHERE("notice.advantage & #{cond.advantage} > 0");
-            if(cond.getBusiType() > 0)
-                WHERE("notice.busitype & #{cond.busiType} > 0");
 
         }}.toString() + "\nLIMIT #{existNum}, #{reqNum}"; // LIMIT은 SQL 빌더 클래스에 없는듯
     }
@@ -46,21 +44,19 @@ public class DynamicQuery {
             WHERE("notice.notfit = 0");
             ORDER_BY("notice.noticeIdx DESC");
 
-            // 주어진 보기들 중 1개라도 선택한 경우에만 해당 조건에 대한 필터링 적용
+            // 필수옵션들
+            WHERE("notice.period & #{cond.period} > 0"); // 설립 경과 년수
+            WHERE("notice.busitype & #{cond.busiType} > 0"); // 기업형태
+            WHERE("notice.field & #{cond.field} > 0"); // 업종
+            WHERE("notice.category & #{cond.category} > 0"); // 필요없는 지원사업분야
+
+            // 선택옵션들 - 주어진 보기들 중 1개라도 선택한 경우에만 해당 조건에 대한 필터링 적용
             if(cond.getLocation() > 0)
                 WHERE("notice.location & #{cond.location} > 0");
-            if(cond.getCategory() > 0)
-                WHERE("notice.category & #{cond.category} > 0");
             if(cond.getAge() > 0)
                 WHERE("notice.age & #{cond.age} > 0");
-            if(cond.getPeriod() > 0)
-                WHERE("notice.period & #{cond.period} > 0");
-            if(cond.getField() > 0)
-                WHERE("notice.field & #{cond.field} > 0");
             if(cond.getAdvantage() > 0)
                 WHERE("notice.advantage & #{cond.advantage} > 0");
-            if(cond.getBusiType() > 0)
-                WHERE("notice.busitype & #{cond.busiType} > 0");
 
         }}.toString();
     }
