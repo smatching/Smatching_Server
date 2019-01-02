@@ -81,7 +81,7 @@ public class NoticeService {
         // condIdx로 맞춤조건 정보 획득
         final Cond cond = condMapper.findCondByCondIdx(condIdx);
         if(cond == null)
-            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_EXIST_COND);
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_EXIST_COND);
 
         // 지원사업 개수 조회
         final int noticeCnt = noticeMapper.countFitNotice(cond);
@@ -106,7 +106,7 @@ public class NoticeService {
         // cond 테이블에서 맞춤조건 정보 획득
         final Cond cond = condMapper.findCondByCondIdx(condIdx);
         if(cond == null)
-            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_EXIST_COND);
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_EXIST_COND);
 
         // notice 테이블과 scrap과 조인하는 쿼리문 사용
         List<NoticeSummary> noticeSummaryList = noticeMapper.findFitNoticeSummaryWithScrap(reqNum, existNum, userIdx, cond);
@@ -149,14 +149,14 @@ public class NoticeService {
                 if(rowCnt != 1)
                     throw new Exception("rowCnt is NOT 1");
 
-                return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_SCRAP, 1);
+                return DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_SCRAP, 1);
             }
             else if (scraped == 1) { // 스크랩 돼있으면 row 삭제
                 int rowCnt = scrapMapper.deleteScrap(userIdx, noticeIdx);
                 if(rowCnt != 1)
                     throw new Exception("rowCnt is NOT 1");
 
-                return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.DELETED_SCRAP, 0);
+                return DefaultRes.res(StatusCode.OK, ResponseMessage.DELETED_SCRAP, 0);
             }
             else { // 0 이나 1이 아니면 이상한거임
                 throw new Exception("scraped is not 0 or 1");
@@ -229,7 +229,7 @@ public class NoticeService {
     // 유저의 창업토크 알람설정 ON/OFF 토글 (마이페이지 탭의 설정화면)
     @Transactional
     public DefaultRes toggleTalkAlert(int userIdx) {
-            final int current = userMapper.findTalkAlertByUserIdx(userIdx);
+        final int current = userMapper.findTalkAlertByUserIdx(userIdx);
 
         try {
             if(current == 0) { // 꺼져 있으면

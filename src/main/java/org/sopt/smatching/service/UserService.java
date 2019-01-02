@@ -17,6 +17,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -26,9 +27,10 @@ public class UserService {
 
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private S3FileUploadService s3FileUploadService;
 
     // 로그인 기능
     public DefaultRes<JwtService.TokenRes> login(final LoginReq loginReq) {
@@ -47,7 +49,7 @@ public class UserService {
     public DefaultRes signUp(final SignUpReq signUpReq) {
         try { // 정상 추가
             userMapper.save(signUpReq);
-            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_USER, signUpReq.getNickname());
+            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_USER);
 
         } catch (DuplicateKeyException e) { // 이메일 중복
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
@@ -83,7 +85,7 @@ public class UserService {
     public DefaultRes modifyUserInfo(final int userIdx, UserModifyReq userModifyReq) {
         // 기존 비밀번호 확인
         if(userMapper.checkPassword(userIdx, userModifyReq.getPassword()) == 0)
-            return DefaultRes.res(StatusCode.FORBIDDEN, ResponseMessage.WRONG_PASSWORD, null);
+            return DefaultRes.res(StatusCode.FORBIDDEN, ResponseMessage.WRONG_PASSWORD);
 
         // 새 비밀번호 존재하면 해당 값으로 비밀번호 덮어쓰기 (없어도 기존 값 그대로 update는 됨)
         if(userModifyReq.getNewPassword() != null)
@@ -94,7 +96,7 @@ public class UserService {
             if(updatedCnt != 1)
                 return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_NOT_ONE);
 
-            return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER, true);
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.UPDATED_USER);
 
         } catch (Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
@@ -102,6 +104,36 @@ public class UserService {
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
+
+    // 프로필사진 변경 기능
+    @Transactional
+    public DefaultRes modifyProfilePicture(final int userIdx, final MultipartFile picture) {
+        try {
+            String profileUrl = s3FileUploadService.upload(picture);
+            userMapper.updateProfileUrlByUserIdx(userIdx, profileUrl);
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.UPDATED_USER_PIC);
+
+        } catch(Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
+    }
+
+    // 프로필사진 삭제 기능
+    @Transactional
+    public DefaultRes deleteProfilePicture(final int userIdx) {
+        try {
+            userMapper.deleteProfileUrlByUserIdx(userIdx);
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.DELETED_USER_PIC);
+
+        } catch(Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
+    }
+
 
     // 회원탈퇴 기능
     @Transactional
@@ -111,7 +143,7 @@ public class UserService {
             if(updatedCnt != 1)
                 return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_NOT_ONE);
 
-            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.DELETED_USER, true);
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.DELETED_USER);
 
         } catch (Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback

@@ -12,7 +12,6 @@ public class ResponseMessage {
     public static final String WRONG_PASSWORD = "패스워드 틀림";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
-    public static final String INTERNAL_SERVER_ERROR_IN_CONTROLLER = "컨트롤러 에러";
 
     public static final String DB_ERROR = "데이터베이스 에러";
     public static final String DB_UPDATE_IS_ZERO = "데이터베이스 변경 Row가 없음";
@@ -34,6 +33,7 @@ public class ResponseMessage {
     public static final String CREATED_COND = "맞춤조건 추가 성공";
     public static final String UPDATED_COND = "맞춤조건 변경 성공";
     public static final String DELETED_COND = "맞춤조건 삭제 성공";
+    public static final String UPDATED_COND_ALERT = "맞춤조건 알람설정 변경 성공";
 
     public static final String READ_SCRAP = "스크랩 여부 조회 성공";
     public static final String CREATED_SCRAP = "스크랩 설정 성공";
@@ -43,4 +43,8 @@ public class ResponseMessage {
     public static final String READ_USER_ALERT = "유저의 알람설정 여부 조회 성공";
     public static final String UPDATED_USER_COND_ALERT = "유저의 맞춤공고 알람설정 변경 성공";
     public static final String UPDATED_USER_TALK_ALERT = "유저의 창업토크 알람설정 변경 성공";
+
+
+    public static final String UPDATED_USER_PIC = "프로필 사진 변경 성공";
+    public static final String DELETED_USER_PIC = "프로필 사진 삭제 성공";
 }

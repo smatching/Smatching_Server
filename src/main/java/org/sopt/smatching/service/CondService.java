@@ -31,7 +31,7 @@ public class CondService {
     public DefaultRes getCondInfoByCondIdx(final int condIdx) {
         final Cond cond = condMapper.findCondByCondIdx(condIdx);
         if(cond == null)
-            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_EXIST_COND);
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_EXIST_COND);
 
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_COND, new CondDetail(cond));
     }
@@ -111,6 +111,36 @@ public class CondService {
         }
     }
 
+    // 맞춤조건 알람 ON / OFF
+    @Transactional
+    public DefaultRes toggleAlert(final int userIdx, final int condIdx) {
+        Integer current = condMapper.findAlert(userIdx, condIdx);
+        if(current == null) {
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_EXIST_COND);
+        }
+
+        try {
+            if(current == 0) { // 꺼져 있으면
+                final int updatedCnt = condMapper.updateAlert(userIdx, condIdx, 1); // 켜는걸로 변경
+                if(updatedCnt < 1)
+                    return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
+
+                return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_COND_ALERT, true);
+            }
+            else { // 켜져있으면
+                final int updatedCnt = condMapper.updateAlert(userIdx, condIdx, 0); // 끄는걸로 변경
+                if(updatedCnt < 1)
+                    return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
+
+                return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_COND_ALERT, false);
+            }
+
+        } catch(Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
+    }
 
 
     // 유저의 맞춤조건 현황 조회 - UserController 에서 사용
