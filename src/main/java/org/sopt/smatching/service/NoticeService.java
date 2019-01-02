@@ -120,6 +120,11 @@ public class NoticeService {
     }
 
 
+    // 공고 상세 조회 - 새로 작성해야함
+    public DefaultRes getNotice(int noticeIdx) {
+        // 조회수 ++
+        return null;
+    }
 
     ///////////////////////////////////////////////////////////////////////
 
@@ -176,6 +181,7 @@ public class NoticeService {
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTICE_SUMMARY, noticeSummaryList);
     }
 
+    //////////////////////////////////////////////////////////////////////////////
 
     // 유저의 알람설정 여부 조회 (마이페이지 탭)
     public DefaultRes getAlert(int userIdx) {
@@ -188,11 +194,64 @@ public class NoticeService {
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USER_ALERT, map);
     }
 
+    // 유저의 맞춤조건 알람설정 ON/OFF 토글 (마이페이지 탭의 설정화면)
+    @Transactional
+    public DefaultRes toggleCondAlert(int userIdx) {
+        final Integer current = condMapper.findAlertByUserIdx(userIdx);
 
-    // 공고 상세 조회 - 새로 작성해야함
-    public DefaultRes getNotice(int noticeIdx) {
-        // 조회수 ++
-        return null;
+        try {
+            if(current == null) { // 만든 맞춤조건이 없는 경우
+                return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_FOUND_COND, false); // 꺼진 상태 유지
+
+            } else if(current > 0){ // 하나라도 켜져있는 경우
+                final int updatedCnt = condMapper.updateAlertByUserIdx(userIdx, 0); // 모두 끈다
+                if(updatedCnt < 1)
+                    return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
+
+                return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_COND_ALERT, false);
+            }
+            else { // 이미 모두 꺼져있는 경우
+                final int updatedCnt = condMapper.updateAlertByUserIdx(userIdx, 1); // 모두 킨다
+                if(updatedCnt < 1)
+                    return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
+
+                return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_COND_ALERT, true);
+            }
+
+        } catch(Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
+    }
+
+
+    // 유저의 창업토크 알람설정 ON/OFF 토글 (마이페이지 탭의 설정화면)
+    @Transactional
+    public DefaultRes toggleTalkAlert(int userIdx) {
+            final int current = userMapper.findTalkAlertByUserIdx(userIdx);
+
+        try {
+            if(current == 0) { // 꺼져 있으면
+                final int updatedCnt = userMapper.updateTalkAlertByUserIdx(userIdx, 1); // 켜는걸로 변경
+                if(updatedCnt < 1)
+                    return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
+
+                return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_TALK_ALERT, true);
+            }
+            else { // 켜져있으면
+                final int updatedCnt = userMapper.updateTalkAlertByUserIdx(userIdx, 0); // 끄는걸로 변경
+                if(updatedCnt < 1)
+                    return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
+
+                return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_TALK_ALERT, false);
+            }
+
+        } catch(Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
     }
 
 }

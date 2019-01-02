@@ -18,6 +18,19 @@ public interface CondMapper {
             "ORDER BY cond.condidx ASC")
     List<UserCond> findInfoByUserIdx(@Param("userIdx") final int userIdx);
 
+    // userIdx로 맞춤조건 알람 설정 여부 조회
+    @Select("SELECT SUM(alert) " +
+            "FROM cond " +
+            "WHERE useridx = #{userIdx}")
+    // null 인 경우와 sum이 0 인 경우를 구분해야하기 때문에 wrapper 클래스 사용
+    Integer findAlertByUserIdx(@Param("userIdx") final int userIdx);
+
+
+    // 유저의 맞춤조건의 알람설정 일괄 변경
+    @Update("UPDATE cond " +
+            "SET alert = #{value} " +
+            "WHERE useridx = #{userIdx}")
+    int updateAlertByUserIdx(@Param("userIdx") final int userIdx, @Param("value") final int value);
 
 
     // condIdx로 맞춤조건 조회
@@ -32,7 +45,8 @@ public interface CondMapper {
     @Insert("INSERT INTO cond(useridx, condname, location, age, period, category, field, advantage, busitype, alert) " +
             "VALUES(#{cond.userIdx}, #{cond.condName}, #{cond.location}, #{cond.age}, #{cond.period}, #{cond.category}, #{cond.field}, #{cond.advantage}, #{cond.busiType}, #{cond.alert})")
     @Options(useGeneratedKeys = true, keyProperty = "cond.condIdx")
-    // AI값 받기 방법 : 리턴타입 void 로 바꾸고 keyColumn 대신 keyProperty 설정 + 인자로 넘겨준 cond 변수에 final 키워드 삭제. 그러면 알아서 condIdx 채워짐 (세미나 코드는 안먹음)
+    // AI값 받기 방법 : keyColumn 대신 keyProperty 설정 + 인자로 넘겨준 cond 변수에 final 키워드 삭제. 그러면 알아서 condIdx 채워짐 (세미나 코드는 안먹음)
+    // 리턴 타입이 int 인 경우 영향받은 row의 개수가 나가는듯
     int save(@Param("cond") Cond cond);
 
 
