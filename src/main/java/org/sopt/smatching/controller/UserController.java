@@ -1,6 +1,7 @@
 package org.sopt.smatching.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.model.LoginReq;
 import org.sopt.smatching.model.SignUpReq;
 import org.sopt.smatching.model.UserModifyReq;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
 
 @Slf4j
 @RestController
@@ -72,14 +75,50 @@ public class UserController {
     // 유저의 맞춤조건 알람설정 ON/OFF 토글 (마이페이지 탭의 설정화면)
     @Auth
     @PutMapping("/alert/cond")
-    public ResponseEntity toggleCondAlert(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
+    public ResponseEntity toggleCondAlert(@RequestHeader(required = false, defaultValue = "0") int idx_variable,
+                                          @RequestHeader(value = "Client", required = false, defaultValue = "Android") final String client) {
+        /**
+         * iOS 요청에 따른 임시 방편
+         */
+        if(client.equals("iOS")) {
+            DefaultRes defaultRes = noticeService.toggleCondAlert(idx_variable);
+            defaultRes.setData(
+                    new HashMap<String, Boolean>() {{
+                        put("result", (Boolean)defaultRes.getData());
+                    }}
+            );
+            return new ResponseEntity<>(defaultRes, HttpStatus.OK);
+        }
+        /**
+         * iOS 요청에 따른 임시 방편
+         */
+
+
         return new ResponseEntity<>(noticeService.toggleCondAlert(idx_variable), HttpStatus.OK);
     }
 
     // 유저의 창업토크 알람설정 ON/OFF 토글 (마이페이지 탭의 설정화면)
     @Auth
     @PutMapping("/alert/talk")
-    public ResponseEntity toggleTalkAlert(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
+    public ResponseEntity toggleTalkAlert(@RequestHeader(required = false, defaultValue = "0") int idx_variable,
+                                          @RequestHeader(value = "Client", required = false, defaultValue = "Android") final String client) {
+        /**
+         * iOS 요청에 따른 임시 방편
+         */
+        if(client.equals("iOS")) {
+            DefaultRes defaultRes = noticeService.toggleTalkAlert(idx_variable);
+            defaultRes.setData(
+                    new HashMap<String, Boolean>() {{
+                        put("result", (Boolean)defaultRes.getData());
+                    }}
+            );
+            return new ResponseEntity<>(defaultRes, HttpStatus.OK);
+        }
+        /**
+         * iOS 요청에 따른 임시 방편
+         */
+
+
         return new ResponseEntity<>(noticeService.toggleTalkAlert(idx_variable), HttpStatus.OK);
     }
 
