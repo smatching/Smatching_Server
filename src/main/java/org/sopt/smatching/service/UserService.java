@@ -47,7 +47,7 @@ public class UserService {
     public DefaultRes signUp(final SignUpReq signUpReq) {
         try { // 정상 추가
             userMapper.save(signUpReq);
-            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_USER, signUpReq.getNickname());
+            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_USER);
 
         } catch (DuplicateKeyException e) { // 이메일 중복
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
