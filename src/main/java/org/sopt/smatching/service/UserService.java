@@ -111,7 +111,7 @@ public class UserService {
             if(updatedCnt != 1)
                 return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_NOT_ONE);
 
-            return DefaultRes.res(StatusCode.OK, ResponseMessage.DELETED_USER, true);
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.DELETED_USER, true);
 
         } catch (Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
