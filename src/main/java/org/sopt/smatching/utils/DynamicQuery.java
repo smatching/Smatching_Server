@@ -14,7 +14,7 @@ public class DynamicQuery {
             FROM("notice");
             LEFT_OUTER_JOIN("scrap_notice ON notice.noticeIdx = scrap_notice.noticeIdx AND scrap_notice.useridx = #{userIdx}");
             WHERE("notice.valid = 1");
-            WHERE("notice.nofit = 0");
+            WHERE("notice.notfit = 0");
             ORDER_BY("notice.noticeIdx DESC");
 
             // 주어진 보기들 중 1개라도 선택한 경우에만 해당 조건에 대한 필터링 적용
@@ -43,7 +43,7 @@ public class DynamicQuery {
             SELECT("COUNT(notice.noticeidx)");
             FROM("notice");
             WHERE("notice.valid = 1");
-            WHERE("notice.nofit = 0");
+            WHERE("notice.notfit = 0");
             ORDER_BY("notice.noticeIdx DESC");
 
             // 주어진 보기들 중 1개라도 선택한 경우에만 해당 조건에 대한 필터링 적용
