@@ -3,6 +3,7 @@ package org.sopt.smatching.service;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.model.cond.Cond;
 import org.sopt.smatching.model.notice.Notice;
+import org.sopt.smatching.model.notice.NoticeDetail;
 import org.sopt.smatching.model.notice.NoticeSummary;
 import org.sopt.smatching.model.user.UserAlert;
 import org.sopt.smatching.mapper.CondMapper;
@@ -122,10 +123,20 @@ public class NoticeService {
     }
 
 
-    // 공고 상세 조회 - 새로 작성해야함
-    public DefaultRes getNotice(int noticeIdx) {
-        // 조회수 ++
-        return null;
+    // 공고 상세 조회 + 조회수 1 증가
+    public DefaultRes getDetail(int noticeIdx) {
+        NoticeDetail noticeDetail = noticeMapper.findDetailByNoticeIdx(noticeIdx);
+        if (noticeDetail == null)
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_FOUND_NOTICE);
+
+        // 조회수 1 증가 - 실패해도 에러를 리턴하진 않고 그냥 로그만 남김
+        try {
+            noticeMapper.plusReadCnt(noticeIdx);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTICE_DETAIL, noticeDetail);
     }
 
     ///////////////////////////////////////////////////////////////////////

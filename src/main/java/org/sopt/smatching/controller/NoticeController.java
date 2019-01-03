@@ -137,8 +137,8 @@ public class NoticeController {
 
     // 지원사업 상세조회
     @GetMapping("/detail")
-    public ResponseEntity getNoticeDetail(@RequestParam(value = "noticeIdx") final int noticeIdx) {
-        return null;
+    public ResponseEntity getNoticeDetail(@RequestParam(value = "notice_idx") final int noticeIdx) {
+        return new ResponseEntity<>(noticeService.getDetail(noticeIdx), HttpStatus.OK);
     }
 
 

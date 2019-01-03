@@ -3,6 +3,7 @@ package org.sopt.smatching.mapper;
 import org.apache.ibatis.annotations.*;
 import org.sopt.smatching.model.cond.Cond;
 import org.sopt.smatching.model.notice.Notice;
+import org.sopt.smatching.model.notice.NoticeDetail;
 import org.sopt.smatching.model.notice.NoticeSummary;
 import org.sopt.smatching.utils.DynamicQuery;
 
@@ -63,6 +64,21 @@ public interface NoticeMapper {
     List<NoticeSummary> findScrapedNoticeSummary(@Param("userIdx") final int userIdx,
                                                  @Param("reqNum") final int reqNum,
                                                  @Param("existNum") final int existNum);
+
+    // 지원사업 공고 상세 조회
+    @Select("SELECT n.noticeidx, n.title, n.institution, d.part, d.phone, d.origin_url, d.reg_date, d.start_date, n.end_date, d.detail_one AS summary, d.detail_two AS target, d.detail_three AS content " +
+            "FROM notice AS n " +
+            "INNER JOIN notice_detail AS d " +
+            "ON n.noticeidx = d.noticeidx " +
+            "WHERE n.noticeidx = #{noticeIdx}")
+    NoticeDetail findDetailByNoticeIdx(@Param("noticeIdx") final int noticeIdx);
+
+    // 지원사업 공고 조회수 1 증가
+    @Update("UPDATE notice " +
+            "SET readcnt = readcnt+1 " +
+            "WHERE noticeidx = #{noticeIdx}")
+    void plusReadCnt(@Param("noticeIdx") final int noticeIdx);
+
 
 
     // 새로운 지원사업공고 추가 - notice 테이블
