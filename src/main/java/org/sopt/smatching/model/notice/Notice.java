@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.sopt.smatching.model.cond.Cond;
-import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.utils.MultipleOption;
 
 @Getter
