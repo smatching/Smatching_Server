@@ -28,6 +28,9 @@ public class ResponseMessage {
     public static final String READ_FIT_NOTICE_CNT_SUCCESS = "맞춤 지원공고 개수 조회 성공";
     public static final String READ_ALL_NOTICE_CNT_SUCCESS = "전체 지원공고 개수 조회 성공";
 
+    public static final String CREATED_NOTICE = "지원사업 공고 추가 성공";
+    public static final String INVALIDATED_NOTICE = "지원사업 비활성화 성공";
+
 
     public static final String READ_COND = "맞춤조건 조회 성공";
     public static final String NOT_FOUND_COND = "설정한 맞춤조건이 없습니다.";

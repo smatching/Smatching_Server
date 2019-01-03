@@ -2,6 +2,7 @@ package org.sopt.smatching.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.model.DefaultRes;
+import org.sopt.smatching.model.NoticeInput;
 import org.sopt.smatching.service.NoticeService;
 import org.sopt.smatching.utils.auth.Auth;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,6 +139,19 @@ public class NoticeController {
     @GetMapping("/detail")
     public ResponseEntity getNoticeDetail(@RequestParam(value = "noticeIdx") final int noticeIdx) {
         return null;
+    }
+
+
+    // 지원사업 추가
+    @PostMapping("")
+    public ResponseEntity addNotice(@RequestBody final NoticeInput noticeInput) {
+        return new ResponseEntity<>(noticeService.addNotice(noticeInput), HttpStatus.OK);
+    }
+
+    // 지원사업 비활성화
+    @PutMapping("/invalidate/{noticeIdx}")
+    public ResponseEntity invalidateNotice(@PathVariable(value = "noticeIdx") final int noticeIdx) {
+        return new ResponseEntity<>(noticeService.invalidateNotice(noticeIdx), HttpStatus.OK);
     }
 
 }
