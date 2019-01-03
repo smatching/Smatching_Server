@@ -1,11 +1,11 @@
 package org.sopt.smatching.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.smatching.dto.Cond;
-import org.sopt.smatching.dto.CondDetail;
-import org.sopt.smatching.dto.CondSummary;
-import org.sopt.smatching.dto.UserCond;
-import org.sopt.smatching.model.CondRes;
+import org.sopt.smatching.model.cond.Cond;
+import org.sopt.smatching.model.cond.CondDetail;
+import org.sopt.smatching.model.cond.CondSummary;
+import org.sopt.smatching.model.user.UserCond;
+import org.sopt.smatching.model.cond.CondRes;
 import org.sopt.smatching.mapper.CondMapper;
 import org.sopt.smatching.mapper.NoticeMapper;
 import org.sopt.smatching.model.DefaultRes;

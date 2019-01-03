@@ -1,14 +1,17 @@
 package org.sopt.smatching.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.smatching.dto.Cond;
-import org.sopt.smatching.dto.NoticeSummary;
-import org.sopt.smatching.dto.UserAlert;
+import org.sopt.smatching.model.cond.Cond;
+import org.sopt.smatching.model.notice.Notice;
+import org.sopt.smatching.model.notice.NoticeDetail;
+import org.sopt.smatching.model.notice.NoticeSummary;
+import org.sopt.smatching.model.user.UserAlert;
 import org.sopt.smatching.mapper.CondMapper;
 import org.sopt.smatching.mapper.NoticeMapper;
 import org.sopt.smatching.mapper.ScrapMapper;
 import org.sopt.smatching.mapper.UserMapper;
 import org.sopt.smatching.model.DefaultRes;
+import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
 import org.sopt.smatching.utils.auth.AuthAspect;
@@ -120,10 +123,20 @@ public class NoticeService {
     }
 
 
-    // 공고 상세 조회 - 새로 작성해야함
-    public DefaultRes getNotice(int noticeIdx) {
-        // 조회수 ++
-        return null;
+    // 공고 상세 조회 + 조회수 1 증가
+    public DefaultRes getDetail(int noticeIdx) {
+        NoticeDetail noticeDetail = noticeMapper.findDetailByNoticeIdx(noticeIdx);
+        if (noticeDetail == null)
+            return DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_FOUND_NOTICE);
+
+        // 조회수 1 증가 - 실패해도 에러를 리턴하진 않고 그냥 로그만 남김
+        try {
+            noticeMapper.plusReadCnt(noticeIdx);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTICE_DETAIL, noticeDetail);
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -246,6 +259,42 @@ public class NoticeService {
 
                 return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_TALK_ALERT, false);
             }
+
+        } catch(Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
+    }
+
+
+    // 새 지원사업 저장 - 앱에서는 안쓰고 관리자 페이지에서만 추가하는 용도로 사용
+    @Transactional
+    public DefaultRes addNotice(NoticeInput noticeInput) {
+        Notice notice = new Notice(noticeInput);
+
+        try {
+            // notice 테이블에 저장하고 AI로 생성된 noticeIdx로 detail 테이블에도 저장
+            noticeMapper.save(notice);
+            noticeMapper.saveDetail(notice);
+            if(noticeInput.isNotfit()) // 기타공고면 update문으로 notift 1로 만들기
+                noticeMapper.makeNotFit(notice.getNoticeIdx());
+
+            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_NOTICE);
+
+        } catch(Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
+    }
+
+    @Transactional
+    public DefaultRes invalidateNotice(int noticeIdx) {
+        try {
+            noticeMapper.invalidate(noticeIdx);
+
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.INVALIDATED_NOTICE);
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback

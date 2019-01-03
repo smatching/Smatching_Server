@@ -3,6 +3,7 @@ package org.sopt.smatching.utils;
 public class ResponseMessage {
 
     public static final String READ_NOTICE_SUMMARY = "공고 목록 조회 성공";
+    public static final String READ_NOTICE_DETAIL = "공고 상세내용 조회 성공";
     public static final String NOT_FOUND_NOTICE = "공고를 찾을 수 없습니다.";
     public static final String ALREADY_EXIST_EMAIL = "이미 존재하는 이메일 입니다.";
     public static final String READ_USER = "회원정보 조회 성공";
@@ -27,6 +28,9 @@ public class ResponseMessage {
 
     public static final String READ_FIT_NOTICE_CNT_SUCCESS = "맞춤 지원공고 개수 조회 성공";
     public static final String READ_ALL_NOTICE_CNT_SUCCESS = "전체 지원공고 개수 조회 성공";
+
+    public static final String CREATED_NOTICE = "지원사업 공고 추가 성공";
+    public static final String INVALIDATED_NOTICE = "지원사업 비활성화 성공";
 
 
     public static final String READ_COND = "맞춤조건 조회 성공";

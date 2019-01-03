@@ -1,4 +1,4 @@
-package org.sopt.smatching.dto;
+package org.sopt.smatching.model.cond;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

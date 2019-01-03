@@ -1,11 +1,11 @@
 package org.sopt.smatching.mapper;
 
 import org.apache.ibatis.annotations.*;
-import org.sopt.smatching.dto.User;
-import org.sopt.smatching.dto.UserAlert;
-import org.sopt.smatching.dto.UserInfo;
-import org.sopt.smatching.model.UserModifyReq;
-import org.sopt.smatching.model.SignUpReq;
+import org.sopt.smatching.model.user.User;
+import org.sopt.smatching.model.user.UserAlert;
+import org.sopt.smatching.model.user.UserInfo;
+import org.sopt.smatching.model.user.UserModifyReq;
+import org.sopt.smatching.model.user.SignUpReq;
 
 @Mapper
 public interface UserMapper {

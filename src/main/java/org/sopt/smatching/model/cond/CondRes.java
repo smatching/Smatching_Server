@@ -1,9 +1,8 @@
-package org.sopt.smatching.model;
+package org.sopt.smatching.model.cond;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.sopt.smatching.dto.CondSummary;
 
 import java.util.ArrayList;
 import java.util.List;

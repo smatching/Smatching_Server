@@ -1,7 +1,7 @@
 package org.sopt.smatching.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.smatching.dto.CondDetail;
+import org.sopt.smatching.model.cond.CondDetail;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.service.CondService;
 import org.sopt.smatching.utils.auth.Auth;

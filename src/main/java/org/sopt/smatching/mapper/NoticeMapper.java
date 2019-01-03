@@ -1,11 +1,10 @@
 package org.sopt.smatching.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.sopt.smatching.dto.Cond;
-import org.sopt.smatching.dto.NoticeSummary;
+import org.apache.ibatis.annotations.*;
+import org.sopt.smatching.model.cond.Cond;
+import org.sopt.smatching.model.notice.Notice;
+import org.sopt.smatching.model.notice.NoticeDetail;
+import org.sopt.smatching.model.notice.NoticeSummary;
 import org.sopt.smatching.utils.DynamicQuery;
 
 import java.util.List;
@@ -65,5 +64,46 @@ public interface NoticeMapper {
     List<NoticeSummary> findScrapedNoticeSummary(@Param("userIdx") final int userIdx,
                                                  @Param("reqNum") final int reqNum,
                                                  @Param("existNum") final int existNum);
+
+    // 지원사업 공고 상세 조회
+    @Select("SELECT n.noticeidx, n.title, n.institution, d.part, d.phone, d.origin_url, d.reg_date, d.start_date, n.end_date, d.detail_one AS summary, d.detail_two AS target, d.detail_three AS content " +
+            "FROM notice AS n " +
+            "INNER JOIN notice_detail AS d " +
+            "ON n.noticeidx = d.noticeidx " +
+            "WHERE n.noticeidx = #{noticeIdx}")
+    NoticeDetail findDetailByNoticeIdx(@Param("noticeIdx") final int noticeIdx);
+
+    // 지원사업 공고 조회수 1 증가
+    @Update("UPDATE notice " +
+            "SET readcnt = readcnt+1 " +
+            "WHERE noticeidx = #{noticeIdx}")
+    void plusReadCnt(@Param("noticeIdx") final int noticeIdx);
+
+
+
+    // 새로운 지원사업공고 추가 - notice 테이블
+    @Insert("INSERT INTO notice(location, category, age, period, field, advantage, busitype, title, institution, end_date) " +
+            "VALUES(#{notice.location}, #{notice.category}, #{notice.age}, #{notice.period}, #{notice.field}, #{notice.advantage}, #{notice.busiType}, #{notice.title}, #{notice.institution}, #{notice.end_date})")
+    @Options(useGeneratedKeys = true, keyProperty = "notice.noticeIdx")
+    int save(@Param("notice") final Notice notice);
+
+
+    // 새로운 지원사업공고 추가 - notice_detail 테이블, save메소드 실행 된 직후에 실행되어야함
+    @Insert("INSERT INTO notice_detail(noticeidx, reg_date, start_date, phonenum, refer_url, origin_url, part, detail_one, detail_two, detail_three) " +
+            "VALUES(#{notice.noticeIdx}, #{notice.reg_date}, #{notice.start_date}, #{notice.phoneNum}, #{notice.refer_url}, #{notice.origin_url}, #{notice.part}, #{notice.detail_one}, #{notice.detail_two}, #{notice.detail_three})")
+    int saveDetail(@Param("notice") final Notice notice);
+
+    // 지원사업공고를 기타로 뺌(맞춤지원에 노출되지 않게하고 전체공고에만 노출되게 설정)
+    @Update("UPDATE notice " +
+            "SET notfit = 1 " +
+            "WHERE noticeidx = #{noticeIdx}")
+    void makeNotFit(@Param("noticeIdx") final int noticeIdx);
+
+
+    // 지원사업공고 비활성화
+    @Update("UPDATE notice " +
+            "SET valid = 0 " +
+            "WHERE noticeidx = #{noticeIdx}")
+    void invalidate(@Param("noticeIdx") final int noticeIdx);
 
 }
