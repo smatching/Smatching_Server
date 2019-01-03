@@ -1,17 +1,16 @@
 package org.sopt.smatching.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
-import org.sopt.smatching.dto.Cond;
-import org.sopt.smatching.dto.Notice;
-import org.sopt.smatching.dto.NoticeSummary;
-import org.sopt.smatching.dto.UserAlert;
+import org.sopt.smatching.model.cond.Cond;
+import org.sopt.smatching.model.notice.Notice;
+import org.sopt.smatching.model.notice.NoticeSummary;
+import org.sopt.smatching.model.user.UserAlert;
 import org.sopt.smatching.mapper.CondMapper;
 import org.sopt.smatching.mapper.NoticeMapper;
 import org.sopt.smatching.mapper.ScrapMapper;
 import org.sopt.smatching.mapper.UserMapper;
 import org.sopt.smatching.model.DefaultRes;
-import org.sopt.smatching.model.NoticeInput;
+import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
 import org.sopt.smatching.utils.auth.AuthAspect;

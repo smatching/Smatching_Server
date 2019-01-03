@@ -2,7 +2,7 @@ package org.sopt.smatching.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.model.DefaultRes;
-import org.sopt.smatching.model.NoticeInput;
+import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.service.NoticeService;
 import org.sopt.smatching.utils.auth.Auth;
 import org.springframework.beans.factory.annotation.Autowired;

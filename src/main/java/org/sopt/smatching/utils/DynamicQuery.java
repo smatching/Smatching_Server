@@ -2,7 +2,7 @@ package org.sopt.smatching.utils;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.jdbc.SQL;
-import org.sopt.smatching.dto.Cond;
+import org.sopt.smatching.model.cond.Cond;
 
 public class DynamicQuery {
 

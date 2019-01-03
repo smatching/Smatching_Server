@@ -1,4 +1,4 @@
-package org.sopt.smatching.model;
+package org.sopt.smatching.model.notice;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

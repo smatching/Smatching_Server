@@ -1,9 +1,9 @@
 package org.sopt.smatching.mapper;
 
 import org.apache.ibatis.annotations.*;
-import org.sopt.smatching.dto.Cond;
-import org.sopt.smatching.dto.Notice;
-import org.sopt.smatching.dto.NoticeSummary;
+import org.sopt.smatching.model.cond.Cond;
+import org.sopt.smatching.model.notice.Notice;
+import org.sopt.smatching.model.notice.NoticeSummary;
 import org.sopt.smatching.utils.DynamicQuery;
 
 import java.util.List;

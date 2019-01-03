@@ -2,9 +2,9 @@ package org.sopt.smatching.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.model.DefaultRes;
-import org.sopt.smatching.model.LoginReq;
-import org.sopt.smatching.model.SignUpReq;
-import org.sopt.smatching.model.UserModifyReq;
+import org.sopt.smatching.model.user.LoginReq;
+import org.sopt.smatching.model.user.SignUpReq;
+import org.sopt.smatching.model.user.UserModifyReq;
 import org.sopt.smatching.service.CondService;
 import org.sopt.smatching.service.NoticeService;
 import org.sopt.smatching.service.UserService;

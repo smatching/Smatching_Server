@@ -1,8 +1,8 @@
 package org.sopt.smatching.mapper;
 
 import org.apache.ibatis.annotations.*;
-import org.sopt.smatching.dto.Cond;
-import org.sopt.smatching.dto.UserCond;
+import org.sopt.smatching.model.cond.Cond;
+import org.sopt.smatching.model.user.UserCond;
 
 import java.util.List;
 

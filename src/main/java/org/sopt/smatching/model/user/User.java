@@ -1,4 +1,4 @@
-package org.sopt.smatching.dto;
+package org.sopt.smatching.model.user;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -4,20 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.sopt.smatching.dto.User;
-import org.sopt.smatching.mapper.UserMapper;
 import org.sopt.smatching.model.DefaultRes;
-import org.sopt.smatching.model.LoginReq;
 import org.sopt.smatching.service.JwtService;
-import org.sopt.smatching.utils.ResponseMessage;
-import org.sopt.smatching.utils.StatusCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
-import java.util.OptionalInt;
 
 @Slf4j
 @Component

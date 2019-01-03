@@ -2,14 +2,13 @@ package org.sopt.smatching.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.smatching.dto.User;
-import org.sopt.smatching.dto.UserCond;
-import org.sopt.smatching.dto.UserInfo;
+import org.sopt.smatching.model.user.User;
+import org.sopt.smatching.model.user.UserInfo;
 import org.sopt.smatching.mapper.UserMapper;
 import org.sopt.smatching.model.DefaultRes;
-import org.sopt.smatching.model.LoginReq;
-import org.sopt.smatching.model.SignUpReq;
-import org.sopt.smatching.model.UserModifyReq;
+import org.sopt.smatching.model.user.LoginReq;
+import org.sopt.smatching.model.user.SignUpReq;
+import org.sopt.smatching.model.user.UserModifyReq;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;

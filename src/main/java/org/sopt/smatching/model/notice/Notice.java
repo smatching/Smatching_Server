@@ -1,9 +1,10 @@
-package org.sopt.smatching.dto;
+package org.sopt.smatching.model.notice;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.sopt.smatching.model.NoticeInput;
+import org.sopt.smatching.model.cond.Cond;
+import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.utils.MultipleOption;
 
 @Getter
