@@ -19,7 +19,7 @@ public interface NoticeMapper {
     int countAllNotice();
 
     // 전체공고 목록 조회 (비회원용, 스크랩여부 x)
-    @Select("SELECT noticeIdx, title, institution, end_date-current_date as dday, readcnt " +
+    @Select("SELECT noticeIdx, title, institution, DATEDIFF(end_date, current_date) as dday, readcnt " +
             "FROM notice " +
             "WHERE valid = 1 " +
             "ORDER BY noticeIdx DESC " +
@@ -28,7 +28,7 @@ public interface NoticeMapper {
                                              @Param("existNum") final int existNum);
 
     // 전체공고 목록 조회
-    @Select("SELECT notice.noticeIdx, notice.title, notice.institution, notice.end_date-current_date as dday, scrap_notice.scrap, notice.readcnt " +
+    @Select("SELECT notice.noticeIdx, notice.title, notice.institution, DATEDIFF(notice.end_date, current_date) as dday, scrap_notice.scrap, notice.readcnt " +
             "FROM notice " +
             "LEFT OUTER JOIN scrap_notice " +
             "ON notice.noticeIdx = scrap_notice.noticeIdx AND scrap_notice.useridx = #{userIdx} " +
@@ -54,7 +54,7 @@ public interface NoticeMapper {
 
 
     // 유저가 스크랩 해놓은 공고 목록 조회
-    @Select("SELECT notice.noticeIdx, notice.title, notice.institution, notice.end_date-current_date as dday, scrap_notice.scrap, notice.readcnt " +
+    @Select("SELECT notice.noticeIdx, notice.title, notice.institution, DATEDIFF(notice.end_date, current_date) as dday, scrap_notice.scrap, notice.readcnt " +
             "FROM scrap_notice " +
             "INNER JOIN notice " +
             "ON notice.noticeIdx = scrap_notice.noticeIdx AND notice.valid = 1 " +

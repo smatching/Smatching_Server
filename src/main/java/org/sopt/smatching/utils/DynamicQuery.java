@@ -10,7 +10,7 @@ public class DynamicQuery {
     public String findFitNoticeSummaryWithScrap(@Param("cond") final Cond cond) {
         return new SQL() {{
 
-            SELECT("notice.noticeIdx, notice.title, notice.institution, notice.end_date-current_date as dday, scrap_notice.scrap, notice.readcnt");
+            SELECT("notice.noticeIdx, notice.title, notice.institution, DATEDIFF(notice.end_date, current_date) as dday, scrap_notice.scrap, notice.readcnt");
             FROM("notice");
             LEFT_OUTER_JOIN("scrap_notice ON notice.noticeIdx = scrap_notice.noticeIdx AND scrap_notice.useridx = #{userIdx}");
             WHERE("notice.valid = 1");
