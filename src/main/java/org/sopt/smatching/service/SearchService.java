@@ -9,6 +9,8 @@ import org.sopt.smatching.utils.StatusCode;
 import org.sopt.smatching.utils.auth.AuthAspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 
@@ -48,4 +50,32 @@ public class SearchService {
 
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTICE_SUMMARY, noticeSummaryList);
     }
+
+
+    // 유저의 최근 검색어 조회
+    public DefaultRes getUserQueryLogs(int userIdx) {
+        List<String> queryList = searchMapper.findQueryLogsByUserIdx(userIdx);
+        if(queryList.isEmpty())
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_FOUND_QUERY_LOG);
+
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_QUERY_LOG, queryList);
+    }
+
+
+    // 유저의 최근 검색어 삭제
+    @Transactional
+    public DefaultRes deleteUserQueryLog(int userIdx, int order) {
+        final int searchLogIdx = searchMapper.findSearchLogIdx(userIdx, order);
+
+        try {
+            searchMapper.deleteBySearchLogIdx(searchLogIdx);
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.DELETED_QUERY_LOG);
+
+        } catch(Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
+            log.error(e.getMessage());
+            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        }
+    }
+
 }

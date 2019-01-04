@@ -1,9 +1,6 @@
 package org.sopt.smatching.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.sopt.smatching.model.notice.NoticeSummary;
 
 import java.util.List;
@@ -27,15 +24,32 @@ public interface SearchMapper {
     List<NoticeSummary> noticeFromEverywhere(@Param("query") final String query);
 
 
-    // 최근 검색어 조회
-    @Select("SELECT query " +
-            "")
-
     // 최근 검색어 저장
     @Insert("INSERT INTO search_log(useridx, query) " +
             "VALUES(#{userIdx}, #{query})")
     int saveQueryLog(@Param("userIdx") final int userIdx, @Param("query") final String query);
 
-    // 최근 검색어 삭제
+
+    // 최근 검색어 조회
+    @Select("SELECT query " +
+            "FROM search_log " +
+            "WHERE useridx = #{userIdx} " +
+            "ORDER BY searchlogidx DESC")
+    List<String> findQueryLogsByUserIdx(@Param("userIdx") final int userIdx);
+
+
+    // 최근 검색어 삭제를 위해 먼저 조회
+    @Select("SELECT searchlogidx " +
+            "FROM search_log " +
+            "WHERE useridx = #{userIdx} " +
+            "ORDER BY searchlogidx DESC " +
+            "LIMIT #{idx}, 1")
+    int findSearchLogIdx(@Param("userIdx") final int userIdx, @Param("idx") final int idx);
+
+
+    // 최근검색어 삭제
+    @Delete("DELETE FROM search_log " +
+            "WHERE searchlogidx = #{searchLogIdx}")
+    int deleteBySearchLogIdx(@Param("searchLogIdx") final int searchLogIdx);
 
 }
