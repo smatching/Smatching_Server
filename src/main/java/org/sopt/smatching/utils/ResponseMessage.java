@@ -53,7 +53,12 @@ public class ResponseMessage {
     public static final String UPDATED_USER_PIC = "프로필 사진 변경 성공";
     public static final String DELETED_USER_PIC = "프로필 사진 삭제 성공";
 
+    public static final String SEARCH_SUCCESS = "검색 성공";
+    public static final String SEARCH_NO_RESULT = "검색 결과가 없습니다.";
+
     public static final String NOT_FOUND_QUERY_LOG = "최근 검색어가 없습니다.";
     public static final String READ_QUERY_LOG = "최근 검색어 조회 성공";
     public static final String DELETED_QUERY_LOG = "최근 검색어 삭제 성공";
+
+
 }

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -44,11 +46,25 @@ public class SearchService {
             }
         }
 
-        List<NoticeSummary> noticeSummaryList = searchMapper.noticeFromEverywhere(query);
-        if(noticeSummaryList.isEmpty())
-            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_FOUND_NOTICE);
 
-        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTICE_SUMMARY, noticeSummaryList);
+        // map 생성해서 각 분야별로 검색하고 결과를 넣음
+        HashMap<String, List> map = new HashMap<String, List>();
+
+        List<NoticeSummary> notices = searchMapper.noticeFromEverywhere(query);
+        map.put("notices", notices.isEmpty() ? null : notices);
+
+        map.put("talks", null);
+        map.put("plans", null);
+
+
+        // 검색한 분야들중에 결과가 하나라도 있는게 존재하면 정상 리턴, 하지만 없는 분야의 value는 null
+        for(String key : map.keySet()) {
+            if(map.get(key) != null)
+                return DefaultRes.res(StatusCode.OK, ResponseMessage.SEARCH_SUCCESS, map);
+        }
+
+        // 모든 키에 결과가 없으면 204 리턴
+        return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_NO_RESULT);
     }
 
 

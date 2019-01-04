@@ -20,7 +20,8 @@ public interface SearchMapper {
             "OR d.detail_one LIKE CONCAT('%', #{query}, '%') " +
             "OR d.detail_two LIKE CONCAT('%', #{query}, '%') " +
             "OR d.detail_three LIKE CONCAT('%', #{query}, '%') " +
-            "ORDER BY n.noticeidx DESC")
+            "ORDER BY n.noticeidx DESC " +
+            "LIMIT 0, 4")
     List<NoticeSummary> noticeFromEverywhere(@Param("query") final String query);
 
 
