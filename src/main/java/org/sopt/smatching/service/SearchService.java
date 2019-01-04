@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -25,10 +23,19 @@ public class SearchService {
     @Autowired
     private JwtService jwtService;
 
-    // 전체 검색 (상단바)
-    public DefaultRes fromEverywhere(String jwt, String query) {
 
-        // 토큰 있으면 검색어 저장
+    // 전체 지원사업 검색 개수 조회 기능
+    public DefaultRes countFromEverywhere(String query) {
+        final int cnt = searchMapper.CountNoticeFromEverywhere(query);
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.SEARCH_COUNT_SUCCESS, cnt);
+    }
+
+    // 전체 지원사업 검색 기능
+    public DefaultRes fromEverywhere(String jwt, String query, int reqNum, int existNum) {
+
+        List<NoticeSummary> notices;
+
+        // 토큰 있으면 검색어 저장하고 스크랩 여부와 조인하는 쿼리 사용
         if(!(jwt == null || jwt == "")) {
             // 토큰 해독
             final JwtService.Token token = jwtService.decode(jwt);
@@ -38,33 +45,26 @@ public class SearchService {
             if(userIdx < 1)
                 return AuthAspect.DEFAULT_RES_403;
 
-            // 저장 - 실패해도 에러를 리턴하진 않고 그냥 로그만 남김
+            // 최근 검색어로 저장 - 실패해도 에러를 리턴하진 않고 그냥 로그만 남김
             try {
                 searchMapper.saveQueryLog(userIdx, query);
             } catch(Exception e) {
                 log.error(e.getMessage());
             }
+
+            // 검색 쿼리 (스크랩 여부까지)
+            notices = searchMapper.noticeFromEverywhereIncScrap(userIdx, query, reqNum, existNum);
+        }
+        // 토큰 없으면 스크랩 여부 없이 검색하는 쿼리만 사용 - scarp 은 무조건 0 으로 채워짐
+        else {
+            notices = searchMapper.noticeFromEverywhere(query, reqNum, existNum);
         }
 
 
-        // map 생성해서 각 분야별로 검색하고 결과를 넣음
-        HashMap<String, List> map = new HashMap<String, List>();
+        if(notices.isEmpty())
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_NO_RESULT);
 
-        List<NoticeSummary> notices = searchMapper.noticeFromEverywhere(query);
-        map.put("notices", notices.isEmpty() ? null : notices);
-
-        map.put("talks", null);
-        map.put("plans", null);
-
-
-        // 검색한 분야들중에 결과가 하나라도 있는게 존재하면 정상 리턴, 하지만 없는 분야의 value는 null
-        for(String key : map.keySet()) {
-            if(map.get(key) != null)
-                return DefaultRes.res(StatusCode.OK, ResponseMessage.SEARCH_SUCCESS, map);
-        }
-
-        // 모든 키에 결과가 없으면 204 리턴
-        return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_NO_RESULT);
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.SEARCH_SUCCESS, notices);
     }
 
 
