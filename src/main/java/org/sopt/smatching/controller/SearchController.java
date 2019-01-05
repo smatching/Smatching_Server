@@ -68,4 +68,38 @@ public class SearchController {
         return new ResponseEntity<>(searchService.deleteUserQueryLog(idx_variable, order), HttpStatus.OK);
     }
 
+
+    @Auth
+    @GetMapping("/notices/scrap")
+    public ResponseEntity fromScrapNotice(@RequestHeader(required = false, defaultValue = "0") int idx_variable,
+                                          @RequestParam(value = "query") final String query,
+                                          @RequestParam(value = "request_num") final int reqNum,
+                                          @RequestParam(value = "exist_num") final int existNum) {
+        return new ResponseEntity<>(searchService.fromScrapNotice(idx_variable, query, reqNum, existNum), HttpStatus.OK);
+    }
+
+    @Auth
+    @GetMapping("/notices/scrap/count")
+    public ResponseEntity countFromScrapNotice(@RequestHeader(required = false, defaultValue = "0") int idx_variable,
+                                               @RequestParam(value = "query") final String query,
+                                               @RequestHeader(value = "Client", required = false, defaultValue = "Android") final String client) {
+        /**
+         * iOS 요청에 따른 임시 방편
+         */
+        if(client.equals("iOS")) {
+            DefaultRes defaultRes = searchService.countFromScrapNotice(idx_variable, query);
+            defaultRes.setData(
+                    new HashMap<String, Integer>() {{
+                        put("num", (Integer)defaultRes.getData());
+                    }}
+            );
+            return new ResponseEntity<>(defaultRes, HttpStatus.OK);
+        }
+        /**
+         * iOS 요청에 따른 임시 방편
+         */
+
+
+        return new ResponseEntity<>(searchService.countFromScrapNotice(idx_variable, query), HttpStatus.OK);
+    }
 }

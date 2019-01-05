@@ -26,7 +26,7 @@ public class SearchService {
 
     // 전체 지원사업 검색 개수 조회 기능
     public DefaultRes countFromEverywhere(String query) {
-        final int cnt = searchMapper.CountNoticeFromEverywhere(query);
+        final int cnt = searchMapper.countNoticeFromEverywhere(query);
         return DefaultRes.res(StatusCode.OK, ResponseMessage.SEARCH_COUNT_SUCCESS, cnt);
     }
 
@@ -94,4 +94,20 @@ public class SearchService {
         }
     }
 
+
+    // 맞춤지원 스크랩에서 검색
+    public DefaultRes fromScrapNotice(int userIdx, String query, int reqNum, int existNum) {
+        List<NoticeSummary> notices = searchMapper.fromScrapNotice(userIdx, query, reqNum, existNum);
+        if(notices.isEmpty())
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_NO_RESULT);
+
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.SEARCH_SUCCESS, notices);
+    }
+
+
+    // 맞춤지원 스크랩에서 검색 결과 개수만 조회
+    public DefaultRes countFromScrapNotice(int userIdx, String query) {
+        final int cnt = searchMapper.countFromScrapNotice(userIdx, query);
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.SEARCH_COUNT_SUCCESS, cnt);
+    }
 }
