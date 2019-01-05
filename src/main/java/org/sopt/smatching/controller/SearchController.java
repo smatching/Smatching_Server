@@ -21,7 +21,7 @@ public class SearchController {
 
 
 
-    @GetMapping("")
+    @GetMapping("/notices")
     public ResponseEntity fromEverywhere(@RequestHeader(value = "Authorization", required = false) String jwt,
                                          @RequestParam(value = "query") final String query,
                                          @RequestParam(value = "request_num") final int reqNum,
@@ -30,7 +30,7 @@ public class SearchController {
     }
 
 
-    @GetMapping("/count")
+    @GetMapping("/notices/count")
     public ResponseEntity countFromEverywhere(@RequestParam(value = "query") final String query,
                                               @RequestHeader(value = "Client", required = false, defaultValue = "Android") final String client) {
 
