@@ -64,7 +64,7 @@ public interface SearchMapper {
             "OR d.detail_one LIKE CONCAT('%', #{query}, '%') " +
             "OR d.detail_two LIKE CONCAT('%', #{query}, '%') " +
             "OR d.detail_three LIKE CONCAT('%', #{query}, '%'))")
-    int CountNoticeFromEverywhere(@Param("query") final String query);
+    int countNoticeFromEverywhere(@Param("query") final String query);
 
 
 
@@ -96,4 +96,46 @@ public interface SearchMapper {
             "WHERE searchlogidx = #{searchLogIdx}")
     int deleteBySearchLogIdx(@Param("searchLogIdx") final int searchLogIdx);
 
+
+
+    // 맞춤지원 스크랩에서 검색 결과 개수 조회
+    @Select("SELECT COUNT(n.noticeidx) " +
+            "FROM notice AS n " +
+            "INNER JOIN notice_detail AS d " +
+            "ON n.noticeidx = d.noticeidx " +
+            "LEFT OUTER JOIN scrap_notice AS s " +
+            "ON s.useridx = #{userIdx} AND n.noticeidx = s.noticeidx " +
+            "WHERE n.valid = 1 AND s.scrap = 1 AND " +
+            "(n.title LIKE CONCAT('%', #{query}, '%') " +
+            "OR n.institution LIKE CONCAT('%', #{query}, '%') " +
+            "OR d.part LIKE CONCAT('%', #{query}, '%') " +
+            "OR d.phone LIKE CONCAT('%', #{query}, '%') " +
+            "OR d.detail_one LIKE CONCAT('%', #{query}, '%') " +
+            "OR d.detail_two LIKE CONCAT('%', #{query}, '%') " +
+            "OR d.detail_three LIKE CONCAT('%', #{query}, '%'))")
+    int countFromScrapNotice(@Param("userIdx") final int userIdx, @Param("query") final String query);
+
+
+
+    // 맞춤지원 스크랩에서 검색
+    @Select("SELECT n.noticeidx, n.title, n.institution, DATEDIFF(n.end_date, current_date) as dday, n.readcnt, s.scrap " +
+            "FROM notice AS n " +
+            "INNER JOIN notice_detail AS d " +
+            "ON n.noticeidx = d.noticeidx " +
+            "LEFT OUTER JOIN scrap_notice AS s " +
+            "ON s.useridx = #{userIdx} AND n.noticeidx = s.noticeidx " +
+            "WHERE n.valid = 1 AND s.scrap = 1 AND " +
+            "(n.title LIKE CONCAT('%', #{query}, '%') " +
+            "OR n.institution LIKE CONCAT('%', #{query}, '%') " +
+            "OR d.part LIKE CONCAT('%', #{query}, '%') " +
+            "OR d.phone LIKE CONCAT('%', #{query}, '%') " +
+            "OR d.detail_one LIKE CONCAT('%', #{query}, '%') " +
+            "OR d.detail_two LIKE CONCAT('%', #{query}, '%') " +
+            "OR d.detail_three LIKE CONCAT('%', #{query}, '%')) " +
+            "ORDER BY s.timestamp DESC " +
+            "LIMIT #{existNum}, #{reqNum}")
+    List<NoticeSummary> fromScrapNotice(@Param("userIdx") final int userIdx,
+                                        @Param("query") final String query,
+                                        @Param("reqNum") final int reqNum,
+                                        @Param("existNum") final int existNum);
 }
