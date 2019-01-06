@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="utf-8">
-    <title>Add Page</title>
+    <title>Smatching Admin Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -371,7 +371,7 @@
 
 
             $.ajax({
-                url : "/notices",
+                url : location.href, // 현재 페이지의 URL과 쿼리스트링까지 그대로. (location.search 하면 쿼리스트링만 나옴)
                 type : "POST",
                 data : JSON.stringify(result),
                 contentType: 'application/json; charset=UTF-8',
