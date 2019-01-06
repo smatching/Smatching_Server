@@ -29,7 +29,7 @@ public class Notice {
     // notice_detail 테이블 부분
     private String reg_date;
     private String start_date;
-    private String phoneNum;
+    private String phone;
     private String refer_url;
     private String origin_url;
     private String part;
@@ -54,7 +54,7 @@ public class Notice {
 
         this.reg_date = noticeInput.getReg_date();
         this.start_date = noticeInput.getStart_date();
-        this.phoneNum = noticeInput.getPhoneNum();
+        this.phone = noticeInput.getPhone();
         this.refer_url = noticeInput.getRefer_url();
         this.origin_url = noticeInput.getOrigin_url();
         this.part = noticeInput.getPart();
