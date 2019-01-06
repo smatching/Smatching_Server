@@ -162,6 +162,10 @@ public class CondService {
             condRes.getCondSummaryList().add(new CondSummary(condIdx, condName, noticeCnt));
         }
 
+        // 맞춤조건이 2개(현재 최대 2개)가 아니면 응답코드만 206(PARTIAL_CONTENT)으로 리턴
+        if(condRes.getCondSummaryList().size() != 2)
+            return DefaultRes.res(StatusCode.PARTIAL_CONTENT, ResponseMessage.READ_USERCOND_SUCCESS, condRes);
+
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USERCOND_SUCCESS, condRes);
     }
 

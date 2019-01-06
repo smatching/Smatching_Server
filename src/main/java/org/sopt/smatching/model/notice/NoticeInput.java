@@ -26,7 +26,7 @@ public class NoticeInput {
     // notice_detail 테이블 부분
     private String reg_date;
     private String start_date;
-    private String phoneNum;
+    private String phone;
     private String refer_url;
     private String origin_url;
     private String part;

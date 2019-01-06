@@ -89,8 +89,8 @@ public interface NoticeMapper {
 
 
     // 새로운 지원사업공고 추가 - notice_detail 테이블, save메소드 실행 된 직후에 실행되어야함
-    @Insert("INSERT INTO notice_detail(noticeidx, reg_date, start_date, phonenum, refer_url, origin_url, part, detail_one, detail_two, detail_three) " +
-            "VALUES(#{notice.noticeIdx}, #{notice.reg_date}, #{notice.start_date}, #{notice.phoneNum}, #{notice.refer_url}, #{notice.origin_url}, #{notice.part}, #{notice.detail_one}, #{notice.detail_two}, #{notice.detail_three})")
+    @Insert("INSERT INTO notice_detail(noticeidx, reg_date, start_date, phone, refer_url, origin_url, part, detail_one, detail_two, detail_three) " +
+            "VALUES(#{notice.noticeIdx}, #{notice.reg_date}, #{notice.start_date}, #{notice.phone}, #{notice.refer_url}, #{notice.origin_url}, #{notice.part}, #{notice.detail_one}, #{notice.detail_two}, #{notice.detail_three})")
     int saveDetail(@Param("notice") final Notice notice);
 
     // 지원사업공고를 기타로 뺌(맞춤지원에 노출되지 않게하고 전체공고에만 노출되게 설정)
