@@ -14,13 +14,12 @@ public class AdminPageController {
 
     @GetMapping("")
     public String viewMain(Model model) {
-
+        model.addAttribute("titles", "요고나와라");
         return "index"; // ftl 파일이름
     }
 
     @GetMapping("/add")
     public String viewAddPopup(Model model) {
-        model.addAttribute("titles", "요고나와라");
         return "add"; // ftl 파일이름
     }
 
