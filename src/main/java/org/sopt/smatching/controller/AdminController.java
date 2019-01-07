@@ -1,6 +1,7 @@
 package org.sopt.smatching.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.smatching.model.notice.Notice;
 import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 
 @Slf4j
@@ -49,6 +53,7 @@ public class AdminController {
         while (line != null) {
             sb.append(line);
             sb.append(System.lineSeparator());
+            sb.append("<br>");
             line = br.readLine();
         }
 
@@ -63,18 +68,19 @@ public class AdminController {
     public ModelAndView viewNoticeList(Model model, @RequestParam(required = false) final String password) {
         if(password == null || !(password.equals(ADMIN_PASSWORD)))
             return null;
-
         HashMap<String, Object> params = new HashMap<>();
-        params.put("titles", "요고나와라");
 
-        return new ModelAndView("noticelist", params);
+        List<Notice> noticeList = noticeService.getNoticeListForAdmin();
+        params.put("noticeList", noticeList);
+        params.put("currentTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
+        return new ModelAndView("noticelist", params); // viewName(String)은 정의해놓은 suffix(.ftl)을 제외한 파일이름
     }
 
 
     // 지원사업 공고 추가 팝업창
     @GetMapping("/notices/add")
-    public String viewAddPopup(Model model,
-                               @RequestParam(required = false) final String password) {
+    public String viewAddPopup(Model model, @RequestParam(required = false) final String password) {
         if(password == null || !(password.equals(ADMIN_PASSWORD)))
             return null;
 

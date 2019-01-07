@@ -267,8 +267,9 @@ public class NoticeService {
         }
     }
 
+    //////////////////////////////// 관리자용 서비스 메소드들 //////////////////////////////////////////////
 
-    // 새 지원사업 저장 - 앱에서는 안쓰고 관리자 페이지에서만 추가하는 용도로 사용
+    // 새 지원사업 저장
     @Transactional
     public DefaultRes addNotice(NoticeInput noticeInput) {
         Notice notice = new Notice(noticeInput);
@@ -289,6 +290,7 @@ public class NoticeService {
         }
     }
 
+    // 지원사업 공고 비활성화
     @Transactional
     public DefaultRes invalidateNotice(int noticeIdx) {
         try {
@@ -301,6 +303,12 @@ public class NoticeService {
             log.error(e.getMessage());
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
+    }
+
+
+    // 전체 지원사업 공고 모든 정보 불러오기
+    public List<Notice> getNoticeListForAdmin() {
+        return noticeMapper.findNoticeEverything();
     }
 
 }
