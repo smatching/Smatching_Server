@@ -7,9 +7,11 @@
 <body>
 <br><br>
 <div>
-    <label>Password : </label>
+    <label style="margin-left: 10px;">Password : </label>
     <input type="password" id="password" onkeyup="enterkey();" />&nbsp;&nbsp;
     <input type="button" value="로그인" onclick="login()" />
+    <br><br>
+    <h2 style="margin-left: 10px;"><a href="/admin/log">서버 로그 확인 페이지 이동</a></h2>
 </div>
 <script>
     function enterkey() {

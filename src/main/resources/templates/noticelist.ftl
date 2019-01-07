@@ -20,7 +20,8 @@
 	<body>
 		
     <div style="text-align:center"><h3><u><font color="#5F04B4" size="5">Smatching Admin Page</u></font></h3></div>
-    <div style="text-align:right; color:blue;"><a href="/admin/notices/add" onclick="window.open(this.href+location.search, 'newwin', 'width=700,height=800,scrollbars=yes,resizable=yes,left=500,top=50');return false;"><h5>새로운 지원사업 공고 추가하기</h5></a><br></div>
+    <div style="text-align:right; color:blue;"><a href="/admin/notices/add" onclick="window.open(this.href+location.search, 'newwin', 'width=700,height=800,scrollbars=yes,resizable=yes,left=500,top=50');return false;">새로운 지원사업 공고 추가하기</a></div>
+    <div style="text-align:left;"><label><input type="checkbox" id="invalidcheckbox"> 비활성화 된 공고 숨기기<br><br><br></label></div>
     
     
     
@@ -39,7 +40,7 @@
         </thead>
         <tbody>
 
-            <tr>
+            <tr class="invalidRow" style="background-color: #ffa197;">
                 <td>${titles}</td>
                 <td>2019-01-06 03:30:11</td>
                 <td><font color="#04B404"><strong class="message-tooltipsy" title="메세지">제목제목(마우스오버)</strong></font></td>
@@ -49,6 +50,19 @@
                 <td><a href="javascript:void(0);" onclick="deleteTestResult({{result.id}}); return false;">자바스크립트실행</a></td>
                 <td>if문넣자</td>
             </tr>
+
+            <#list noticeList as notice>
+            <tr>
+                <td>${notice.userIdx}<#if notice.userIdx?number == 1>1번유저if문</#if></td>
+                <td>${notice.nickname}</td>
+                <td>${notice}</td>
+                <td>${notice}</td>
+                <td>${notice}</td>
+                <td>${notice}</td>
+                <td>${notice}</td>
+                <td>${notice}</td>
+            </tr>
+            </#list>
 
         </tbody>
     </table>
@@ -92,6 +106,15 @@
     });    
     
     $('td').attr('align', 'center'); // 표 내용들 가운데정렬
+
+
+    $("#invalidcheckbox").click(function() {
+        if(this.checked) {
+            $(".invalidRow").hide();
+        }
+        else {
+            $(".invalidRow").show();
+        }
+    });
     </script>
-    
 </html>

@@ -10,6 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
 
 
 @Slf4j
@@ -31,14 +37,37 @@ public class AdminController {
     }
 
 
+    // 서버 로그확인 페이지
+    @GetMapping("/log")
+    @ResponseBody
+    public ResponseEntity viewServerLog() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader("/home/ubuntu/nohup.out"));
+
+        StringBuilder sb = new StringBuilder();
+        String line = br.readLine();
+
+        while (line != null) {
+            sb.append(line);
+            sb.append(System.lineSeparator());
+            line = br.readLine();
+        }
+
+        br.close();
+
+        return new ResponseEntity<>(sb.toString(), HttpStatus.OK);
+    }
+
+
     // 지원사업 공고 리스트 페이지
     @GetMapping("/notices")
-    public String viewNoticeList(Model model, @RequestParam(required = false) final String password) {
+    public ModelAndView viewNoticeList(Model model, @RequestParam(required = false) final String password) {
         if(password == null || !(password.equals(ADMIN_PASSWORD)))
             return null;
 
-        model.addAttribute("titles", "요고나와라");
-        return "noticelist"; // ftl 파일이름
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("titles", "요고나와라");
+
+        return new ModelAndView("noticelist", params);
     }
 
 
