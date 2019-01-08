@@ -19,7 +19,7 @@
 	</head>
 	<body>
 		
-    <div style="text-align:center"><h3><u><font color="#5F04B4" size="5">Smatching Admin Page</u></font></h3></div>
+    <div style="text-align:center"><h3><u><font color="#5F04B4" size="5">Smatching Admin Page : ${currentTime}</u></font></h3></div>
     <div style="text-align:right; color:blue;"><a href="/admin/notices/add" onclick="window.open(this.href+location.search, 'newwin', 'width=700,height=800,scrollbars=yes,resizable=yes,left=500,top=50');return false;">새로운 지원사업 공고 추가하기</a></div>
     <div style="text-align:left;"><label><input type="checkbox" id="invalidcheckbox"> 비활성화 된 공고 숨기기<br><br><br></label></div>
     
@@ -28,42 +28,30 @@
     <table id="example" class="display" style="width:100%">
         <thead>
             <tr>
-                <th>순서번호</th>
-                <th>스매칭 등록시간</th>
+                <th>번호</th>
+                <th>등록시간</th>
                 <th>제목</th>
                 <th>기관</th>
-                <th>종료일</th>
+                <th>마감일</th>
                 <th>조회수</th>
-                <th>유효여부</th>
-                <th>기타여부</th>
+                <th>링크</th>
+                <th>자세히</th>
             </tr>
         </thead>
         <tbody>
-
-            <tr class="invalidRow" style="background-color: #ffa197;">
-                <td>${titles}</td>
-                <td>2019-01-06 03:30:11</td>
-                <td><font color="#04B404"><strong class="message-tooltipsy" title="메세지">제목제목(마우스오버)</strong></font></td>
-                <td><a href="{{result.reportFileLink}}" target="_blank">기관기관(링크)</a></td>
-                <td>2019-12-22</td>
-                <td><a href="/edittestresult?resultID={{result.id}}" onclick="window.open(this.href, 'newwin', 'width=600,height=800,scrollbars=yes,resizable=yes,left=500,top=50');return false;">팝업팝업</a></td> <!--- 팝업차단 켜져있으면 예외등록 해줘야함 --->
-                <td><a href="javascript:void(0);" onclick="deleteTestResult({{result.id}}); return false;">자바스크립트실행</a></td>
-                <td>if문넣자</td>
-            </tr>
-
             <#list noticeList as notice>
-            <tr>
-                <td>${notice.userIdx}<#if notice.userIdx?number == 1>1번유저if문</#if></td>
-                <td>${notice.nickname}</td>
-                <td>${notice}</td>
-                <td>${notice}</td>
-                <td>${notice}</td>
-                <td>${notice}</td>
-                <td>${notice}</td>
-                <td>${notice}</td>
+            <tr<#if notice.valid?number == 0> class="invalidRow" style="background-color: #ffa197;"<#elseif notice.notfit?number==1> class="etcnotice" style="background-color: #fffe97;"</#if>>
+                <td>${notice.noticeIdx}</td>
+                <td>${notice.timestamp}</td>
+                <td>${notice.title}</td>
+                <td>${notice.institution}</td>
+                <td>${notice.end_date}</td>
+                <td>${notice.readCnt}</td>
+                <td><span class="message-tooltipsy" style="color: blue;"
+                          title="<a href='${notice.refer_url}' target='_blank'>참고 URL로 이동</a><br><br><a href='${notice.origin_url}' target=_'blank'>원본 URL로 이동</a>">Links</span></td>
+                <td><a href="/admin/notices/detail/${notice.noticeIdx}" onclick="window.open(this.href, 'newwin', 'width=600,height=800,scrollbars=yes,resizable=yes,left=500,top=50');return false;">Click</a></td>
             </tr>
             </#list>
-
         </tbody>
     </table>
 	</body>
