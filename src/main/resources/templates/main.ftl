@@ -20,7 +20,12 @@
         }
     }
     function login() {
-        window.location = location.href + "/notices?password=" + document.getElementById("password").value;
+        if(location.href.substr(-1) == '/') {
+            window.location = location.href + "notices?password=" + document.getElementById("password").value;
+        }
+        else {
+            window.location = location.href + "/notices?password=" + document.getElementById("password").value;
+        }
     }
 </script>
 </body>
