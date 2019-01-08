@@ -86,12 +86,17 @@ public class UserService {
         if(userMapper.checkPassword(userIdx, userModifyReq.getPassword()) == 0)
             return DefaultRes.res(StatusCode.FORBIDDEN, ResponseMessage.WRONG_PASSWORD);
 
-        // 새 비밀번호 존재하면 해당 값으로 비밀번호 덮어쓰기 (없어도 기존 값 그대로 update는 됨)
-        if(userModifyReq.getNewPassword() != null)
-            userModifyReq.setPassword(userModifyReq.getNewPassword());
+        // 새 비밀번호가 empty string 이면 기존 비밀번호를 복사하기
+        if(userModifyReq.getNewPassword().equals(""))
+            userModifyReq.setNewPassword(userModifyReq.getPassword());
+
+        // 닉네임이 empty string 이면 기존 닉네임 그대로 사용
+        if(userModifyReq.getNickname().equals(""))
+            userModifyReq.setNickname(userMapper.findUserModifyByUserIdx(userIdx).getNickname());
+
 
         try {
-            final int updatedCnt = userMapper.modifyUserByUserIdx(userIdx, userModifyReq);
+            final int updatedCnt = userMapper.modifyUserByUserIdx(userIdx, userModifyReq); // 무조건 새 비밀번호로 저장
             if(updatedCnt != 1)
                 return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_NOT_ONE);
 
