@@ -28,8 +28,8 @@ public class DynamicQuery {
                 WHERE("notice.location & #{cond.location} > 0");
             if(cond.getAge() > 0)
                 WHERE("notice.age & #{cond.age} > 0");
-            if(cond.getAdvantage() > 0)
-                WHERE("notice.advantage & #{cond.advantage} > 0");
+//            if(cond.getAdvantage() > 0)
+//                WHERE("notice.advantage & #{cond.advantage} > 0");
 
         }}.toString() + "\nLIMIT #{existNum}, #{reqNum}"; // LIMIT은 SQL 빌더 클래스에 없는듯
     }
@@ -42,7 +42,6 @@ public class DynamicQuery {
             FROM("notice");
             WHERE("notice.valid = 1");
             WHERE("notice.notfit = 0");
-            ORDER_BY("notice.noticeIdx DESC");
 
             // 필수옵션들
             WHERE("notice.period & #{cond.period} > 0"); // 설립 경과 년수
