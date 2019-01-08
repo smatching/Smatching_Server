@@ -136,7 +136,7 @@
 
                                 <label class="radio-inline"><input type="checkbox" name="location" value="chungbuk" style="margin-bottom: 10px"> 충북</label>
                                 <label class="radio-inline"><input type="checkbox" name="location" value="jeju" style="margin-bottom: 10px"> 제주</label>
-                                <label class="radio-inline"><input type="checkbox" name="location" value="aborad" style="margin-bottom: 10px"> 국외</label>
+                                <label class="radio-inline" style="font-weight:bold; color: blue;"><input type="checkbox" name="location" value="aborad" style="margin-bottom: 10px"> 국외</label>
                             </div>
                         </div>
 
@@ -391,16 +391,17 @@
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'html',
                 error : function() {
-                    alert("추가 실패 - Ajax Error");
+                    alert("추가 실패!!! 입력값을 토대로 개발자 문의필요 - Ajax Error");
                 },
                 success : function(response) {
                     var response_code = (JSON.parse(response)["status"]);
                     if(response_code == 201) {
                         alert("성공적으로 추가하였습니다.");
-                        location.reload();
+                        location.reload(); // 새로고침
+                        window.scrollTo(0, 0); // 맨위로
                     }
                     else {
-                        alert("추가 실패 - Code: " + response_code);
+                        alert("추가 실패!!! 입력값을 토대로 개발자 문의필요 - Code: " + response_code);
                     }
 
                 }
