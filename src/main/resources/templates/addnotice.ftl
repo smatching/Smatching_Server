@@ -114,7 +114,7 @@
                         <div class="form-group required">
                             <label class="control-label col-md-4 requiredField">지역</span></label>
                             <div class="controls col-md-8" style="margin-bottom: 10px">
-                                <label class="radio-inline" style="display: block; font-weight:bold;"><input type="checkbox" name="selectall" style="margin-bottom: 10px"> 전체</label>
+                                <label class="radio-inline" style="display: block; font-weight:bold; color: blue;"><input type="checkbox" name="locationselectall" style="margin-bottom: 10px"> 국내 전체</label>
 
                                 <label class="radio-inline"><input type="checkbox" name="location" value="seoul" style="margin-bottom: 10px"> 서울</label>
                                 <label class="radio-inline"><input type="checkbox" name="location" value="busan" style="margin-bottom: 10px"> 부산</label>
@@ -315,12 +315,26 @@
     });
 
 
-    // 전체가 아닌 나머지가 체크 해제되면 전체도 체크 뺌
-    $("input:checkbox").not("input[name=selectall]").click(function() {
+    // 전체가 아닌 나머지가 체크 해제되면 전체도 체크 뺌 (지역 제외)
+    $("input:checkbox").not("input[name=selectall]").not("input[name=location]").not("input[name=locationselectall]").click(function() {
         if(!(this.checked)) {
             $(this).parent().parent().find("input[name=selectall]").prop('checked', false);
         }
     });
+
+    // 국내 전체 체크박스 작동 설정 (지역)
+    $("input[name=locationselectall]").click(function() {
+        $(this).parent().parent().find("input").not("input[name=locationselectall]").not("input[value=aborad]").prop('checked', this.checked);
+    });
+
+    // 국내 전체가 아닌 나머지가 체크 해제되면 전체도 체크 뺌 (지역)
+    $("input[name=location]").not("input[value=aborad]").click(function() {
+        if(!(this.checked)) {
+            $(this).parent().parent().find("input[name=locationselectall]").prop('checked', false);
+        }
+    });
+
+
 
 
     function makeMapFromMultipleOptions(option_name) {
