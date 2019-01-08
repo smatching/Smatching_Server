@@ -41,7 +41,10 @@ public class S3FileUploadService {
             //파일이름 암호화
             final String saveFileName = getUuid() + ext;
             //파일 객체 생성
-            File file = new File(System.getProperty("user.dir") + saveFileName);
+            File file = new File(System.getProperty("user.dir") + "/" + saveFileName); // 윈도우에선 user.dir만 해도 되는데 우분투는 / 까지 붙여줘야함
+            if(file == null) {
+                throw new Exception("File object is empty!!!");
+            }
             //파일 변환
             uploadFile.transferTo(file);
             //S3 파일 업로드
@@ -50,8 +53,8 @@ public class S3FileUploadService {
             url = defaultUrl + saveFileName;
             //파일 삭제
             file.delete();
-        }catch (StringIndexOutOfBoundsException e) {
-            //파일이 없을 경우 예외 처리
+        } catch (Exception e) {
+            log.error("\n- Exception Detail (below)", e);
             url = null;
         }
         return url;
@@ -74,7 +77,7 @@ public class S3FileUploadService {
             //완료 확인
             upload.waitForCompletion();
         } catch (AmazonClientException amazonClientException) {
-            log.error(amazonClientException.getMessage());
+            log.error("\n- AmazonClientException Detail (below)", amazonClientException);
         } catch (InterruptedException e) {
             log.error("\n- Exception Detail (below)", e);
         }
