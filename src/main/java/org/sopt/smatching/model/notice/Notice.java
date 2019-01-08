@@ -26,6 +26,10 @@ public class Notice {
     private String institution;
     private String end_date;
 
+    private int readCnt;
+    private int valid;
+    private int notfit;
+
     // notice_detail 테이블 부분
     private String reg_date;
     private String start_date;
@@ -36,11 +40,13 @@ public class Notice {
     private String detail_one;
     private String detail_two;
     private String detail_three;
+    private String timestamp;
 
 
     public Notice(NoticeInput noticeInput) {
 
         this.location = Cond.mapToLong(noticeInput.getLocation(), MultipleOption.LOCATIONS);
+        this.category = Cond.mapToInt(noticeInput.getCategory(), MultipleOption.CATEGORYS);
         this.age = Cond.mapToInt(noticeInput.getAge(), MultipleOption.AGES);
         this.period = Cond.mapToInt(noticeInput.getPeriod(), MultipleOption.PERIODS);
         this.field = Cond.mapToLong(noticeInput.getField(), MultipleOption.FIELDS);
@@ -50,6 +56,7 @@ public class Notice {
         this.title = noticeInput.getTitle();
         this.institution = noticeInput.getInstitution();
         this.end_date = noticeInput.getEnd_date();
+        this.notfit = noticeInput.isNotfit() ? 1 : 0;
 
 
         this.reg_date = noticeInput.getReg_date();

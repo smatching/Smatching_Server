@@ -33,7 +33,8 @@ public class ExceptionControllerAdvice {
         }
         log.error("- Header (below)\n" + headerStr);
 
-        log.error("- Exception Info (below)", e);
+        log.error("- @@@@@ Exception Message @@@@@ ---> : " + e.getMessage());
+        log.error("- @@@@@ LOOK UPPER MESSAGE CAREFULLY!!! @@@@@\n\n- Exception Detail (below)", e);
 
         log.error("--------------------------------------------\n\n");
 

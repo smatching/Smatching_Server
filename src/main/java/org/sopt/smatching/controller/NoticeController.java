@@ -142,16 +142,4 @@ public class NoticeController {
     }
 
 
-    // 지원사업 추가
-    @PostMapping("")
-    public ResponseEntity addNotice(@RequestBody final NoticeInput noticeInput) {
-        return new ResponseEntity<>(noticeService.addNotice(noticeInput), HttpStatus.OK);
-    }
-
-    // 지원사업 비활성화
-    @PutMapping("/invalidate/{noticeIdx}")
-    public ResponseEntity invalidateNotice(@PathVariable(value = "noticeIdx") final int noticeIdx) {
-        return new ResponseEntity<>(noticeService.invalidateNotice(noticeIdx), HttpStatus.OK);
-    }
-
 }
