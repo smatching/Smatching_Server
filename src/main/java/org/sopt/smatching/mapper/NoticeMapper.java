@@ -108,7 +108,7 @@ public interface NoticeMapper {
 
 
     // 관리자용 - 모든 지원사업공고 리스트 정보 가져오기
-    @Select("SELECT n.noticeidx, n.valid, n.notfit, n.title, n.institution, n.end_date, n.readcnt, d.timestamp, d.refer_url, d.origin_url " +
+    @Select("SELECT n.noticeidx, n.valid, n.notfit, n.title, n.institution, n.end_date, n.readcnt, d.timestamp, d.refer_url, d.origin_url, d.part " +
             "FROM notice AS n " +
             "INNER JOIN notice_detail AS d " +
             "ON n.noticeidx = d.noticeidx")
