@@ -130,7 +130,7 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserInfo(idx_variable), HttpStatus.OK);
     }
 
-    // 회원정보변경
+    // 회원정보 변경
     @Auth
     @PutMapping("/edit")
     public ResponseEntity modifyUserInfo(@RequestHeader(required = false, defaultValue = "0") int idx_variable,

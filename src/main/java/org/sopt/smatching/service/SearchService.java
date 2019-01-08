@@ -49,7 +49,7 @@ public class SearchService {
             try {
                 searchMapper.saveQueryLog(userIdx, query);
             } catch(Exception e) {
-                log.error(e.getMessage());
+                log.error("\n- Exception Detail (below)", e);
             }
 
             // 검색 쿼리 (스크랩 여부까지)
@@ -89,7 +89,7 @@ public class SearchService {
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }

@@ -53,9 +53,9 @@ public class JwtService {
             DecodedJWT decodedJWT = jwtVerifier.verify(token);
             return new Token(decodedJWT.getClaim("user_idx").asLong().intValue());
         } catch (JWTVerificationException jve) {
-            log.error(jve.getMessage());
+            log.error("\n- Exception Detail (below)", jve);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
         }
         return new Token();
     }

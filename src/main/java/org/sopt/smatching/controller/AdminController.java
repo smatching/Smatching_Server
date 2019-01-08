@@ -77,6 +77,17 @@ public class AdminController {
         return new ModelAndView("noticelist", params); // viewName(String)은 정의해놓은 suffix(.ftl)을 제외한 파일이름
     }
 
+    // 지원사업 공고 리스트 상세조회 팝업창
+    @GetMapping("/notices/detail/{noticeIdx}")
+    public ModelAndView vuewNoticeDetail(Model model, @RequestParam(required = false) final String password, @PathVariable(value = "noticeIdx") final int noticeIdx) {
+        if(password == null || !(password.equals(ADMIN_PASSWORD)))
+            return null;
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        return new ModelAndView("noticedetail", params);
+    }
+
 
     // 지원사업 공고 추가 팝업창
     @GetMapping("/notices/add")

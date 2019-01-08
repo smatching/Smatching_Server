@@ -53,14 +53,14 @@ public class UserService {
         } catch (DuplicateKeyException e) { // 이메일 중복
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
             if(e.getMessage().contains("for key 'UC_email'") == true) {
-                log.error(e.getMessage());
+                log.error("\n- Exception Detail (below)", e);
                 return DefaultRes.res(StatusCode.ALREADY_EXSIST_EMAIL, ResponseMessage.ALREADY_EXIST_EMAIL);
             }
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
 
         } catch (Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -86,12 +86,17 @@ public class UserService {
         if(userMapper.checkPassword(userIdx, userModifyReq.getPassword()) == 0)
             return DefaultRes.res(StatusCode.FORBIDDEN, ResponseMessage.WRONG_PASSWORD);
 
-        // 새 비밀번호 존재하면 해당 값으로 비밀번호 덮어쓰기 (없어도 기존 값 그대로 update는 됨)
-        if(userModifyReq.getNewPassword() != null)
-            userModifyReq.setPassword(userModifyReq.getNewPassword());
+        // 새 비밀번호가 empty string 이면 기존 비밀번호를 복사하기
+        if(userModifyReq.getNewPassword().equals(""))
+            userModifyReq.setNewPassword(userModifyReq.getPassword());
+
+        // 닉네임이 empty string 이면 기존 닉네임 그대로 사용
+        if(userModifyReq.getNickname().equals(""))
+            userModifyReq.setNickname(userMapper.findUserModifyByUserIdx(userIdx).getNickname());
+
 
         try {
-            final int updatedCnt = userMapper.modifyUserByUserIdx(userIdx, userModifyReq);
+            final int updatedCnt = userMapper.modifyUserByUserIdx(userIdx, userModifyReq); // 무조건 새 비밀번호로 저장
             if(updatedCnt != 1)
                 return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_NOT_ONE);
 
@@ -99,7 +104,7 @@ public class UserService {
 
         } catch (Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -114,7 +119,7 @@ public class UserService {
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -128,7 +133,7 @@ public class UserService {
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -146,7 +151,7 @@ public class UserService {
 
         } catch (Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }

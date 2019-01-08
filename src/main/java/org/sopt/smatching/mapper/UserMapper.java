@@ -22,7 +22,7 @@ public interface UserMapper {
 
     // 회원정보 변경
     @Update("UPDATE user " +
-            "SET nickname = #{userModifyReq.nickname}, password = #{userModifyReq.password} " +
+            "SET nickname = #{userModifyReq.nickname}, password = #{userModifyReq.newPassword} " +
             "WHERE useridx = #{userIdx}")
     int modifyUserByUserIdx(@Param("userIdx") final int userIdx, @Param("userModifyReq") UserModifyReq userModifyReq);
 
