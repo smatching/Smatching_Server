@@ -56,13 +56,13 @@ public class CondService {
             int rowCnt = condMapper.save(cond);
 
             if(rowCnt != 1)
-                throw new Exception("rowCnt is NOT 1");
+                throw new Exception("rowCnt is NOT 1 but " + Integer.toString(rowCnt));
 
             return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_COND, cond.getCondIdx());
 
         } catch(Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
 
@@ -80,13 +80,13 @@ public class CondService {
             final int rowCnt = condMapper.updateByCondIdx(userIdx, condIdx, cond);
 
             if(rowCnt != 1)
-                throw new Exception("rowCnt is NOT 1");
+                throw new Exception("rowCnt is NOT 1 but " + Integer.toString(rowCnt));
 
             return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.UPDATED_COND, condIdx);
 
         } catch(Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -100,13 +100,13 @@ public class CondService {
             final int rowCnt = condMapper.deleteByCondIdx(userIdx, condIdx);
 
             if(rowCnt != 1)
-                throw new Exception("rowCnt is NOT 1");
+                throw new Exception("rowCnt is NOT 1 but " + Integer.toString(rowCnt));
 
             return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.DELETED_COND);
 
         } catch(Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -137,7 +137,7 @@ public class CondService {
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }

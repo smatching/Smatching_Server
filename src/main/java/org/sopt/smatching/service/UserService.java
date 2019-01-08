@@ -53,14 +53,14 @@ public class UserService {
         } catch (DuplicateKeyException e) { // 이메일 중복
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
             if(e.getMessage().contains("for key 'UC_email'") == true) {
-                log.error(e.getMessage());
+                log.error("\n- Exception Detail (below)", e);
                 return DefaultRes.res(StatusCode.ALREADY_EXSIST_EMAIL, ResponseMessage.ALREADY_EXIST_EMAIL);
             }
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
 
         } catch (Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -99,7 +99,7 @@ public class UserService {
 
         } catch (Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -114,7 +114,7 @@ public class UserService {
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -128,7 +128,7 @@ public class UserService {
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -146,7 +146,7 @@ public class UserService {
 
         } catch (Exception e) { // DB 에러
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }

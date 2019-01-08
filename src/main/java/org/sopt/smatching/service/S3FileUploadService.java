@@ -76,7 +76,7 @@ public class S3FileUploadService {
         } catch (AmazonClientException amazonClientException) {
             log.error(amazonClientException.getMessage());
         } catch (InterruptedException e) {
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
         }
     }
 }

@@ -133,7 +133,7 @@ public class NoticeService {
         try {
             noticeMapper.plusReadCnt(noticeIdx);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
         }
 
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTICE_DETAIL, noticeDetail);
@@ -160,24 +160,24 @@ public class NoticeService {
             if (scraped == 0) { // 스크랩 안돼있으면 row 추가
                 int rowCnt = scrapMapper.insertScrap(userIdx, noticeIdx);
                 if(rowCnt != 1)
-                    throw new Exception("rowCnt is NOT 1");
+                    throw new Exception("rowCnt is NOT 1 but " + Integer.toString(rowCnt));
 
                 return DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_SCRAP, 1);
             }
             else if (scraped == 1) { // 스크랩 돼있으면 row 삭제
                 int rowCnt = scrapMapper.deleteScrap(userIdx, noticeIdx);
                 if(rowCnt != 1)
-                    throw new Exception("rowCnt is NOT 1");
+                    throw new Exception("rowCnt is NOT 1 but " + Integer.toString(rowCnt));
 
                 return DefaultRes.res(StatusCode.OK, ResponseMessage.DELETED_SCRAP, 0);
             }
             else { // 0 이나 1이 아니면 이상한거임
-                throw new Exception("scraped is not 0 or 1");
+                throw new Exception("scraped is not 0 or 1 but " + Integer.toString(scraped));
             }
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -233,7 +233,7 @@ public class NoticeService {
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -262,7 +262,7 @@ public class NoticeService {
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -285,7 +285,7 @@ public class NoticeService {
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
@@ -300,7 +300,7 @@ public class NoticeService {
 
         } catch(Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error(e.getMessage());
+            log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
     }
