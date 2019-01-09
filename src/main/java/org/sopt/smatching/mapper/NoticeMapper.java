@@ -113,4 +113,11 @@ public interface NoticeMapper {
             "INNER JOIN notice_detail AS d " +
             "ON n.noticeidx = d.noticeidx")
     List<Notice> findNoticeEverything();
+
+
+    // 스케줄러용 - 만료된 공고(dday < 0)의 noticeIdx 가져오기
+    @Select("SELECT noticeidx " +
+            "FROM notice " +
+            "WHERE DATEDIFF(end_date, CURRENT_DATE) < 0")
+    List<Integer> getExpiredNotice();
 }

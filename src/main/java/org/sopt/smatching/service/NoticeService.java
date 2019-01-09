@@ -326,4 +326,14 @@ public class NoticeService {
         return noticeMapper.findNoticeEverything();
     }
 
+
+    // 전체 지원사업공고를 스캔해서 dday가 만료된건 비활성화 - NoticeScheduler 사용
+    @Transactional
+    public List<Integer> scanExpiredNoticesToInvalidation() {
+        final List<Integer> list = noticeMapper.getExpiredNotice();
+        for(int noticeIdx : list) {
+            invalidateNotice(noticeIdx);
+        }
+        return list;
+    }
 }
