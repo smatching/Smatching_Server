@@ -285,23 +285,30 @@ public class NoticeService {
     public DefaultRes addNotice(NoticeInput noticeInput) {
         Notice notice = new Notice(noticeInput);
 
-        // notice 테이블에 저장하고 AI로 생성된 noticeIdx로 detail 테이블에도 저장
+        // notice 테이블에 저장하고 Auto Increment 로 생성된 noticeIdx 를 이용해 detail 테이블에도 저장
         int a = noticeMapper.save(notice);
-        int b = scrapMapper.insertScrap(-1, -1);
-        int c = noticeMapper.saveDetail(notice);
-        if(a!=0 || b!=0 || c!=0) {
+        int b = noticeMapper.saveDetail(notice);
+        if(a!=1 || b!=1 ) {
             log.error("--------------------------------------------");
-            log.error("@@@@@ rowCnts are NOT 1,1,1 but " + a + ',' + b + ',' + c + " @@@@@");
+            log.error("@@@@@ rowCnts are NOT 1,1 but " + a + ',' + b + " @@@@@");
             scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
         }
 
-        if(noticeInput.isNotfit()) { // 기타공고면 update문으로 notift 1로 만들기
+        if(noticeInput.isNotfit()) { // 기타공고면 update문으로 notift 1로 만들고 알람 전송 없이 종료
             int rowCnt = noticeMapper.makeNotFit(notice.getNoticeIdx());
             if(rowCnt != 1) {
                 log.error("--------------------------------------------");
                 log.error("@@@@@ rowCnt is NOT 1 but " + rowCnt + " @@@@@");
                 scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
             }
+
+            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_NOTICE);
+        }
+
+        // 알람 전송할 유저 찾기 - 저장되어 있는 cond들과 비교해서 해당되는 맞춤조건을 찾아옴
+        int[] list = condMapper.getNotifiedUser(notice);
+        for(int userIdx : list) {
+            log.info("UserIdx : " + userIdx);
         }
 
         return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_NOTICE);
