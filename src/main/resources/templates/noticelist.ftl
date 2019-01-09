@@ -10,9 +10,9 @@
 	</head>
 
     <body>
-        <div style="text-align:center"><h3><u><font color="#5F04B4" size="5">Smatching Admin Page : ${currentTime}</u></font></h3></div>
-        <div style="text-align:right; color:blue;"><a href="/admin/notices/add" onclick="window.open(this.href+location.search, 'newwin', 'width=700,height=800,scrollbars=yes,resizable=yes,left=500,top=50');return false;">새로운 지원사업 공고 추가하기</a></div>
-        <div style="text-align:left;"><label><input type="checkbox" id="invalidcheckbox"> 비활성화 된 공고 숨기기<br><br><br></label></div>
+        <img src="/topimage.png" style="margin: -8px;" width="1920px">
+        <div style="text-align:right; color:blue; margin-top:15px; font-size: large;"><a href="/admin/notices/add" onclick="window.open(this.href+location.search, 'newwin', 'width=700,height=800,scrollbars=yes,resizable=yes,left=500,top=50');return false;">새로운 지원사업 공고 추가하기</a></div>
+        <div style="text-align:left; margin-top:3px;"><label><input type="checkbox" id="invalidcheckbox"> 비활성화 된 공고 숨기기<br><br><br></label></div>
 
         <table id="example" class="display" style="width:100%">
             <thead>
@@ -40,20 +40,22 @@
                     <td>${notice.readCnt}</td>
                     <td><span class="message-tooltipsy" style="color: blue;"
                               title="<a href='${notice.refer_url}' target='_blank'>참고 URL로 이동</a><br><br><a href='${notice.origin_url}' target=_'blank'>원본 URL로 이동</a>">Links</span></td>
-                    <td><a href="/admin/notices/detail/${notice.noticeIdx}" onclick="window.open(this.href, 'newwin', 'width=600,height=800,scrollbars=yes,resizable=yes,left=500,top=50');return false;">Click</a></td>
+                    <td><a href="/admin/notices/detail/${notice.noticeIdx}" onclick="window.open(this.href+location.search, 'newwin', 'width=600,height=800,scrollbars=yes,resizable=yes,left=500,top=50');return false;">Click</a></td>
                 </tr>
                 </#list>
             </tbody>
         </table>
+    <br>
+    <div style="text-align:center; color: #5F04B4;"><h3>Loaded Time : <u>${currentTime}</u></h3></div>
     </body>
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#example').DataTable( {
-                "order": [[0, 'desc']] // 초기값은 0번째 컬럼 내림차순으로 정렬
-            } );
-
             $('td').attr('align', 'center'); // 표 내용들 가운데정렬
+
+            $('#example').DataTable( {
+                "order": [[0, 'desc']] // table을 DataTable로 변환 진행, 초기값은 0번째 컬럼 내림차순으로 정렬
+            } );
 
             $(window).resize(); // 보기 좋게 브라우저 리사이즈 실행
         } );
