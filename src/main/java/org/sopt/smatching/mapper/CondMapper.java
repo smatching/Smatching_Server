@@ -2,7 +2,9 @@ package org.sopt.smatching.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.sopt.smatching.model.cond.Cond;
+import org.sopt.smatching.model.notice.Notice;
 import org.sopt.smatching.model.user.UserCond;
+import org.sopt.smatching.utils.DynamicQuery;
 
 import java.util.List;
 
@@ -75,4 +77,9 @@ public interface CondMapper {
             "SET alert = #{value} " +
             "WHERE condidx = #{condIdx} AND useridx = #{userIdx}")
     int updateAlert(@Param("userIdx") final int userIdx, @Param("condIdx") final int condIdx, @Param("value") final int value);
+
+
+    // 공고와 일치하는 맞춤조건을 찾고 그에 해당하는 userIdx 찾아오기 (동적쿼리 사용)
+    @SelectProvider(type = DynamicQuery.class, method = "getNotifiedUser")
+    int[] getNotifiedUser(@Param("notice") final Notice notice);
 }

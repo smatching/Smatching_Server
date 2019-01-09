@@ -294,13 +294,21 @@ public class NoticeService {
             scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
         }
 
-        if(noticeInput.isNotfit()) { // 기타공고면 update문으로 notift 1로 만들기
+        if(noticeInput.isNotfit()) { // 기타공고면 update문으로 notift 1로 만들고 알람 전송 없이 종료
             int rowCnt = noticeMapper.makeNotFit(notice.getNoticeIdx());
             if(rowCnt != 1) {
                 log.error("--------------------------------------------");
                 log.error("@@@@@ rowCnt is NOT 1 but " + rowCnt + " @@@@@");
                 scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
             }
+
+            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_NOTICE);
+        }
+
+        // 알람 전송할 유저 찾기 - 저장되어 있는 cond들과 비교해서 해당되는 맞춤조건을 찾아옴
+        int[] list = condMapper.getNotifiedUser(notice);
+        for(int userIdx : list) {
+            log.info("UserIdx : " + userIdx);
         }
 
         return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_NOTICE);
