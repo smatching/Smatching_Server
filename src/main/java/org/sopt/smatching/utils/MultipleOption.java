@@ -3,7 +3,7 @@ package org.sopt.smatching.utils;
 public class MultipleOption {
 
     /**
-     * 복수선택 가능한 객관식 옵션들 정의
+     * 객관식 옵션들 정의
      **/
 
     public static final String[] LOCATIONS = { "seoul",    "busan",    "daegu",   "incheon", "gwangju",
