@@ -97,14 +97,14 @@ public interface NoticeMapper {
     @Update("UPDATE notice " +
             "SET notfit = 1 " +
             "WHERE noticeidx = #{noticeIdx}")
-    void makeNotFit(@Param("noticeIdx") final int noticeIdx);
+    int makeNotFit(@Param("noticeIdx") final int noticeIdx);
 
 
     // 지원사업공고 비활성화
     @Update("UPDATE notice " +
             "SET valid = 0 " +
             "WHERE noticeidx = #{noticeIdx}")
-    void invalidate(@Param("noticeIdx") final int noticeIdx);
+    int invalidate(@Param("noticeIdx") final int noticeIdx);
 
 
     // 관리자용 - 모든 지원사업공고 리스트 정보 가져오기
@@ -113,4 +113,12 @@ public interface NoticeMapper {
             "INNER JOIN notice_detail AS d " +
             "ON n.noticeidx = d.noticeidx")
     List<Notice> findNoticeEverything();
+
+
+    // 스케줄러용 - 만료된 공고(dday < 0)의 noticeIdx 가져오기
+    @Select("SELECT noticeidx " +
+            "FROM notice " +
+            "WHERE DATEDIFF(end_date, CURRENT_DATE) < 0 " +
+            "AND valid = 1")
+    List<Integer> getExpiredNotice();
 }

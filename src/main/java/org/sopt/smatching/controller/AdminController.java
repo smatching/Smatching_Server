@@ -35,9 +35,9 @@ public class AdminController {
 
 
     // admin 페이지 메인
-    @GetMapping
-    public String viewMain(Model model) {
-        return "index";
+    @GetMapping("")
+    public ModelAndView viewMain(Model model) {
+        return new ModelAndView("main");
     }
 
 
