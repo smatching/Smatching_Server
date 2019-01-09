@@ -1,23 +1,41 @@
 package org.sopt.smatching.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.smatching.model.DefaultRes;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 
+import static org.sopt.smatching.model.DefaultRes.DB_ERROR_DEFAULT_RES;
 import static org.sopt.smatching.model.DefaultRes.FAIL_DEFAULT_RES;
 
 @Slf4j
 @ControllerAdvice // 모든 컨트롤러에 대응됨
 public class ExceptionControllerAdvice {
 
-    @ExceptionHandler(value = Exception.class) // 모든 예외를 받음
+    // DB 사용 관련 예외만 받음
+    @ExceptionHandler(value = DataAccessException.class)
+    public ResponseEntity returnDBErrorRes(HttpServletRequest req, DataAccessException e) {
+        log.error("-----------------start----------------------\n-------DB ExceptionHandler CATCHED!!!-------");
+        logEverything(req, e);
+        return new ResponseEntity<>(DB_ERROR_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+    // 모든 예외를 받음
+    @ExceptionHandler(value = Exception.class)
     public ResponseEntity returnFailDefaultRes(HttpServletRequest req, Exception e) {
-        log.error("--------------------------------------------\n\n-------MY EXCEPTION HANDER CATCHED!!!-------");
+        log.error("-----------------start----------------------\n-------Entire ExceptionHandler CATCHED!!!-------");
+        logEverything(req, e);
+        return new ResponseEntity<>(FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+    // request와 exception에 대한 정보를 모두 로그로 남기는 메소드
+    public void logEverything(HttpServletRequest req, Exception e) {
         log.error("- Method : " + req.getMethod());
         log.error("- URI : " + req.getRequestURI());
         log.error("- QueryString : " + req.getQueryString());
@@ -36,9 +54,7 @@ public class ExceptionControllerAdvice {
         log.error("- @@@@@ Exception Message @@@@@ ---> : " + e.getMessage());
         log.error("- @@@@@ LOOK UPPER MESSAGE CAREFULLY!!! @@@@@\n\n- Exception Detail (below)", e);
 
-        log.error("--------------------------------------------\n\n");
-
-        return new ResponseEntity<>(FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+        log.error("-----------------end------------------------\n\n\n");
     }
 
 

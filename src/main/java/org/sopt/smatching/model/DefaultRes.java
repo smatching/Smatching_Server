@@ -36,4 +36,5 @@ public class DefaultRes<T> {
     }
 
     public static final DefaultRes FAIL_DEFAULT_RES = new DefaultRes(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR);
+    public static final DefaultRes DB_ERROR_DEFAULT_RES = new DefaultRes (StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
 }

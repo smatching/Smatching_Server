@@ -153,32 +153,37 @@ public class NoticeService {
     @Transactional
     public DefaultRes changeScrap(int userIdx, int noticeIdx) {
 
-        // 현재 상태 count로 체크 (1 or 0)
+        // 현재 상태 sql의 COUNT로 체크 (1 or 0)
         int scraped = scrapMapper.isScraped(userIdx, noticeIdx);
 
-        try {
-            if (scraped == 0) { // 스크랩 안돼있으면 row 추가
-                int rowCnt = scrapMapper.insertScrap(userIdx, noticeIdx);
-                if(rowCnt != 1)
-                    throw new Exception("rowCnt is NOT 1 but " + Integer.toString(rowCnt));
-
-                return DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_SCRAP, 1);
-            }
-            else if (scraped == 1) { // 스크랩 돼있으면 row 삭제
-                int rowCnt = scrapMapper.deleteScrap(userIdx, noticeIdx);
-                if(rowCnt != 1)
-                    throw new Exception("rowCnt is NOT 1 but " + Integer.toString(rowCnt));
-
-                return DefaultRes.res(StatusCode.OK, ResponseMessage.DELETED_SCRAP, 0);
-            }
-            else { // 0 이나 1이 아니면 이상한거임
-                throw new Exception("scraped is not 0 or 1 but " + Integer.toString(scraped));
+        if (scraped == 0) { // 스크랩 안돼있으면 row 추가
+            int rowCnt = scrapMapper.insertScrap(userIdx, noticeIdx);
+            if(rowCnt != 1) {
+                log.error("--------------------------------------------");
+                log.error("@@@@@ rowCnt is NOT 1 but " + rowCnt + " @@@@@");
+                scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
             }
 
-        } catch(Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error("\n- Exception Detail (below)", e);
-            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+            return DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_SCRAP, 1);
+        }
+
+        else if (scraped == 1) { // 스크랩 돼있으면 row 삭제
+            int rowCnt = scrapMapper.deleteScrap(userIdx, noticeIdx);
+            if(rowCnt != 1) {
+                log.error("--------------------------------------------");
+                log.error("@@@@@ rowCnt is NOT 1 but " + rowCnt + " @@@@@");
+                scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
+            }
+
+            return DefaultRes.res(StatusCode.OK, ResponseMessage.DELETED_SCRAP, 0);
+        }
+
+        else { // PK(2개조합)으로 조회했기 때문에 COUNT의 결과가 무조건 0 아니면 1이어야함.. 여기로 오면 안됨
+            log.error("--------------------------------------------");
+            log.error("@@@@@ scraped is NOT 0 or 1 but " + scraped + " @@@@@");
+            scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
+
+            return null; // 위에서 예외가 발생되기 때문에 여기로 넘어올일 없음
         }
     }
 
@@ -200,7 +205,7 @@ public class NoticeService {
     public DefaultRes getAlert(int userIdx) {
         UserAlert userAlert = userMapper.findUserAlertByUserIdx(userIdx);
 
-        HashMap<String, Boolean> map = new HashMap();
+        HashMap<String, Boolean> map = new HashMap<>();
         map.put("talkAlert", userAlert.getTalkAlert() > 0);
         map.put("condAlert", userAlert.getCondAlert() > 0);
 
@@ -212,30 +217,30 @@ public class NoticeService {
     public DefaultRes toggleCondAlert(int userIdx) {
         final Integer current = condMapper.findAlertByUserIdx(userIdx);
 
-        try {
-            if(current == null) { // 만든 맞춤조건이 없는 경우
-                return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_FOUND_COND, false); // 꺼진 상태 유지
+        if(current == null) { // 만든 맞춤조건이 없는 경우
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_FOUND_COND, false); // 꺼진 상태 유지
 
-            } else if(current > 0){ // 하나라도 켜져있는 경우
-                final int updatedCnt = condMapper.updateAlertByUserIdx(userIdx, 0); // 모두 끈다
-                if(updatedCnt < 1)
-                    return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
-
-                return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_COND_ALERT, false);
-            }
-            else { // 이미 모두 꺼져있는 경우
-                final int updatedCnt = condMapper.updateAlertByUserIdx(userIdx, 1); // 모두 킨다
-                if(updatedCnt < 1)
-                    return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
-
-                return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_COND_ALERT, true);
+        } else if(current > 0){ // 하나라도 켜져있는 경우
+            final int rowCnt = condMapper.updateAlertByUserIdx(userIdx, 0); // 모두 끈다
+            if(rowCnt < 1) {
+                log.error("--------------------------------------------");
+                log.error("@@@@@ rowCnt is smaller than 1, rowCnt : " + rowCnt + " @@@@@");
+                scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
             }
 
-        } catch(Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error("\n- Exception Detail (below)", e);
-            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+            return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_COND_ALERT, false);
         }
+        else { // 이미 모두 꺼져있는 경우
+            final int rowCnt = condMapper.updateAlertByUserIdx(userIdx, 1); // 모두 킨다
+            if(rowCnt < 1) {
+                log.error("--------------------------------------------");
+                log.error("@@@@@ rowCnt is smaller than 1, rowCnt : " + rowCnt + " @@@@@");
+                scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
+            }
+
+            return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_COND_ALERT, true);
+        }
+
     }
 
 
@@ -246,16 +251,22 @@ public class NoticeService {
 
         try {
             if(current == 0) { // 꺼져 있으면
-                final int updatedCnt = userMapper.updateTalkAlertByUserIdx(userIdx, 1); // 켜는걸로 변경
-                if(updatedCnt < 1)
-                    return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
+                final int rowCnt = userMapper.updateTalkAlertByUserIdx(userIdx, 1); // 켜는걸로 변경
+                if(rowCnt != 1) {
+                    log.error("--------------------------------------------");
+                    log.error("@@@@@ rowCnt is NOT 1 but " + rowCnt + " @@@@@");
+                    scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
+                }
 
                 return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_TALK_ALERT, true);
             }
             else { // 켜져있으면
-                final int updatedCnt = userMapper.updateTalkAlertByUserIdx(userIdx, 0); // 끄는걸로 변경
-                if(updatedCnt < 1)
-                    return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
+                final int rowCnt = userMapper.updateTalkAlertByUserIdx(userIdx, 0); // 끄는걸로 변경
+                if(rowCnt != 1) {
+                    log.error("--------------------------------------------");
+                    log.error("@@@@@ rowCnt is NOT 1 but " + rowCnt + " @@@@@");
+                    scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
+                }
 
                 return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_TALK_ALERT, false);
             }
@@ -274,35 +285,39 @@ public class NoticeService {
     public DefaultRes addNotice(NoticeInput noticeInput) {
         Notice notice = new Notice(noticeInput);
 
-        try {
-            // notice 테이블에 저장하고 AI로 생성된 noticeIdx로 detail 테이블에도 저장
-            noticeMapper.save(notice);
-            noticeMapper.saveDetail(notice);
-            if(noticeInput.isNotfit()) // 기타공고면 update문으로 notift 1로 만들기
-                noticeMapper.makeNotFit(notice.getNoticeIdx());
-
-            return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_NOTICE);
-
-        } catch(Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error("\n- Exception Detail (below)", e);
-            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        // notice 테이블에 저장하고 AI로 생성된 noticeIdx로 detail 테이블에도 저장
+        int a = noticeMapper.save(notice);
+        int b = scrapMapper.insertScrap(-1, -1);
+        int c = noticeMapper.saveDetail(notice);
+        if(a!=0 || b!=0 || c!=0) {
+            log.error("--------------------------------------------");
+            log.error("@@@@@ rowCnts are NOT 1,1,1 but " + a + ',' + b + ',' + c + " @@@@@");
+            scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
         }
+
+        if(noticeInput.isNotfit()) { // 기타공고면 update문으로 notift 1로 만들기
+            int rowCnt = noticeMapper.makeNotFit(notice.getNoticeIdx());
+            if(rowCnt != 1) {
+                log.error("--------------------------------------------");
+                log.error("@@@@@ rowCnt is NOT 1 but " + rowCnt + " @@@@@");
+                scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
+            }
+        }
+
+        return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_NOTICE);
     }
 
     // 지원사업 공고 비활성화
     @Transactional
     public DefaultRes invalidateNotice(int noticeIdx) {
-        try {
-            noticeMapper.invalidate(noticeIdx);
-
-            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.INVALIDATED_NOTICE);
-
-        } catch(Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            log.error("\n- Exception Detail (below)", e);
-            return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
+        int rowCnt = noticeMapper.invalidate(noticeIdx);
+        if(rowCnt != 1) {
+            log.error("--------------------------------------------");
+            log.error("@@@@@ rowCnt is NOT 1 but " + rowCnt + " @@@@@");
+            scrapMapper.insertScrap(-1, -1); // 강제로 예외 발생시킴
         }
+
+        return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.INVALIDATED_NOTICE);
     }
 
 
