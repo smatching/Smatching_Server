@@ -318,7 +318,7 @@ public class NoticeService {
         // 각 유저들에 대해 알람 저장
         for(int userIdx : list) {
             // NewNotice 알람 저장 - Message는 공고의 제목
-            notificationMapper.save(new Notification(userIdx, AlertType.NewNotice.toString(), noticeInput.getTitle()));
+            notificationMapper.save(new Notification(userIdx, notice.getNoticeIdx(), AlertType.NewNotice.toString(), noticeInput.getTitle()));
             // (구현필요) - userIdx 로 기기 찾아서 푸시알람 전송
         }
 
@@ -365,7 +365,7 @@ public class NoticeService {
             final int[] users = scrapMapper.findScrapedUserByNoticeIdx(noticeIdx); // 이 noticeIdx를 스크랩 한 userIdx 전부 불러오기
 
             for(int userIdx : users) { // 각 유저들에 대해 알람 저장하기
-                notificationMapper.save(new Notification(userIdx, AlertType.ThreeDaysLeft.toString(), noticeDetail.getTitle()));
+                notificationMapper.save(new Notification(userIdx, noticeIdx, AlertType.ThreeDaysLeft.toString(), noticeDetail.getTitle()));
                 // (구현필요) 푸시 알람 보내기
             }
         }
