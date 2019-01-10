@@ -14,7 +14,6 @@ import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
 import org.sopt.smatching.utils.auth.AuthAspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -26,18 +25,23 @@ import java.util.List;
 @Service
 public class NoticeService {
 
-    @Autowired
     private JwtService jwtService;
-    @Autowired
+
     private NoticeMapper noticeMapper;
-    @Autowired
     private CondMapper condMapper;
-    @Autowired
     private ScrapMapper scrapMapper;
-    @Autowired
     private UserMapper userMapper;
-    @Autowired
     private NotificationMapper notificationMapper;
+
+
+    public NoticeService(JwtService jwtService, NoticeMapper noticeMapper, CondMapper condMapper, ScrapMapper scrapMapper, UserMapper userMapper, NotificationMapper notificationMapper) {
+        this.jwtService = jwtService;
+        this.noticeMapper = noticeMapper;
+        this.condMapper = condMapper;
+        this.scrapMapper = scrapMapper;
+        this.userMapper = userMapper;
+        this.notificationMapper = notificationMapper;
+    }
 
 
 

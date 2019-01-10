@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.service.SearchService;
 import org.sopt.smatching.utils.auth.Auth;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +15,11 @@ import java.util.HashMap;
 @RequestMapping("/search")
 public class SearchController {
 
-    @Autowired
     private SearchService searchService;
 
-
+    public SearchController(SearchService searchService) {
+        this.searchService = searchService;
+    }
 
     @GetMapping("/notices")
     public ResponseEntity fromEverywhere(@RequestHeader(value = "Authorization", required = false) String jwt,

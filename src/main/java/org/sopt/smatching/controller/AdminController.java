@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.model.notice.Notice;
 import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.service.NoticeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +29,12 @@ public class AdminController {
     @Value("${ADMIN.PASSWORD}")
     private String ADMIN_PASSWORD;
 
-    @Autowired
     private NoticeService noticeService;
+
+
+    public AdminController(NoticeService noticeService) {
+        this.noticeService = noticeService;
+    }
 
 
     // admin 페이지 메인

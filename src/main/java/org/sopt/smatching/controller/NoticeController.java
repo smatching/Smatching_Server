@@ -2,10 +2,8 @@ package org.sopt.smatching.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.model.DefaultRes;
-import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.service.NoticeService;
 import org.sopt.smatching.utils.auth.Auth;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +16,11 @@ import java.util.Optional;
 @RequestMapping("/notices")
 public class NoticeController {
 
-    @Autowired
     private NoticeService noticeService;
+
+    public NoticeController(NoticeService noticeService) {
+        this.noticeService = noticeService;
+    }
 
 
     // 지원사업 개수 조회

@@ -3,7 +3,6 @@ package org.sopt.smatching.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.mapper.NotificationMapper;
-import org.sopt.smatching.model.notification.Notification;
 import org.sopt.smatching.model.notification.NotificationOutput;
 import org.sopt.smatching.model.user.User;
 import org.sopt.smatching.model.user.UserInfo;
@@ -14,7 +13,6 @@ import org.sopt.smatching.model.user.SignUpReq;
 import org.sopt.smatching.model.user.UserModifyReq;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,14 +27,18 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
     private JwtService jwtService;
-    @Autowired
     private S3FileUploadService s3FileUploadService;
-    @Autowired
+    private UserMapper userMapper;
     private NotificationMapper notificationMapper;
+
+
+    public UserService(JwtService jwtService, S3FileUploadService s3FileUploadService, UserMapper userMapper, NotificationMapper notificationMapper) {
+        this.jwtService = jwtService;
+        this.s3FileUploadService = s3FileUploadService;
+        this.userMapper = userMapper;
+        this.notificationMapper = notificationMapper;
+    }
 
     // 로그인 기능
     public DefaultRes<JwtService.TokenRes> login(final LoginReq loginReq) {
@@ -61,7 +63,7 @@ public class UserService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
             if(e.getMessage().contains("for key 'UC_email'") == true) {
                 log.error("\n- Exception Detail (below)", e);
-                return DefaultRes.res(StatusCode.ALREADY_EXSIST_EMAIL, ResponseMessage.ALREADY_EXIST_EMAIL);
+                return DefaultRes.res(StatusCode.ALREADY_EXSIT_EMAIL, ResponseMessage.ALREADY_EXIST_EMAIL);
             }
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
 
