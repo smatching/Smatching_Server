@@ -1,15 +1,14 @@
 package org.sopt.smatching.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.smatching.mapper.*;
 import org.sopt.smatching.model.cond.Cond;
 import org.sopt.smatching.model.notice.Notice;
 import org.sopt.smatching.model.notice.NoticeDetail;
 import org.sopt.smatching.model.notice.NoticeSummary;
+import org.sopt.smatching.model.notification.AlertType;
+import org.sopt.smatching.model.notification.Notification;
 import org.sopt.smatching.model.user.UserAlert;
-import org.sopt.smatching.mapper.CondMapper;
-import org.sopt.smatching.mapper.NoticeMapper;
-import org.sopt.smatching.mapper.ScrapMapper;
-import org.sopt.smatching.mapper.UserMapper;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.utils.ResponseMessage;
@@ -37,6 +36,8 @@ public class NoticeService {
     private ScrapMapper scrapMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
 
 
@@ -230,8 +231,10 @@ public class NoticeService {
 
             return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_COND_ALERT, false);
         }
-        else { // 이미 모두 꺼져있는 경우
-            final int rowCnt = condMapper.updateAlertByUserIdx(userIdx, 1); // 모두 킨다
+        else { // 모두 꺼져있는 경우
+            List<Integer> list = condMapper.findCondIdxByUserIdx(userIdx); // 맞춤조건이 없는 경우 위의 if(current == null)에서 걸러지므로 0번 인덱스에 무조건 엘리먼트가 존재
+
+            final int rowCnt = condMapper.updateAlert(userIdx, list.get(0),1); // 앞쪽꺼를 킨다
             if(rowCnt < 1) {
                 log.error("--------------------------------------------");
                 log.error("@@@@@ rowCnt is smaller than 1, rowCnt : " + rowCnt + " @@@@@");
@@ -307,8 +310,12 @@ public class NoticeService {
 
         // 알람 전송할 유저 찾기 - 저장되어 있는 cond들과 비교해서 해당되는 맞춤조건을 찾아옴
         int[] list = condMapper.getNotifiedUser(notice);
+
+        // 각 유저들에 대해 알람 저장
         for(int userIdx : list) {
-            log.info("UserIdx : " + userIdx);
+            // NewNotice 알람 저장 - Message는 공고의 제목
+            notificationMapper.save(new Notification(userIdx, AlertType.NewNotice.toString(), noticeInput.getTitle()));
+            // (구현필요) - userIdx 로 기기 찾아서 푸시알람 전송
         }
 
         return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_NOTICE);
@@ -343,4 +350,5 @@ public class NoticeService {
         }
         return list;
     }
+
 }
