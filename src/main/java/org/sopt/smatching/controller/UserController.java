@@ -169,4 +169,11 @@ public class UserController {
     public ResponseEntity getNotificationList(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
         return new ResponseEntity<>(userService.getNotificationList(idx_variable), HttpStatus.OK);
     }
+
+    // 읽지않은 사용자 알람 개수 조회
+    @Auth
+    @GetMapping("/notification/unchecked")
+    public ResponseEntity getUncheckedNotificationCount(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
+        return new ResponseEntity<>(userService.getUncheckedNotificationCount(idx_variable), HttpStatus.OK);
+    }
 }

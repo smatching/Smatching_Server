@@ -22,6 +22,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -162,7 +163,7 @@ public class UserService {
         }
     }
 
-
+    @Transactional
     // 유저의 모든 알람내역 조회
     public DefaultRes getNotificationList(final int userIdx) {
         List<NotificationOutput> list = notificationMapper.findAllByUserIdx(userIdx);
@@ -175,6 +176,19 @@ public class UserService {
             notificationOutput.writeOutputTime();
         }
 
+        // 읽지 않은 알람이 있으면 모두 읽은 상태로 바꿈 (리턴이 0이 올수도 있어서 updatedRow 확인 로직 넣지않음)
+        notificationMapper.changeToRead(userIdx);
+
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTIFICATION, list);
+    }
+
+
+    // 읽지않은 사용자 알람 개수 조회
+    public DefaultRes getUncheckedNotificationCount(final int userIdx) {
+        int count = notificationMapper.countUnchecked(userIdx);
+
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTIFICATION, new HashMap<String, Integer>() {{
+            put("num", count);
+        }});
     }
 }

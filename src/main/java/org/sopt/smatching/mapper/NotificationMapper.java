@@ -24,7 +24,16 @@ public interface NotificationMapper {
     List<NotificationOutput> findAllByUserIdx(@Param("userIdx") final int userIdx);
 
 
-    // 알람 읽은 상태로 변경
-    @Update("")
-    int changeToRead(@Param("notificationIdx") final int notificationIdx, @Param("userIdx") final int userIdx);
+    // 사용자의 모든 알람을 읽은 상태로 변경
+    @Update("UPDATE notification " +
+            "SET checked = 1 " +
+            "WHERE useridx = #{userIdx} AND checked = 0")
+    void changeToRead(@Param("userIdx") final int userIdx);
+
+
+    // 읽지않은 사용자 알람 개수 조회
+    @Select("SELECT COUNT(notificationidx) " +
+            "FROM notification " +
+            "WHERE useridx = #{userIdx} AND checked = 0")
+    int countUnchecked(@Param("userIdx") final int userIdx);
 }
