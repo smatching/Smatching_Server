@@ -16,4 +16,11 @@ public interface ScrapMapper {
     // 스크랩 Row 삭제
     @Delete("DELETE FROM scrap_notice WHERE useridx = #{userIdx} AND noticeidx = #{noticeIdx}")
     int deleteScrap(@Param("userIdx") final int userIdx, @Param("noticeIdx") final int noticeIdx);
+
+
+    // noticeIdx 로 해당 공고를 스크랩한 사용자들의 userIdx 검색
+    @Select("SELECT useridx " +
+            "FROM scrap_notice " +
+            "WHERE noticeidx = #{noticeIdx}")
+    int[] findScrapedUserByNoticeIdx(@Param("noticeIdx") final int noticeIdx);
 }

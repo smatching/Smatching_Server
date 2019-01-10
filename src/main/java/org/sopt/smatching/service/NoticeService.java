@@ -351,4 +351,22 @@ public class NoticeService {
         return list;
     }
 
+    // D-Day가 3 인 공고의 noticeIdx 찾아서 그 공고를 스크랩 해놓은 사용자에게 알람 보내기
+    @Transactional
+    public List<Integer> scanD_3NoticesToNotify() {
+        final List<Integer> notices = noticeMapper.getThreeDaysLeftNotice(); // notice 테이블에서 D-Day가 3일인 공고의 noticeIdx 찾아옴
+
+        for(int noticeIdx : notices) {
+            final NoticeDetail noticeDetail = noticeMapper.findDetailByNoticeIdx(noticeIdx); // 공고 제목을 얻기위해 공고 조회
+            final int[] users = scrapMapper.findScrapedUserByNoticeIdx(noticeIdx); // 이 noticeIdx를 스크랩 한 userIdx 전부 불러오기
+
+            for(int userIdx : users) { // 각 유저들에 대해 알람 저장하기
+                notificationMapper.save(new Notification(userIdx, AlertType.ThreeDaysLeft.toString(), noticeDetail.getTitle()));
+                // (구현필요) 푸시 알람 보내기
+            }
+        }
+
+        return notices;
+    }
+
 }
