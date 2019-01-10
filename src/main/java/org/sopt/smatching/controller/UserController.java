@@ -9,7 +9,6 @@ import org.sopt.smatching.service.CondService;
 import org.sopt.smatching.service.NoticeService;
 import org.sopt.smatching.service.UserService;
 import org.sopt.smatching.utils.auth.Auth;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +21,15 @@ import java.util.HashMap;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
     private UserService userService;
-    @Autowired
     private CondService condService;
-    @Autowired
     private NoticeService noticeService;
+
+    public UserController(UserService userService, CondService condService, NoticeService noticeService) {
+        this.userService = userService;
+        this.condService = condService;
+        this.noticeService = noticeService;
+    }
 
     // 회원 가입
     @PostMapping("")

@@ -11,7 +11,6 @@ import org.sopt.smatching.mapper.NoticeMapper;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -22,10 +21,13 @@ import java.util.List;
 @Service
 public class CondService {
 
-    @Autowired
     private CondMapper condMapper;
-    @Autowired
     private NoticeMapper noticeMapper;
+
+    public CondService(CondMapper condMapper, NoticeMapper noticeMapper) {
+        this.condMapper = condMapper;
+        this.noticeMapper = noticeMapper;
+    }
 
     // 맞춤조건 조회
     public DefaultRes getCondInfoByCondIdx(final int condIdx) {

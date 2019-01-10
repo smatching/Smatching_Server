@@ -7,7 +7,6 @@ import org.sopt.smatching.model.notice.NoticeSummary;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
 import org.sopt.smatching.utils.auth.AuthAspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -18,10 +17,13 @@ import java.util.List;
 @Service
 public class SearchService {
 
-    @Autowired
     private SearchMapper searchMapper;
-    @Autowired
     private JwtService jwtService;
+
+    public SearchService(SearchMapper searchMapper, JwtService jwtService) {
+        this.searchMapper = searchMapper;
+        this.jwtService = jwtService;
+    }
 
 
     // 전체 지원사업 검색 개수 조회 기능

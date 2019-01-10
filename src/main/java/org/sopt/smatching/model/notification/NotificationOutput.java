@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class NotificationOutput {
 
-    private int notificationIdx;
+    private int noticeIdx;
     private String alertType;
     private String message;
     private boolean checked;

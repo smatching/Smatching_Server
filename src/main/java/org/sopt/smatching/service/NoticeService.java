@@ -14,7 +14,6 @@ import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
 import org.sopt.smatching.utils.auth.AuthAspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -26,18 +25,23 @@ import java.util.List;
 @Service
 public class NoticeService {
 
-    @Autowired
     private JwtService jwtService;
-    @Autowired
+
     private NoticeMapper noticeMapper;
-    @Autowired
     private CondMapper condMapper;
-    @Autowired
     private ScrapMapper scrapMapper;
-    @Autowired
     private UserMapper userMapper;
-    @Autowired
     private NotificationMapper notificationMapper;
+
+
+    public NoticeService(JwtService jwtService, NoticeMapper noticeMapper, CondMapper condMapper, ScrapMapper scrapMapper, UserMapper userMapper, NotificationMapper notificationMapper) {
+        this.jwtService = jwtService;
+        this.noticeMapper = noticeMapper;
+        this.condMapper = condMapper;
+        this.scrapMapper = scrapMapper;
+        this.userMapper = userMapper;
+        this.notificationMapper = notificationMapper;
+    }
 
 
 
@@ -314,7 +318,7 @@ public class NoticeService {
         // 각 유저들에 대해 알람 저장
         for(int userIdx : list) {
             // NewNotice 알람 저장 - Message는 공고의 제목
-            notificationMapper.save(new Notification(userIdx, AlertType.NewNotice.toString(), noticeInput.getTitle()));
+            notificationMapper.save(new Notification(userIdx, notice.getNoticeIdx(), AlertType.NewNotice.toString(), noticeInput.getTitle()));
             // (구현필요) - userIdx 로 기기 찾아서 푸시알람 전송
         }
 
@@ -349,6 +353,24 @@ public class NoticeService {
             invalidateNotice(noticeIdx);
         }
         return list;
+    }
+
+    // D-Day가 3 인 공고의 noticeIdx 찾아서 그 공고를 스크랩 해놓은 사용자에게 알람 보내기
+    @Transactional
+    public List<Integer> scanD_3NoticesToNotify() {
+        final List<Integer> notices = noticeMapper.getThreeDaysLeftNotice(); // notice 테이블에서 D-Day가 3일인 공고의 noticeIdx 찾아옴
+
+        for(int noticeIdx : notices) {
+            final NoticeDetail noticeDetail = noticeMapper.findDetailByNoticeIdx(noticeIdx); // 공고 제목을 얻기위해 공고 조회
+            final int[] users = scrapMapper.findScrapedUserByNoticeIdx(noticeIdx); // 이 noticeIdx를 스크랩 한 userIdx 전부 불러오기
+
+            for(int userIdx : users) { // 각 유저들에 대해 알람 저장하기
+                notificationMapper.save(new Notification(userIdx, noticeIdx, AlertType.ThreeDaysLeft.toString(), noticeDetail.getTitle()));
+                // (구현필요) 푸시 알람 보내기
+            }
+        }
+
+        return notices;
     }
 
 }
