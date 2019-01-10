@@ -231,8 +231,10 @@ public class NoticeService {
 
             return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_USER_COND_ALERT, false);
         }
-        else { // 이미 모두 꺼져있는 경우
-            final int rowCnt = condMapper.updateAlertByUserIdx(userIdx, 1); // 모두 킨다
+        else { // 모두 꺼져있는 경우
+            List<Integer> list = condMapper.findCondIdxByUserIdx(userIdx); // 맞춤조건이 없는 경우 위의 if(current == null)에서 걸러지므로 0번 인덱스에 무조건 엘리먼트가 존재
+
+            final int rowCnt = condMapper.updateAlert(userIdx, list.get(0),1); // 앞쪽꺼를 킨다
             if(rowCnt < 1) {
                 log.error("--------------------------------------------");
                 log.error("@@@@@ rowCnt is smaller than 1, rowCnt : " + rowCnt + " @@@@@");

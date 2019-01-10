@@ -53,10 +53,19 @@ public class CondService {
         cond.setUserIdx(userIdx);
 
         try { // 정상 추가
-            int rowCnt = condMapper.save(cond);
-
+            int rowCnt = condMapper.save(cond); // alert는 삽입하지 않음, DB에 설정된 디폴드값(0)으로 들어가서 꺼져있는 상태
             if(rowCnt != 1)
                 throw new Exception("rowCnt is NOT 1 but " + Integer.toString(rowCnt));
+
+            // 알람이 켜져있는 맞춤조건이 있는지 확인
+            int sum = condMapper.findAlertByUserIdx(userIdx); // 방금 save한 맞춤조건이 있으므로 null이 나오진 않음
+
+
+            if(sum == 0) { // 알람이 켜져있는 맞춤조건이 없으면 지금 추가한 맞춤조건의 알람을 켬
+                rowCnt = condMapper.updateAlert(userIdx, cond.getCondIdx(), 1); // 켜는걸로 변경
+                if(rowCnt != 1)
+                    throw new Exception("rowCnt is NOT 1 but " + Integer.toString(rowCnt));
+            }
 
             return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_COND, cond.getCondIdx());
 
@@ -121,14 +130,15 @@ public class CondService {
 
         try {
             if(current == 0) { // 꺼져 있으면
-                final int updatedCnt = condMapper.updateAlert(userIdx, condIdx, 1); // 켜는걸로 변경
+                condMapper.updateAlertByUserIdx(userIdx, 0); // 일단 유저의 모든 맞춤조건들은 알람 OFF
+                final int updatedCnt = condMapper.updateAlert(userIdx, condIdx, 1); // 켜는걸로 변경(현재 맞춤조건만)
                 if(updatedCnt < 1)
                     return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
 
                 return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATED_COND_ALERT, true);
             }
             else { // 켜져있으면
-                final int updatedCnt = condMapper.updateAlert(userIdx, condIdx, 0); // 끄는걸로 변경
+                final int updatedCnt = condMapper.updateAlert(userIdx, condIdx, 0); // 끄는걸로 변경(현재 맞춤조건만)
                 if(updatedCnt < 1)
                     return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_UPDATE_IS_ZERO);
 
