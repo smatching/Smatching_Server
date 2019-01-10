@@ -2,6 +2,9 @@ package org.sopt.smatching.service;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.smatching.mapper.NotificationMapper;
+import org.sopt.smatching.model.notification.Notification;
+import org.sopt.smatching.model.notification.NotificationOutput;
 import org.sopt.smatching.model.user.User;
 import org.sopt.smatching.model.user.UserInfo;
 import org.sopt.smatching.mapper.UserMapper;
@@ -19,6 +22,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -30,6 +34,8 @@ public class UserService {
     private JwtService jwtService;
     @Autowired
     private S3FileUploadService s3FileUploadService;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
     // 로그인 기능
     public DefaultRes<JwtService.TokenRes> login(final LoginReq loginReq) {
@@ -154,5 +160,21 @@ public class UserService {
             log.error("\n- Exception Detail (below)", e);
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
         }
+    }
+
+
+    // 유저의 모든 알람내역 조회
+    public DefaultRes getNotificationList(final int userIdx) {
+        List<NotificationOutput> list = notificationMapper.findAllByUserIdx(userIdx);
+
+        if(list.isEmpty())
+            return DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_FOUND_NOTIFICATION);
+
+        // 경과 시간 계산해서 String 으로 다시 저장
+        for(NotificationOutput notificationOutput : list) {
+            notificationOutput.writeOutputTime();
+        }
+
+        return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_NOTIFICATION, list);
     }
 }

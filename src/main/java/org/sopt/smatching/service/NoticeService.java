@@ -1,15 +1,14 @@
 package org.sopt.smatching.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.smatching.mapper.*;
 import org.sopt.smatching.model.cond.Cond;
 import org.sopt.smatching.model.notice.Notice;
 import org.sopt.smatching.model.notice.NoticeDetail;
 import org.sopt.smatching.model.notice.NoticeSummary;
+import org.sopt.smatching.model.notification.AlertType;
+import org.sopt.smatching.model.notification.Notification;
 import org.sopt.smatching.model.user.UserAlert;
-import org.sopt.smatching.mapper.CondMapper;
-import org.sopt.smatching.mapper.NoticeMapper;
-import org.sopt.smatching.mapper.ScrapMapper;
-import org.sopt.smatching.mapper.UserMapper;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.model.notice.NoticeInput;
 import org.sopt.smatching.utils.ResponseMessage;
@@ -37,6 +36,8 @@ public class NoticeService {
     private ScrapMapper scrapMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
 
 
@@ -307,8 +308,12 @@ public class NoticeService {
 
         // 알람 전송할 유저 찾기 - 저장되어 있는 cond들과 비교해서 해당되는 맞춤조건을 찾아옴
         int[] list = condMapper.getNotifiedUser(notice);
+
+        // 각 유저들에 대해 알람 저장
         for(int userIdx : list) {
-            log.info("UserIdx : " + userIdx);
+            // NewNotice 알람 저장 - Message는 공고의 제목
+            notificationMapper.save(new Notification(userIdx, AlertType.NewNotice.toString(), noticeInput.getTitle()));
+            // (구현필요) - userIdx 로 기기 찾아서 푸시알람 전송
         }
 
         return DefaultRes.res(StatusCode.CREATED, ResponseMessage.CREATED_NOTICE);
@@ -343,4 +348,5 @@ public class NoticeService {
         }
         return list;
     }
+
 }

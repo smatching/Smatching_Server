@@ -61,4 +61,7 @@ public class ResponseMessage {
     public static final String READ_QUERY_LOG = "최근 검색어 조회 성공";
     public static final String DELETED_QUERY_LOG = "최근 검색어 삭제 성공";
 
+
+    public static final String NOT_FOUND_NOTIFICATION = "사용자의 알람이 존재하지 않습니다.";
+    public static final String READ_NOTIFICATION = "사용자의 알람 조회 성공";
 }

@@ -161,4 +161,12 @@ public class UserController {
     public ResponseEntity modifyUserInfo(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
         return new ResponseEntity<>(userService.deleteUser(idx_variable), HttpStatus.OK);
     }
+
+
+    // 사용자 알람 조회
+    @Auth
+    @GetMapping("/notification")
+    public ResponseEntity getNotificationList(@RequestHeader(required = false, defaultValue = "0") int idx_variable) {
+        return new ResponseEntity<>(userService.getNotificationList(idx_variable), HttpStatus.OK);
+    }
 }
