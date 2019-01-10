@@ -61,8 +61,7 @@ public class UserService {
 
         } catch (DuplicateKeyException e) { // 이메일 중복
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //Rollback
-            if(e.getMessage().contains("for key 'UC_email'") == true) {
-                log.error("\n- Exception Detail (below)", e);
+            if(e.getMessage().contains("for key 'UC_email'")) {
                 return DefaultRes.res(StatusCode.ALREADY_EXSIT_EMAIL, ResponseMessage.ALREADY_EXIST_EMAIL);
             }
             return DefaultRes.res(StatusCode.DB_ERROR, ResponseMessage.DB_ERROR);
