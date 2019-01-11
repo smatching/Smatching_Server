@@ -4,17 +4,11 @@
 
 
 
-#### GitHub Wiki : https://github.com/smatching/Smatching_Server/wik
+### GitHub Wiki : https://github.com/smatching/Smatching_Server/wiki
 
- 
+* (Android) Google Play Store : https://play.google.com/store/apps/details?id=appjam.sopt.a23rd.smatching
 
-<center>SOPT 23rd APP-JAM :)</center>
-
- 
-
-##### (Android) Google Play Store : https://play.google.com/store/apps/details?id=appjam.sopt.a23rd.smatching
-
-##### (iOS) : Upcoming!
+* (iOS) : Upcoming!
 
 
 
@@ -36,3 +30,4 @@
 ## 저자
 
 - **유기태** - [ktyu](https://github.com/ktyu)
+- Thanks for SOPT 23rd, APP-JAM :)
