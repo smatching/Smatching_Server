@@ -30,4 +30,5 @@
 ## 저자
 
 - **유기태** - [ktyu](https://github.com/ktyu)
-- Thanks for SOPT 23rd, APP-JAM :)
+- Thanks for SOPT 23rd, APP-JAM [Smatching Team](https://github.com/smatching) :D
+
