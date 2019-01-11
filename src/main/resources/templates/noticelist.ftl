@@ -40,7 +40,7 @@
                     <td>${notice.readCnt}</td>
                     <td><span class="message-tooltipsy" style="color: blue;"
                               title="<a href='${notice.refer_url}' target='_blank'>참고 URL로 이동</a><br><br><a href='${notice.origin_url}' target=_'blank'>원본 URL로 이동</a>">Links</span></td>
-                    <td><a href="/admin/notices/detail/${notice.noticeIdx}" onclick="window.open(this.href+location.search, 'newwin', 'width=600,height=800,scrollbars=yes,resizable=yes,left=500,top=50');return false;">Click</a></td>
+                    <td><a href="/admin/notices/detail/${notice.noticeIdx}" onclick="window.open(this.href+location.search, 'newwin', 'width=700,height=800,scrollbars=yes,resizable=yes,left=500,top=50');return false;">Click</a></td>
                 </tr>
                 </#list>
             </tbody>

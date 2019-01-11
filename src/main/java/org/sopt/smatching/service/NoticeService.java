@@ -3,6 +3,7 @@ package org.sopt.smatching.service;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.smatching.mapper.*;
 import org.sopt.smatching.model.cond.Cond;
+import org.sopt.smatching.model.cond.CondDetail;
 import org.sopt.smatching.model.notice.Notice;
 import org.sopt.smatching.model.notice.NoticeDetail;
 import org.sopt.smatching.model.notice.NoticeSummary;
@@ -11,6 +12,7 @@ import org.sopt.smatching.model.notification.Notification;
 import org.sopt.smatching.model.user.UserAlert;
 import org.sopt.smatching.model.DefaultRes;
 import org.sopt.smatching.model.notice.NoticeInput;
+import org.sopt.smatching.utils.MultipleOption;
 import org.sopt.smatching.utils.ResponseMessage;
 import org.sopt.smatching.utils.StatusCode;
 import org.sopt.smatching.utils.auth.AuthAspect;
@@ -342,6 +344,40 @@ public class NoticeService {
     // 전체 지원사업 공고 모든 정보 불러오기
     public List<Notice> getNoticeListForAdmin() {
         return noticeMapper.findNoticeEverything();
+    }
+
+
+    // 관리자용 한 지원사업 공고의 모든정보 불러오기
+    public HashMap<String, Object> getNoticeAdmin(int noticeIdx) {
+
+        Notice notice = noticeMapper.getNoticeAdmin(noticeIdx);
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("title", notice.getTitle());
+        map.put("institution", notice.getInstitution());
+        map.put("part", notice.getPart());
+        map.put("phone", notice.getPhone());
+        map.put("reg_date", notice.getReg_date());
+        map.put("start_date", notice.getStart_date());
+        map.put("end_date", notice.getEnd_date());
+        map.put("refer_url", notice.getRefer_url());
+        map.put("origin_url", notice.getOrigin_url());
+
+        map.put("notfit", notice.getNotfit());
+
+        map.put("location", CondDetail.bitToMap(notice.getLocation(), MultipleOption.LOCATIONS));
+        map.put("age", CondDetail.bitToMap(notice.getAge(), MultipleOption.AGES));
+        map.put("period", CondDetail.bitToMap(notice.getPeriod(), MultipleOption.PERIODS));
+        map.put("busiType", CondDetail.bitToMap(notice.getBusiType(), MultipleOption.BUSITYPES));
+        map.put("category", CondDetail.bitToMap(notice.getCategory(), MultipleOption.CATEGORYS));
+        map.put("field", CondDetail.bitToMap(notice.getField(), MultipleOption.FIELDS));
+        map.put("advantage", CondDetail.bitToMap(notice.getAdvantage(), MultipleOption.ADVANTAGES));
+
+        map.put("detail_one", notice.getDetail_one().replace("\n", "\\n"));
+        map.put("detail_two", notice.getDetail_two().replace("\n", "\\n"));
+        map.put("detail_three", notice.getDetail_three().replace("\n", "\\n"));
+
+        return map;
     }
 
 

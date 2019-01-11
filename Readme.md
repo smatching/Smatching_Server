@@ -25,9 +25,10 @@
 - Database : AWS RDS (MySQL  5.7)
 - File Storage : AWS S3
 
-
+![Web_App_Reference_Architecture](Web_App_Reference_Architecture.png)
 
 ## 저자
 
 - **유기태** - [ktyu](https://github.com/ktyu)
-- Thanks for SOPT 23rd, APP-JAM :)
+- Thanks for SOPT 23rd, APP-JAM [Smatching Team](https://github.com/smatching) :D
+

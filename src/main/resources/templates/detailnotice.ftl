@@ -9,25 +9,24 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <style>
         .radio-inline+.radio-inline, .checkbox-inline+.checkbox-inline { margin-left: 0px; }
-        .panel-heading { font-weight: bold;}
     </style>
 </head>
 
 <body>
-<div class="container">         
+<div class="container">
     <div id="signupbox" style=" margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info" style="width:625px">
-        
+
             <!-- 상단 폼 제목 -->
             <div class="panel-heading">
-                <div class="panel-title" style="text-align: center">지원 사업 추가</div>
-            </div>  
-            
+                <div class="panel-title" style="text-align: center">지원 사업 내용확인</div>
+            </div>
+
             <!-- 폼 내용 -->
             <div class="panel-body" >
-                <form> <!-- 폼이 두번 들어가야 모양이 이쁨.. -->                        
+                <form> <!-- 폼이 두번 들어가야 모양이 이쁨.. -->
                     <form class="form-horizontal" id="myform">
-                    
+
                         <!-- 제목 -->
                         <div class="form-group required">
                             <label class="control-label col-md-4 requiredField">지원사업 제목<span class="asteriskField">*</span></label>
@@ -115,8 +114,6 @@
                         <div class="form-group required">
                             <label class="control-label col-md-4 requiredField">지역</span></label>
                             <div class="controls col-md-8" style="margin-bottom: 10px">
-                                <label class="radio-inline" style="display: block; font-weight:bold; color: blue;"><input type="checkbox" name="locationselectall" style="margin-bottom: 10px"> 국내 전체</label>
-
                                 <label class="radio-inline"><input type="checkbox" name="location" value="seoul" style="margin-bottom: 10px"> 서울</label>
                                 <label class="radio-inline"><input type="checkbox" name="location" value="busan" style="margin-bottom: 10px"> 부산</label>
                                 <label class="radio-inline"><input type="checkbox" name="location" value="daegu" style="margin-bottom: 10px"> 대구</label>
@@ -157,8 +154,6 @@
                         <div class="form-group required">
                             <label class="control-label col-md-4 requiredField">설립 경과 년수</span></label>
                             <div class="controls col-md-8" style="margin-bottom: 10px">
-                                <label class="radio-inline" style="display: block; font-weight:bold;"><input type="checkbox" name="selectall" style="margin-bottom: 10px"> 전체</label>
-
                                 <label class="radio-inline"><input type="checkbox" name="period" value="zero_one" style="margin-bottom: 10px"> 0~1년</label>
                                 <label class="radio-inline"><input type="checkbox" name="period" value="one_two" style="margin-bottom: 10px"> 1~2년</label>
                                 <label class="radio-inline"><input type="checkbox" name="period" value="two_three" style="margin-bottom: 10px"> 2~3년</label>
@@ -176,8 +171,6 @@
                         <div class="form-group required">
                             <label class="control-label col-md-4 requiredField">기업 형태</span></label>
                             <div class="controls col-md-8" style="margin-bottom: 10px">
-                                <label class="radio-inline" style="display: block; font-weight:bold;"><input type="checkbox" name="selectall" style="margin-bottom: 10px"> 전체</label>
-
                                 <label class="radio-inline"><input type="checkbox" name="busiType" value="midsmall" style="margin-bottom: 10px"> 중소기업</label>
                                 <label class="radio-inline"><input type="checkbox" name="busiType" value="midbig" style="margin-bottom: 10px"> 중견기업</label>
                                 <label class="radio-inline"><input type="checkbox" name="busiType" value="big" style="margin-bottom: 10px"> 대기업</label>
@@ -193,8 +186,6 @@
                         <div class="form-group required">
                             <label class="control-label col-md-4 requiredField">가능한 지원사업분야</span></label>
                             <div class="controls col-md-8" style="margin-bottom: 10px">
-                                <label class="radio-inline" style="display: block; font-weight:bold;"><input type="checkbox" name="selectall" style="margin-bottom: 10px"> 전체</label>
-
                                 <label class="radio-inline"><input type="checkbox" name="category" value="loan" style="margin-bottom: 10px"> 무대출 자금 지원</label>
                                 <label class="radio-inline"><input type="checkbox" name="category" value="edu" style="margin-bottom: 10px"> 창업교육,창업 멘토링</label>
                                 <label class="radio-inline"><input type="checkbox" name="category" value="know" style="margin-bottom: 10px"> 지식재산권 (특허, 저작권 등)</label>
@@ -212,8 +203,6 @@
                         <div class="form-group required">
                             <label class="control-label col-md-4 requiredField">업종</span></label>
                             <div class="controls col-md-8" style="margin-bottom: 10px">
-                                <label class="radio-inline" style="display: block; font-weight:bold;"><input type="checkbox" name="selectall" style="margin-bottom: 10px"> 전체</label>
-
                                 <label class="radio-inline" style="display: block;"><input type="checkbox" name="field" value="a" style="margin-bottom: 10px"> A 농업, 임업 및 어업 (01~03)</label>
                                 <label class="radio-inline" style="display: block;"><input type="checkbox" name="field" value="b" style="margin-bottom: 10px"> B 광업 (05~08)</label>
                                 <label class="radio-inline" style="display: block;"><input type="checkbox" name="field" value="c" style="margin-bottom: 10px"> C 제조업 (10~34)</label>
@@ -247,8 +236,6 @@
                         <div class="form-group required">
                             <label class="control-label col-md-4 requiredField">우대사항</span></label>
                             <div class="controls col-md-8" style="margin-bottom: 10px">
-                                <label class="radio-inline" style="display: block; font-weight:bold;"><input type="checkbox" name="selectall" style="margin-bottom: 10px"> 전체</label>
-
                                 <label class="radio-inline"><input type="checkbox" name="advantage" value="retry" style="margin-bottom: 10px"> 재도전기업</label>
                                 <label class="radio-inline"><input type="checkbox" name="advantage" value="woman" style="margin-bottom: 10px"> 여성기업</label>
                                 <label class="radio-inline"><input type="checkbox" name="advantage" value="disabled" style="margin-bottom: 10px"> 장애인기업</label>
@@ -286,133 +273,58 @@
                             </div>
                         </div>
 
-                        <!-- 추가하기 버튼-->
-                        <div class="form-group">
-                            <div class="controls col-md-8" style="text-align: center;">
-                                <input type="button" value="추가하기" class="btn btn btn-primary" style="width:200px; margin-top:30px;" onclick="sendNotice()"/>
-                            </div>
-                        </div> 
-                            
                     </form>
 
                 </form>
             </div>
         </div>
-    </div> 
+    </div>
 </div>
-    
+
 
 <script type="text/javascript">
-    // $(document).ready(function() { });
+    $(document).ready(function() {
+        $("input[name=title]").val("${notice.title}");
+        $("input[name=institution]").val("${notice.institution}");
+        $("input[name=part]").val("${notice.part}");
+        $("input[name=phone]").val("${notice.phone}");
+        $("input[name=reg_date]").val("${notice.reg_date}");
+        $("input[name=start_date]").val("${notice.start_date}");
+        $("input[name=end_date]").val("${notice.end_date}");
+        $("input[name=refer_url]").val("${notice.refer_url}");
+        $("input[name=origin_url]").val("${notice.origin_url}");
 
-    var multipleOptions = ["location", "age", "period", "field", "advantage", "busiType", "category"];
-    var textOptions = ["title", "institution", "end_date", "reg_date", "start_date", "phone", "refer_url", "origin_url", "part"];
-    var longTextOptions = ["detail_one", "detail_two", "detail_three"];
+        <#if notice.notfit == 1>$("#notfitID").attr("checked", true);</#if>
 
+        <#list notice.location as propName, propValue>
+             <#if propValue == true>$("input[name=location][value=${propName}]").attr("checked", true);</#if>
+        </#list>
+        <#list notice.age as propName, propValue>
+        <#if propValue == true>$("input[name=age][value=${propName}]").attr("checked", true);</#if>
+        </#list>
+        <#list notice.period as propName, propValue>
+        <#if propValue == true>$("input[name=period][value=${propName}]").attr("checked", true);</#if>
+        </#list>
+        <#list notice.busiType as propName, propValue>
+        <#if propValue == true>$("input[name=busiType][value=${propName}]").attr("checked", true);</#if>
+        </#list>
+        <#list notice.category as propName, propValue>
+        <#if propValue == true>$("input[name=category][value=${propName}]").attr("checked", true);</#if>
+        </#list>
+        <#list notice.field as propName, propValue>
+        <#if propValue == true>$("input[name=field][value=${propName}]").attr("checked", true);</#if>
+        </#list>
+        <#list notice.advantage as propName, propValue>
+        <#if propValue == true>$("input[name=advantage][value=${propName}]").attr("checked", true);</#if>
+        </#list>
 
-    // 전체 체크박스 작동 설정
-    $("input[name=selectall]").click(function() {
-        $(this).parent().parent().find("input").not("input[name=selectall]").prop('checked', this.checked);
+        $("textarea[name=detail_one]").val("${notice.detail_one}");
+        $("textarea[name=detail_two]").val("${notice.detail_two}");
+        $("textarea[name=detail_three]").val("${notice.detail_three}");
+
+        $("input").attr("disabled", true);
+        $("textarea").attr("disabled", true);
     });
-
-
-    // 전체가 아닌 나머지가 체크 해제되면 전체도 체크 뺌 (지역 제외)
-    $("input:checkbox").not("input[name=selectall]").not("input[name=location]").not("input[name=locationselectall]").click(function() {
-        if(!(this.checked)) {
-            $(this).parent().parent().find("input[name=selectall]").prop('checked', false);
-        }
-    });
-
-    // 국내 전체 체크박스 작동 설정 (지역)
-    $("input[name=locationselectall]").click(function() {
-        $(this).parent().parent().find("input").not("input[name=locationselectall]").not("input[value=aborad]").prop('checked', this.checked);
-    });
-
-    // 국내 전체가 아닌 나머지가 체크 해제되면 전체도 체크 뺌 (지역)
-    $("input[name=location]").not("input[value=aborad]").click(function() {
-        if(!(this.checked)) {
-            $(this).parent().parent().find("input[name=locationselectall]").prop('checked', false);
-        }
-    });
-
-
-
-
-    function makeMapFromMultipleOptions(option_name) {
-        var result = {};
-        $("input:checkbox[name="+ option_name +"]").each(function() {
-            result[this.value] = this.checked;
-        });
-        return result;
-    }
-
-    function getValueFromTextOptions(option_name) {
-        return $("input[name=" + option_name + "]").val();
-    }
-
-    function getValueFromLongTextOptions(option_name) {
-        return $("textarea[name=" + option_name + "]").val();
-    }
-
-
-    function sendNotice() {
-        if(confirm("입력한 정보로 지원사업 공고를 등록하시겠습니까?") == true) {
-            var result = {};
-            var flag = false;
-
-            $(".asteriskField").each(function() {
-                if($(this).parent().parent().find("input").val() == '') {
-                    flag = true;
-                }
-            });
-            if(flag) {
-                alert("필수항목을 모두 입력해주세요.")
-                return;
-            }
-
-            for(var i=0; i<multipleOptions.length; i++) {
-                result[multipleOptions[i]] = makeMapFromMultipleOptions(multipleOptions[i]);
-            }
-
-            for(var i=0; i<textOptions.length; i++) {
-                result[textOptions[i]] = getValueFromTextOptions(textOptions[i]);
-            }
-
-            for(var i=0; i<textOptions.length; i++) {
-                result[longTextOptions[i]] = getValueFromLongTextOptions(longTextOptions[i]);
-            }
-
-            result["notfit"] = $("#notfitID").is(':checked');
-
-
-            $.ajax({
-                url : location.href, // 현재 페이지의 URL과 쿼리스트링까지 그대로. (location.search 하면 쿼리스트링만 나옴)
-                type : "POST",
-                data : JSON.stringify(result),
-                contentType: 'application/json; charset=UTF-8',
-                dataType: 'html',
-                error : function() {
-                    alert("추가 실패!!! 입력값을 토대로 개발자 문의필요 - Ajax Error");
-                },
-                success : function(response) {
-                    var response_code = (JSON.parse(response)["status"]);
-                    if(response_code == 201) {
-                        alert("성공적으로 추가하였습니다.");
-                        location.reload(); // 새로고침
-                        window.scrollTo(0, 0); // 맨위로
-                    }
-                    else {
-                        alert("추가 실패!!! 입력값을 토대로 개발자 문의필요 - Code: " + response_code);
-                    }
-
-                }
-            })
-        }
-
-        else {
-            return;
-        }
-    }
 
 
 </script>
