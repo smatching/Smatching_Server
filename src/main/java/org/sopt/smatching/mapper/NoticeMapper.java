@@ -115,6 +115,15 @@ public interface NoticeMapper {
     List<Notice> findNoticeEverything();
 
 
+    // 관리자용 - notice와 notice_detail 조인한 모든 정보 가져오기
+    @Select("SELECT * " +
+            "FROM notice " +
+            "INNER JOIN notice_detail " +
+            "ON notice.noticeidx = notice_detail.noticeidx " +
+            "WHERE notice.noticeidx = #{noticeIdx}")
+    Notice getNoticeAdmin(@Param("noticeIdx") int noticeIdx);
+
+
     // 스케줄러용 - 만료된 공고(dday < 0)의 noticeIdx 가져오기
     @Select("SELECT noticeidx " +
             "FROM notice " +
