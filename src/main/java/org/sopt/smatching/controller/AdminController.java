@@ -45,8 +45,8 @@ public class AdminController {
 
 
     // 서버 로그확인 페이지
-    @GetMapping("/log")
-    @ResponseBody
+//    @GetMapping("/log")
+//    @ResponseBody
     public ResponseEntity viewServerLog() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("/home/ubuntu/nohup.out"));
 
